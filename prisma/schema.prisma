@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               Int              @id @default(autoincrement())
+  name             String
+  email            String           @unique
+  password         String
+  role             String
+  unit             String           @default("SENADOR CANEDO")
+  session_histories SessionHistory[]
+}
+
+model Patient {
+  id                Int              @id @default(autoincrement())
+  name              String
+  patient_type      String           @default("ABA")
+  health_plan       String
+  birth_date        DateTime
+  sessions          Session[]
+  session_histories SessionHistory[]
+  neuro_schedules   NeuroSchedule[]
+}
+
+model Session {
+  id          Int      @id @default(autoincrement())
+  patient_id  Int
+  date        DateTime
+  specialty   String
+  status      String   @default("scheduled")
+
+  patient     Patient @relation(fields: [patient_id], references: [id], onDelete: Cascade)
+}
+
+model SessionHistory {
+  id                    Int       @id @default(autoincrement())
+  patient_id            Int
+  specialty             String
+  completed             Int
+  total                 Int
+  session_dates         Json
+  registered_at         DateTime  @default(now())
+  registered_by_user_id Int?
+  registered_by_name    String
+
+  patient Patient @relation(fields: [patient_id], references: [id], onDelete: Cascade)
+  user    User?   @relation(fields: [registered_by_user_id], references: [id], onDelete: SetNull)
+
+  @@index([patient_id, specialty, registered_at])
+}
+
+// Tabela de Planos de Saúde
+model HealthPlan {
+  id       Int    @id @default(autoincrement())
+  name     String @unique
+  revenue  Revenue[]
+}
+
+// Receitas
+model Revenue {
+  id            Int       @id @default(autoincrement())
+  source        String    // "health_plan" ou "particular"
+  health_plan_id Int?       // null se for particular
+  amount        Float
+  description   String?
+  date          DateTime  @default(now())
+  
+  health_plan   HealthPlan? @relation(fields: [health_plan_id], references: [id])
+}
+
+// Despesas
+model Expense {
+  id        Int      @id @default(autoincrement())
+  category  String   // "salario", "aluguel", "energia", "agua", "internet", "imposto", "outros"
+  amount    Float
+  description String?
+  date      DateTime @default(now())
+}
+
+// Transações gerais (mantida para histórico)
+model Finance {
+  id       Int      @id @default(autoincrement())
+  type     String
+  category String
+  amount   Float
+  date     DateTime @default(now())
+}
+
+model Employee {
+  id            Int    @id @default(autoincrement())
+  name          String
+  specialty     String
+  salary        Float
+  absences      Int    @default(0)
+  daily_value   Float
+  updated_value Float
+  documents     EmployeeDocument[]
+}
+
+model EmployeeDocument {
+  id            Int      @id @default(autoincrement())
+  employee_id   Int
+  document_type String?
+  original_name String
+  stored_name   String
+  mime_type     String
+  size_bytes    Int
+  created_at    DateTime @default(now())
+
+  employee Employee @relation(fields: [employee_id], references: [id], onDelete: Cascade)
+}
+
+model NeuroSchedule {
+  id          Int      @id @default(autoincrement())
+  patient_id  Int
+  date        DateTime
+  deadline    DateTime
+  status      String   @default("pendente")
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  patient Patient @relation(fields: [patient_id], references: [id], onDelete: Cascade)
+
+  @@index([patient_id])
+}

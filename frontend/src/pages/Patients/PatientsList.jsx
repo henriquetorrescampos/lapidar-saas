@@ -1,0 +1,256 @@
+import React, { useState, useEffect } from "react";
+import { Plus, Edit2, Trash2, Eye } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import Layout from "../../components/Layout/Layout";
+import Card from "../../components/Common/Card";
+import Button from "../../components/Common/Button";
+import Loading from "../../components/Common/Loading";
+import Alert from "../../components/Common/Alert";
+import Modal from "../../components/Common/Modal";
+import { patientService } from "../../services/patientService";
+import { getPatientAge } from "../../utils/patient";
+
+const ITEMS_PER_PAGE = 10;
+
+export default function PatientsList() {
+  const navigate = useNavigate();
+  const [patients, setPatients] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    loadPatients();
+  }, []);
+
+  const loadPatients = async () => {
+    try {
+      setLoading(true);
+      const data = await patientService.getAll();
+      setPatients(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setError("Erro ao carregar pacientes");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await patientService.delete(selectedPatient.id);
+      setSuccess("Paciente deletado com sucesso");
+      setDeleteModalOpen(false);
+      loadPatients();
+    } catch (err) {
+      setError("Erro ao deletar paciente");
+    }
+  };
+
+  // Filtrar pacientes por nome
+  const filteredPatients = patients.filter((patient) =>
+    patient.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
+  // Calcular paginação
+  const totalPages = Math.ceil(filteredPatients.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedPatients = filteredPatients.slice(startIndex, endIndex);
+
+  // Reset para primeira página quando mudar filtro
+  const handleSearchChange = (value) => {
+    setSearchTerm(value);
+    setCurrentPage(1);
+  };
+
+  if (loading) return <Loading />;
+
+  return (
+    <Layout>
+      <div>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-800">Pacientes</h1>
+          <Button
+            variant="primary"
+            onClick={() => navigate("/patients/new")}
+            className="flex items-center gap-2"
+          >
+            <Plus size={20} />
+            Novo Paciente
+          </Button>
+        </div>
+
+        {error && (
+          <Alert type="error" message={error} onClose={() => setError("")} />
+        )}
+
+        {success && (
+          <Alert
+            type="success"
+            message={success}
+            onClose={() => setSuccess("")}
+          />
+        )}
+
+        <Card>
+          {/* Campo de Filtro */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Buscar Paciente
+            </label>
+            <input
+              type="text"
+              placeholder="Digite o nome do paciente..."
+              value={searchTerm}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {searchTerm && (
+              <p className="text-sm text-gray-600 mt-2">
+                {filteredPatients.length} paciente(s) encontrado(s)
+              </p>
+            )}
+          </div>
+
+          {filteredPatients.length === 0 ? (
+            <p className="text-center text-gray-600 py-8">
+              {searchTerm
+                ? "Nenhum paciente encontrado com esse nome"
+                : "Nenhum paciente cadastrado"}
+            </p>
+          ) : (
+            <>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-gray-200">
+                      <th className="text-left p-4 font-semibold text-gray-700">
+                        Nome
+                      </th>
+                      <th className="text-left p-4 font-semibold text-gray-700">
+                        Plano
+                      </th>
+                      <th className="text-left p-4 font-semibold text-gray-700">
+                        Idade
+                      </th>
+                      <th className="text-right p-4 font-semibold text-gray-700">
+                        Ações
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {paginatedPatients.map((patient) => (
+                      <tr
+                        key={patient.id}
+                        className="border-b border-gray-100 hover:bg-gray-50 transition"
+                      >
+                        <td className="p-4 text-gray-800">{patient.name}</td>
+                        <td className="p-4 text-gray-600">
+                          {patient.health_plan}
+                        </td>
+                        <td className="p-4 text-gray-600">
+                          {getPatientAge(patient.birth_date)} anos
+                        </td>
+                        <td className="p-4 text-right space-x-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => navigate(`/patients/${patient.id}`)}
+                          >
+                            <Eye size={18} />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() =>
+                              navigate(`/patients/${patient.id}/edit`)
+                            }
+                          >
+                            <Edit2 size={18} />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              setSelectedPatient(patient);
+                              setDeleteModalOpen(true);
+                            }}
+                          >
+                            <Trash2 size={18} className="text-red-600" />
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Controles de Paginação */}
+              {totalPages > 1 && (
+                <div className="mt-6 flex items-center justify-between">
+                  <p className="text-sm text-gray-600">
+                    Mostrando {startIndex + 1} a{" "}
+                    {Math.min(endIndex, filteredPatients.length)} de{" "}
+                    {filteredPatients.length} pacientes
+                  </p>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                    >
+                      ← Anterior
+                    </Button>
+                    <div className="flex items-center gap-2">
+                      {Array.from({ length: totalPages }).map((_, i) => (
+                        <button
+                          key={i + 1}
+                          onClick={() => setCurrentPage(i + 1)}
+                          className={`px-3 py-1 rounded-lg transition ${
+                            currentPage === i + 1
+                              ? "bg-blue-600 text-white"
+                              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                          }`}
+                        >
+                          {i + 1}
+                        </button>
+                      ))}
+                    </div>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() =>
+                        setCurrentPage((p) => Math.min(totalPages, p + 1))
+                      }
+                      disabled={currentPage === totalPages}
+                    >
+                      Próxima →
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </Card>
+
+        <Modal
+          isOpen={deleteModalOpen}
+          title="Deletar Paciente"
+          onClose={() => setDeleteModalOpen(false)}
+          onConfirm={handleDelete}
+          confirmText="Deletar"
+        >
+          <p className="text-gray-600">
+            Tem certeza que deseja deletar o paciente{" "}
+            <strong>{selectedPatient?.name}</strong>?
+          </p>
+        </Modal>
+      </div>
+    </Layout>
+  );
+}
