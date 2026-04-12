@@ -18,6 +18,7 @@ const SPECIALTIES = [
   "NUTRICIONISTA",
   "PSICOPEDAGOGA",
   "ESTAGIÁRIA",
+  "AUXILIAR DE SERVIÇOS GERAIS",
 ];
 
 function parseNumber(value) {
