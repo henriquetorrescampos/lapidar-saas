@@ -15,6 +15,7 @@ const HEALTH_PLANS = [
   "IPASGO",
   "CASEMBRAPA",
   "CASSI",
+  "PARTICULAR",
 ];
 
 export default function PatientForm() {
