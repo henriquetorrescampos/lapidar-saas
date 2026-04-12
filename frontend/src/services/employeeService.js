@@ -25,8 +25,15 @@ function getFileHeaders() {
 }
 
 export const employeeService = {
-  getAll: async () => {
-    const response = await fetch(`${API_URL}/employees`, {
+  getAll: async ({ page, limit } = {}) => {
+    const params = new URLSearchParams();
+    if (page) params.set("page", page);
+    if (limit) params.set("limit", limit);
+
+    const query = params.toString();
+    const url = `${API_URL}/employees${query ? `?${query}` : ""}`;
+
+    const response = await fetch(url, {
       method: "GET",
       headers: getHeaders(),
     });

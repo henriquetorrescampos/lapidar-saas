@@ -21,8 +21,18 @@ export async function createEmployeeController(req, res) {
 
 export async function getEmployeesController(req, res) {
   try {
-    const employees = await getEmployees();
-    res.json(employees);
+    const page = req.query.page ? Number.parseInt(req.query.page, 10) : null;
+    const limit = req.query.limit ? Number.parseInt(req.query.limit, 10) : null;
+
+    if (page && (Number.isNaN(page) || page < 1)) {
+      return res.status(400).json({ error: "Invalid page parameter" });
+    }
+    if (limit && (Number.isNaN(limit) || limit < 1 || limit > 100)) {
+      return res.status(400).json({ error: "Invalid limit parameter (1-100)" });
+    }
+
+    const result = await getEmployees({ page, limit });
+    res.json(result);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

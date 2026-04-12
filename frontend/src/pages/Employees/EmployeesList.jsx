@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Plus, Edit2, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../../components/Layout/Layout";
@@ -7,6 +7,7 @@ import Button from "../../components/Common/Button";
 import Loading from "../../components/Common/Loading";
 import Alert from "../../components/Common/Alert";
 import Modal from "../../components/Common/Modal";
+import Pagination from "../../components/Common/Pagination";
 import { employeeService } from "../../services/employeeService";
 
 function formatCurrency(value) {
@@ -24,23 +25,24 @@ export default function EmployeesList() {
   const [success, setSuccess] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
-
-  const consolidatedPayroll = useMemo(() => {
-    return employees.reduce(
-      (total, employee) => total + Number(employee.updated_value || 0),
-      0,
-    );
-  }, [employees]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalEmployees, setTotalEmployees] = useState(0);
+  const [consolidatedPayroll, setConsolidatedPayroll] = useState(0);
+  const LIMIT = 10;
 
   useEffect(() => {
     loadEmployees();
-  }, []);
+  }, [page]);
 
   const loadEmployees = async () => {
     try {
       setLoading(true);
-      const data = await employeeService.getAll();
-      setEmployees(Array.isArray(data) ? data : []);
+      const result = await employeeService.getAll({ page, limit: LIMIT });
+      setEmployees(Array.isArray(result.data) ? result.data : []);
+      setTotalPages(result.meta?.totalPages || 1);
+      setTotalEmployees(result.meta?.total || 0);
+      setConsolidatedPayroll(result.meta?.consolidatedPayroll || 0);
     } catch (err) {
       setError(err.message || "Erro ao carregar funcionários");
     } finally {
@@ -57,6 +59,7 @@ export default function EmployeesList() {
       setEmployees((prev) =>
         prev.filter((employee) => employee.id !== employeeToDelete.id),
       );
+      setTotalEmployees((prev) => prev - 1);
       setShowDeleteModal(false);
       setEmployeeToDelete(null);
     } catch (err) {
@@ -200,6 +203,12 @@ export default function EmployeesList() {
             </div>
           )}
         </Card>
+
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
 
         <Modal
           isOpen={showDeleteModal}

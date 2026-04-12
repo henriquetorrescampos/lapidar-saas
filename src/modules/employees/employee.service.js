@@ -51,11 +51,36 @@ export async function createEmployee(data) {
   });
 }
 
-export async function getEmployees() {
+export async function getEmployees({ page, limit } = {}) {
+  if (page && limit) {
+    const skip = (page - 1) * limit;
+
+    const [data, total, payrollAgg] = await Promise.all([
+      prisma.employee.findMany({
+        orderBy: { name: "asc" },
+        skip,
+        take: limit,
+      }),
+      prisma.employee.count(),
+      prisma.employee.aggregate({
+        _sum: { updated_value: true },
+      }),
+    ]);
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+        consolidatedPayroll: payrollAgg._sum.updated_value || 0,
+      },
+    };
+  }
+
   return await prisma.employee.findMany({
-    orderBy: {
-      name: "asc",
-    },
+    orderBy: { name: "asc" },
   });
 }
 
