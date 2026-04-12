@@ -16,6 +16,7 @@ const SPECIALTIES = [
   "TERAPEUTA OCUPACIONAL",
   "FISIOTERAPEUTA",
   "NUTRICIONISTA",
+  "PSICOPEDAGOGA",
 ];
 
 function parseNumber(value) {
