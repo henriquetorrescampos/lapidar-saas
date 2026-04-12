@@ -36,12 +36,9 @@ export default function Login() {
       }
 
       // Armazenar o token no contexto e localStorage
-      login(response.token);
+      await login(response.token);
 
-      // Usar setTimeout pequeno para garantir que o contexto foi atualizado
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 100);
+      navigate("/dashboard");
     } catch (err) {
       setError(err.message || "Erro ao fazer login. Verifique as credenciais.");
       setLoading(false);

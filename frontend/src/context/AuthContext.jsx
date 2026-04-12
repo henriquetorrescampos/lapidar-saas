@@ -35,9 +35,23 @@ export function AuthProvider({ children }) {
     }
   }, [token]);
 
-  const login = (newToken) => {
+  const login = async (newToken) => {
     localStorage.setItem("token", newToken);
     setToken(newToken);
+
+    // Buscar dados do usuário imediatamente após login
+    try {
+      const res = await fetch(`${API_URL}/me`, {
+        headers: { Authorization: `Bearer ${newToken}` },
+      });
+      if (!res.ok) throw new Error("Token inválido");
+      const userData = await res.json();
+      setUser(userData);
+    } catch {
+      localStorage.removeItem("token");
+      setToken(null);
+      setUser(null);
+    }
   };
 
   const logout = () => {
