@@ -7,7 +7,8 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
-    "seed": "node prisma/seed.js"
+    "seed": "node prisma/seed.js",
+    "build": "npx prisma generate && npx prisma migrate deploy"
   },
   "keywords": [
     "clinic",
