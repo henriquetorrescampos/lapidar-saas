@@ -666,7 +666,7 @@ export default function SessionsPage() {
                             onChange={() =>
                               handleSessionToggle(specialty, index)
                             }
-                            className="w-4 h-4 text-primary-600 rounded"
+                            className="w-4 h-4 text-primary-600 rounded cursor-pointer"
                           />
                           <div className="flex-1 flex items-center gap-2 flex-wrap">
                             <label
