@@ -11,7 +11,7 @@ async function main() {
     });
 
     if (!adminExists) {
-      const hashedPassword = await bcrypt.hash("Henriquearena1@", 10);
+      const hashedPassword = await bcrypt.hash("Henriquelapidar1@", 10);
 
       const admin = await prisma.user.create({
         data: {
@@ -24,7 +24,7 @@ async function main() {
 
       console.log("✓ Admin user created successfully");
       console.log(`  Email: admin@lapidar.com.br`);
-      console.log(`  Password: Henriquearena1@`);
+      console.log(`  Password: Henriquelapidar1@`);
       console.log(`  ⚠️  Change this password after first login!`);
     } else {
       console.log("✓ Admin user already exists");
@@ -32,11 +32,12 @@ async function main() {
 
     // Seed health plans
     const defaultPlans = [
-      "Ipasgo",
-      "Iamesc",
-      "Saúde Caixa",
-      "Casembrapa",
-      "Geap Saúde",
+      "IPASGO",
+      "IAMESC",
+      "SAÚDE CAIXA",
+      "CASEMBRAPA",
+      "GEAP SAÚDE",
+      "PARTICULAR",
     ];
 
     for (const planName of defaultPlans) {
