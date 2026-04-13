@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Users, DollarSign } from "lucide-react";
+import { Users, DollarSign, Eye, EyeOff } from "lucide-react";
 import Layout from "../components/Layout/Layout";
 import Card from "../components/Common/Card";
 import Loading from "../components/Common/Loading";
@@ -17,6 +17,7 @@ export default function Dashboard() {
     balance: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [showBalance, setShowBalance] = useState(true);
 
   useEffect(() => {
     loadStats();
@@ -98,12 +99,30 @@ export default function Dashboard() {
             <Card>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-sm">Balanço</p>
-                  <p className="text-2xl font-bold text-gray-800">
-                    R${" "}
-                    {stats.balance?.toLocaleString("pt-BR", {
-                      minimumFractionDigits: 2,
-                    })}
+                  <div className="flex items-center gap-2 mb-1">
+                    <p className="text-gray-600 text-sm">Balanço</p>
+                    <button
+                      type="button"
+                      onClick={() => setShowBalance((v) => !v)}
+                      className="text-gray-400 hover:text-gray-600 transition"
+                    >
+                      {showBalance ? <Eye size={16} /> : <EyeOff size={16} />}
+                    </button>
+                  </div>
+                  <p
+                    className={`text-2xl font-bold ${
+                      showBalance
+                        ? stats.balance >= 0
+                          ? "text-green-600"
+                          : "text-red-600"
+                        : "text-gray-800"
+                    }`}
+                  >
+                    {showBalance
+                      ? `R$ ${stats.balance?.toLocaleString("pt-BR", {
+                          minimumFractionDigits: 2,
+                        })}`
+                      : "R$ ••••••"}
                   </p>
                 </div>
                 <div className="bg-purple-100 p-4 rounded-lg">
