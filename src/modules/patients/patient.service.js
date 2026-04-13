@@ -61,6 +61,9 @@ export async function getPatients() {
     include: {
       sessions: true,
     },
+    orderBy: {
+      name: "asc",
+    },
   });
 }
 
