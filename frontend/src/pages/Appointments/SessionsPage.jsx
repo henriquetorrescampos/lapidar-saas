@@ -41,7 +41,7 @@ const SESSION_COUNT_BY_TYPE = {
 };
 
 const MIN_SESSIONS_BY_TYPE = {
-  ABA: 8,
+  ABA: 4,
   TERAPIA_ADULTO: 4,
 };
 
