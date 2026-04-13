@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { useApi } from "../../hooks/api";
 import {
   BarChart,
@@ -30,6 +31,7 @@ export default function FinanceDashboard() {
   const [error, setError] = useState(null);
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
+  const [showValues, setShowValues] = useState(true);
 
   const fetchDashboard = async () => {
     try {
@@ -183,14 +185,27 @@ export default function FinanceDashboard() {
       </Card>
 
       {/* Indicadores Principais */}
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="font-semibold">Indicadores</h3>
+        <button
+          type="button"
+          onClick={() => setShowValues((v) => !v)}
+          className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition"
+        >
+          {showValues ? <Eye size={18} /> : <EyeOff size={18} />}
+          {showValues ? "Ocultar valores" : "Mostrar valores"}
+        </button>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         {indicators.map((indicator, idx) => (
           <Card key={idx} className={`${indicator.bgColor}`}>
             <p className="text-sm text-gray-600 mb-2">{indicator.title}</p>
             <p className={`text-2xl font-bold ${indicator.color}`}>
-              {indicator.title === "Margem"
-                ? indicator.value
-                : formatCurrency(Number(indicator.value))}
+              {!showValues
+                ? "••••••"
+                : indicator.title === "Margem"
+                  ? indicator.value
+                  : formatCurrency(Number(indicator.value))}
             </p>
           </Card>
         ))}
@@ -201,7 +216,9 @@ export default function FinanceDashboard() {
         {/* Receita por Fonte */}
         <Card>
           <h3 className="font-semibold mb-4">Receita por Fonte</h3>
-          {revenueData.length > 0 ? (
+          {!showValues ? (
+            <p className="text-gray-400 text-center py-8">Valores ocultos</p>
+          ) : revenueData.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -236,7 +253,9 @@ export default function FinanceDashboard() {
         {/* Despesa por Categoria */}
         <Card>
           <h3 className="font-semibold mb-4">Despesas por Categoria</h3>
-          {expenseData.length > 0 ? (
+          {!showValues ? (
+            <p className="text-gray-400 text-center py-8">Valores ocultos</p>
+          ) : expenseData.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={expenseData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -273,23 +292,24 @@ export default function FinanceDashboard() {
           <div>
             <p className="text-sm text-gray-600">Total de Receitas</p>
             <p className="text-xl font-bold text-green-600">
-              {dashboard?.revenue_count || 0}
+              {showValues ? dashboard?.revenue_count || 0 : "•••"}
             </p>
           </div>
           <div>
             <p className="text-sm text-gray-600">Total de Despesas</p>
             <p className="text-xl font-bold text-red-600">
-              {dashboard?.expense_count || 0}
+              {showValues ? dashboard?.expense_count || 0 : "•••"}
             </p>
           </div>
           <div>
             <p className="text-sm text-gray-600">Taxa de Lucratividade</p>
             <p className="text-xl font-bold text-blue-600">
-              {(
-                (dashboard?.net_profit / (dashboard?.gross_revenue || 1)) *
-                100
-              ).toFixed(1)}
-              %
+              {showValues
+                ? `${(
+                    (dashboard?.net_profit / (dashboard?.gross_revenue || 1)) *
+                    100
+                  ).toFixed(1)}%`
+                : "•••"}
             </p>
           </div>
         </div>
