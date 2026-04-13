@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Users, DollarSign, Eye, EyeOff } from "lucide-react";
+import { Users, DollarSign, Eye, EyeOff, Brain } from "lucide-react";
 import Layout from "../components/Layout/Layout";
 import Card from "../components/Common/Card";
 import Loading from "../components/Common/Loading";
@@ -13,6 +13,7 @@ export default function Dashboard() {
     patients: 0,
     patients_aba: 0,
     patients_terapia_adulto: 0,
+    patients_neuro: 0,
     appointments: 0,
     balance: 0,
   });
@@ -37,6 +38,9 @@ export default function Dashboard() {
       const patients_terapia_adulto = patientsArray.filter((p) =>
         p.patient_type?.includes("TERAPIA_ADULTO"),
       ).length;
+      const patients_neuro = patientsArray.filter((p) =>
+        p.patient_type?.includes("AVALIACAO_NEUROPSICOLOGICA"),
+      ).length;
 
       if (user?.role === "admin") {
         summary = await financeService.getSummary();
@@ -47,6 +51,7 @@ export default function Dashboard() {
         patients: patientsArray.length,
         patients_aba,
         patients_terapia_adulto,
+        patients_neuro,
         appointments: 0,
         balance,
       });
@@ -91,6 +96,22 @@ export default function Dashboard() {
               </div>
               <div className="bg-cyan-100 p-4 rounded-lg">
                 <Users size={32} className="text-cyan-600" />
+              </div>
+            </div>
+          </Card>
+
+          <Card>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 text-sm">
+                  Avaliação Neuropsicológica
+                </p>
+                <p className="text-2xl font-bold text-gray-800">
+                  {stats.patients_neuro}
+                </p>
+              </div>
+              <div className="bg-amber-100 p-4 rounded-lg">
+                <Brain size={32} className="text-amber-600" />
               </div>
             </div>
           </Card>
