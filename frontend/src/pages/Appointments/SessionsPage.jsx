@@ -104,7 +104,7 @@ export default function SessionsPage() {
         .fill(null)
         .map((_, i) => {
           const date = new Date(today);
-          date.setDate(date.getDate() + (i + 1));
+          date.setDate(date.getDate() + i);
           return { checked: false, date: date.toISOString().split("T")[0] };
         });
     return {
