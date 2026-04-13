@@ -168,10 +168,17 @@ export default function PatientsList() {
                                   TERAPIA_ADULTO: "Terapia Adulto",
                                   AVALIACAO_NEUROPSICOLOGICA: "Avaliação Neuro",
                                 };
+                                const colors = {
+                                  ABA: "bg-blue-100 text-blue-800",
+                                  TERAPIA_ADULTO:
+                                    "bg-purple-100 text-purple-800",
+                                  AVALIACAO_NEUROPSICOLOGICA:
+                                    "bg-green-100 text-green-800",
+                                };
                                 return (
                                   <span
                                     key={type}
-                                    className="inline-block rounded-full bg-primary-100 px-2 py-0.5 text-xs font-medium text-primary-800"
+                                    className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${colors[type] || "bg-gray-100 text-gray-800"}`}
                                   >
                                     {labels[type] || type}
                                   </span>
