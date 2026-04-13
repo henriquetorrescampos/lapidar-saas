@@ -137,6 +137,9 @@ export default function PatientsList() {
                       <th className="text-left p-4 font-semibold text-gray-700">
                         Idade
                       </th>
+                      <th className="text-left p-4 font-semibold text-gray-700">
+                        Especialidades
+                      </th>
                       <th className="text-right p-4 font-semibold text-gray-700">
                         Ações
                       </th>
@@ -154,6 +157,27 @@ export default function PatientsList() {
                         </td>
                         <td className="p-4 text-gray-600">
                           {getPatientAge(patient.birth_date)} anos
+                        </td>
+                        <td className="p-4">
+                          <div className="flex flex-wrap gap-1">
+                            {(patient.patient_type || "")
+                              .split(",")
+                              .map((type) => {
+                                const labels = {
+                                  ABA: "ABA",
+                                  TERAPIA_ADULTO: "Terapia Adulto",
+                                  AVALIACAO_NEUROPSICOLOGICA: "Avaliação Neuro",
+                                };
+                                return (
+                                  <span
+                                    key={type}
+                                    className="inline-block rounded-full bg-primary-100 px-2 py-0.5 text-xs font-medium text-primary-800"
+                                  >
+                                    {labels[type] || type}
+                                  </span>
+                                );
+                              })}
+                          </div>
                         </td>
                         <td className="p-4 text-right space-x-2">
                           <Button
