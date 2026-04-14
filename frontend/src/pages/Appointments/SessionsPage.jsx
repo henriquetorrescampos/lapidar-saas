@@ -95,7 +95,6 @@ export default function SessionsPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Estado para os checkboxes das sessões com datas
   const initializeSessions = (patient) => {
     const count = getSessionCount(patient);
     const today = new Date();
@@ -117,7 +116,6 @@ export default function SessionsPage() {
 
   const [sessions, setSessions] = useState(initializeSessions(null));
 
-  // Histórico de atendimentos
   const [history, setHistory] = useState([]);
   const [selectedHistoryItem, setSelectedHistoryItem] = useState(null);
   const [deleteConfirmItem, setDeleteConfirmItem] = useState(null);
@@ -154,10 +152,8 @@ export default function SessionsPage() {
     loadPatients();
   }, []);
 
-  // Carregar sessões quando mudar de paciente
   useEffect(() => {
     if (selectedPatient) {
-      // Evita estado transitório inválido ao trocar rapidamente de paciente.
       setSessions(initializeSessions(selectedPatient));
       loadExistingSessions();
       loadSessionHistory(selectedPatient.id);
@@ -186,8 +182,6 @@ export default function SessionsPage() {
 
     try {
       const availableSpecialties = getAvailableSpecialties(selectedPatient);
-
-      // Carregar especialidades de acordo com o tipo de paciente
       const sessionsData = {};
 
       for (const specialty of availableSpecialties) {
@@ -197,11 +191,9 @@ export default function SessionsPage() {
             specialty,
           );
 
-        // Munta o estado com as sessões existentes
         sessionsData[specialty] = initializeSessions(selectedPatient)[
           specialty
         ].map((session) => {
-          // Verificar se essa sessão já existe
           const existingSession = existingSessions.find(
             (s) => s.date.split("T")[0] === session.date,
           );
@@ -216,7 +208,6 @@ export default function SessionsPage() {
       setSessions(sessionsData);
     } catch (err) {
       console.error("Erro ao carregar sessões:", err);
-      // Se houver erro, apenas inicializa com state vazio
       setSessions(initializeSessions(selectedPatient));
     }
   };
@@ -232,7 +223,6 @@ export default function SessionsPage() {
     }
   };
 
-  // Excluir pacientes que são SOMENTE avaliação neuropsicológica
   const therapyPatients = patients.filter(
     (patient) => patient.patient_type !== "AVALIACAO_NEUROPSICOLOGICA",
   );
@@ -253,7 +243,6 @@ export default function SessionsPage() {
 
     const newCheckedState = !currentSession.checked;
 
-    // Atualizar o estado imediatamente para feedback visual
     setSessions((prev) => {
       const currentSpecialtySessions = Array.isArray(prev[specialty])
         ? prev[specialty]
@@ -261,17 +250,10 @@ export default function SessionsPage() {
       const newSessions = [...currentSpecialtySessions];
       if (!newSessions[index]) return prev;
 
-      newSessions[index] = {
-        ...newSessions[index],
-        checked: newCheckedState,
-      };
-      return {
-        ...prev,
-        [specialty]: newSessions,
-      };
+      newSessions[index] = { ...newSessions[index], checked: newCheckedState };
+      return { ...prev, [specialty]: newSessions };
     });
 
-    // Se foi marcado, salvar no banco de dados
     if (newCheckedState) {
       try {
         const result = await appointmentService.createSingle({
@@ -280,7 +262,6 @@ export default function SessionsPage() {
           date: currentSession.date,
         });
 
-        // Armazenar o ID da sessão no estado
         setSessions((prev) => {
           const currentSpecialtySessions = Array.isArray(prev[specialty])
             ? prev[specialty]
@@ -288,19 +269,12 @@ export default function SessionsPage() {
           const newSessions = [...currentSpecialtySessions];
           if (!newSessions[index]) return prev;
 
-          newSessions[index] = {
-            ...newSessions[index],
-            id: result.id,
-          };
-          return {
-            ...prev,
-            [specialty]: newSessions,
-          };
+          newSessions[index] = { ...newSessions[index], id: result.id };
+          return { ...prev, [specialty]: newSessions };
         });
       } catch (err) {
         console.error("❌ Erro ao salvar sessão:", err);
 
-        // Desmarcar o checkbox se falhar em salvar
         setSessions((prev) => {
           const currentSpecialtySessions = Array.isArray(prev[specialty])
             ? prev[specialty]
@@ -308,25 +282,17 @@ export default function SessionsPage() {
           const newSessions = [...currentSpecialtySessions];
           if (!newSessions[index]) return prev;
 
-          newSessions[index] = {
-            ...newSessions[index],
-            checked: false,
-          };
-          return {
-            ...prev,
-            [specialty]: newSessions,
-          };
+          newSessions[index] = { ...newSessions[index], checked: false };
+          return { ...prev, [specialty]: newSessions };
         });
 
         setError(`Erro ao salvar sessão: ${err.message}`);
       }
     } else {
-      // Se foi desmarcado, deletar do banco de dados
       try {
         if (currentSession.id) {
           await appointmentService.deleteSingle(currentSession.id);
 
-          // Limpar o ID do estado
           setSessions((prev) => {
             const currentSpecialtySessions = Array.isArray(prev[specialty])
               ? prev[specialty]
@@ -334,20 +300,13 @@ export default function SessionsPage() {
             const newSessions = [...currentSpecialtySessions];
             if (!newSessions[index]) return prev;
 
-            newSessions[index] = {
-              ...newSessions[index],
-              id: null,
-            };
-            return {
-              ...prev,
-              [specialty]: newSessions,
-            };
+            newSessions[index] = { ...newSessions[index], id: null };
+            return { ...prev, [specialty]: newSessions };
           });
         }
       } catch (err) {
         console.error("❌ Erro ao deletar sessão:", err);
 
-        // Remarcar o checkbox se falhar em deletar
         setSessions((prev) => {
           const currentSpecialtySessions = Array.isArray(prev[specialty])
             ? prev[specialty]
@@ -355,14 +314,8 @@ export default function SessionsPage() {
           const newSessions = [...currentSpecialtySessions];
           if (!newSessions[index]) return prev;
 
-          newSessions[index] = {
-            ...newSessions[index],
-            checked: true,
-          };
-          return {
-            ...prev,
-            [specialty]: newSessions,
-          };
+          newSessions[index] = { ...newSessions[index], checked: true };
+          return { ...prev, [specialty]: newSessions };
         });
 
         setError(`Erro ao deletar sessão: ${err.message}`);
@@ -385,14 +338,8 @@ export default function SessionsPage() {
       const newSessions = [...currentSpecialtySessions];
       if (!newSessions[index]) return prev;
 
-      newSessions[index] = {
-        ...newSessions[index],
-        date: newDate,
-      };
-      return {
-        ...prev,
-        [specialty]: newSessions,
-      };
+      newSessions[index] = { ...newSessions[index], date: newDate };
+      return { ...prev, [specialty]: newSessions };
     });
   };
 
@@ -453,10 +400,7 @@ export default function SessionsPage() {
       ]);
 
       setSpecialtyPages((prev) => ({ ...prev, [specialty]: 1 }));
-
       setSuccess(`✅ Histórico de ${specialty} registrado com sucesso!`);
-
-      // Limpar mensagem de sucesso após 3 segundos
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
       console.error("❌ Erro ao registrar histórico:", err);
@@ -517,7 +461,6 @@ export default function SessionsPage() {
             />
           </div>
 
-          {/* Lista de pacientes filtrados */}
           {searchTerm && filteredPatients.length > 0 && (
             <div className="mb-4 border border-gray-200 rounded-lg overflow-hidden max-h-64 overflow-y-auto bg-white">
               {filteredPatients.map((patient) => (
@@ -549,7 +492,6 @@ export default function SessionsPage() {
             </div>
           )}
 
-          {/* Ou selecione no dropdown */}
           {!searchTerm && (
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -598,6 +540,7 @@ export default function SessionsPage() {
         {/* Grid de Especialidades */}
         {selectedPatient && (
           <>
+            {/* Dicas ABA */}
             {selectedPatient?.patient_type?.includes("ABA") && (
               <details className="mb-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <summary className="flex items-center gap-2 px-4 py-2.5 cursor-pointer select-none">
@@ -620,6 +563,26 @@ export default function SessionsPage() {
                 </ul>
               </details>
             )}
+
+            {/* Dicas Terapia Adulto */}
+            {selectedPatient?.patient_type?.includes("TERAPIA_ADULTO") && (
+              <details className="mb-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <summary className="flex items-center gap-2 px-4 py-2.5 cursor-pointer select-none">
+                  <Info size={16} className="text-blue-500 shrink-0" />
+                  <span className="text-sm font-medium text-blue-800">
+                    Dicas para emissão de guias
+                  </span>
+                </summary>
+                <ul className="px-4 pb-3 pt-1 space-y-1.5 text-lg text-blue-700 list-disc list-inside">
+                  <li>
+                    A guia de terapia adulto com 10 quantidades representa 4
+                    sessões. Sempre emitir a guia na última sessão para reservar
+                    o horário para o paciente.
+                  </li>
+                </ul>
+              </details>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               {getAvailableSpecialties(selectedPatient).map((specialty) => (
                 <Card key={specialty}>
@@ -628,22 +591,6 @@ export default function SessionsPage() {
                       <h3 className="text-lg font-bold text-gray-800">
                         {specialty}
                       </h3>
-                      {selectedPatient?.patient_type?.includes(
-                        "TERAPIA_ADULTO",
-                      ) && (
-                        <div className="relative group">
-                          <Info
-                            size={18}
-                            className="text-blue-500 cursor-help"
-                          />
-                          <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-64 p-3 bg-gray-800 text-white text-xs rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                            A guia de terapia adulto com 10 quantidades
-                            representa 4 sessões. Sempre emitir a guia na última
-                            sessão para reservar o horário para o paciente.
-                            <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800" />
-                          </div>
-                        </div>
-                      )}
                     </div>
                     <p className="text-sm text-gray-600 mb-4">
                       {countCompleted(specialty)}/
@@ -750,7 +697,6 @@ export default function SessionsPage() {
                     key={specialty}
                     className="border border-gray-200 rounded-lg overflow-hidden"
                   >
-                    {/* Cabeçalho do grupo */}
                     <button
                       onClick={() =>
                         setExpandedSpecialties((prev) => ({
@@ -782,7 +728,6 @@ export default function SessionsPage() {
                       />
                     </button>
 
-                    {/* Tabela do grupo */}
                     {isExpanded && (
                       <div>
                         <table className="w-full">
@@ -842,7 +787,6 @@ export default function SessionsPage() {
                           </tbody>
                         </table>
 
-                        {/* Paginação por especialidade */}
                         {totalPages > 1 && (
                           <div className="flex items-center justify-between px-4 py-2 border-t border-gray-100 bg-gray-50">
                             <p className="text-xs text-gray-500">
