@@ -97,15 +97,10 @@ export default function SessionsPage() {
 
   const initializeSessions = (patient) => {
     const count = getSessionCount(patient);
-    const today = new Date();
     const buildArray = () =>
       Array(count)
         .fill(null)
-        .map((_, i) => {
-          const date = new Date(today);
-          date.setDate(date.getDate() + i);
-          return { checked: false, date: date.toISOString().split("T")[0] };
-        });
+        .map(() => ({ checked: false, date: "", id: null }));
     return {
       Psicopedagogia: buildArray(),
       Fonoaudiologia: buildArray(),
@@ -191,17 +186,22 @@ export default function SessionsPage() {
             specialty,
           );
 
-        sessionsData[specialty] = initializeSessions(selectedPatient)[
-          specialty
-        ].map((session) => {
-          const existingSession = existingSessions.find(
-            (s) => s.date.split("T")[0] === session.date,
-          );
-          return {
-            ...session,
-            checked: !!existingSession,
-            id: existingSession?.id || null,
-          };
+        const defaultSessions = initializeSessions(selectedPatient)[specialty];
+        const sortedExistingSessions = Array.isArray(existingSessions)
+          ? [...existingSessions].sort(
+              (a, b) => new Date(a.date) - new Date(b.date),
+            )
+          : [];
+
+        sessionsData[specialty] = defaultSessions.map((session, index) => {
+          const existingSession = sortedExistingSessions[index];
+          return existingSession
+            ? {
+                checked: true,
+                date: existingSession.date.split("T")[0],
+                id: existingSession.id,
+              }
+            : session;
         });
       }
 
@@ -242,6 +242,8 @@ export default function SessionsPage() {
     if (!currentSession) return;
 
     const newCheckedState = !currentSession.checked;
+    const today = new Date().toISOString().split("T")[0];
+    const defaultDate = currentSession.date || today;
 
     setSessions((prev) => {
       const currentSpecialtySessions = Array.isArray(prev[specialty])
@@ -250,15 +252,23 @@ export default function SessionsPage() {
       const newSessions = [...currentSpecialtySessions];
       if (!newSessions[index]) return prev;
 
-      newSessions[index] = { ...newSessions[index], checked: newCheckedState };
+      newSessions[index] = {
+        ...newSessions[index],
+        checked: newCheckedState,
+        date: newCheckedState ? defaultDate : newSessions[index].date,
+      };
       return { ...prev, [specialty]: newSessions };
     });
 
     if (newCheckedState) {
+      if (!currentSession.date) {
+        return;
+      }
+
       try {
         const result = await appointmentService.createSingle({
           patient_id: selectedPatient.id,
-          specialty: specialty,
+          specialty,
           date: currentSession.date,
         });
 
@@ -330,7 +340,9 @@ export default function SessionsPage() {
     return initializeSessions(selectedPatient)[specialty] || [];
   };
 
-  const handleSessionDateChange = (specialty, index, newDate) => {
+  const handleSessionDateChange = async (specialty, index, newDate) => {
+    const currentSession = getSpecialtySessions(specialty)[index];
+
     setSessions((prev) => {
       const currentSpecialtySessions = Array.isArray(prev[specialty])
         ? prev[specialty]
@@ -338,9 +350,36 @@ export default function SessionsPage() {
       const newSessions = [...currentSpecialtySessions];
       if (!newSessions[index]) return prev;
 
-      newSessions[index] = { ...newSessions[index], date: newDate };
+      newSessions[index] = {
+        ...newSessions[index],
+        date: newDate,
+      };
       return { ...prev, [specialty]: newSessions };
     });
+
+    if (currentSession?.checked && !currentSession?.id && newDate) {
+      try {
+        const result = await appointmentService.createSingle({
+          patient_id: selectedPatient.id,
+          specialty,
+          date: newDate,
+        });
+
+        setSessions((prev) => {
+          const currentSpecialtySessions = Array.isArray(prev[specialty])
+            ? prev[specialty]
+            : initializeSessions(selectedPatient)[specialty] || [];
+          const newSessions = [...currentSpecialtySessions];
+          if (!newSessions[index]) return prev;
+
+          newSessions[index] = { ...newSessions[index], id: result.id };
+          return { ...prev, [specialty]: newSessions };
+        });
+      } catch (err) {
+        console.error("❌ Erro ao salvar sessão após alteração de data:", err);
+        setError(`Erro ao salvar sessão: ${err.message}`);
+      }
+    }
   };
 
   const countCompleted = (specialty) => {
@@ -378,8 +417,27 @@ export default function SessionsPage() {
 
     try {
       const checkedSessions = sessions[specialty].filter((s) => s.checked);
+
+      if (checkedSessions.some((session) => !session.date)) {
+        throw new Error(
+          "Defina a data para todas as sessões marcadas antes de registrar o histórico.",
+        );
+      }
+
+      const sessionsToCreate = checkedSessions.filter((session) => !session.id);
+      const createdIds = [];
+
+      for (const session of sessionsToCreate) {
+        const result = await appointmentService.createSingle({
+          patient_id: selectedPatient.id,
+          specialty,
+          date: session.date,
+        });
+        createdIds.push(result.id);
+      }
+
       const sessionIds = checkedSessions
-        .map((session) => session.id)
+        .map((session) => session.id || createdIds.shift())
         .filter(Boolean);
 
       if (sessionIds.length !== checkedSessions.length) {
