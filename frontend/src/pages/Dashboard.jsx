@@ -160,6 +160,84 @@ export default function Dashboard() {
             Olá, {user?.name}! Bem-vindo ao sistema da clínica Lapidar.
           </p>
         </Card>
+
+        <div className="mt-8">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Guia de Emissão de Guias</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <Card>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-3 h-3 rounded-full bg-cyan-500" />
+                <h3 className="font-semibold text-gray-800">Terapia Adulto</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li className="flex gap-2">
+                  <span className="text-cyan-500 font-bold mt-0.5">•</span>
+                  <span><strong>10 quantidades</strong> na guia = <strong>4 sessões</strong></span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-cyan-500 font-bold mt-0.5">•</span>
+                  <span>Emitir sempre na <strong>última sessão</strong> para reservar o horário do paciente</span>
+                </li>
+              </ul>
+            </Card>
+
+            <Card>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-3 h-3 rounded-full bg-indigo-500" />
+                <h3 className="font-semibold text-gray-800">Terapia ABA Infantil</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li className="flex gap-2">
+                  <span className="text-indigo-500 font-bold mt-0.5">•</span>
+                  <span><strong>1x/semana:</strong> 2 sessões na guia = 1 atendimento. Ex: 4 semanas → emitir <strong>8 quantidades</strong></span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-indigo-500 font-bold mt-0.5">•</span>
+                  <span><strong>2x/semana:</strong> 1 sessão na guia = 1 atendimento. Ex: 4 semanas → emitir <strong>8 quantidades</strong></span>
+                </li>
+              </ul>
+            </Card>
+
+            <Card>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-3 h-3 rounded-full bg-violet-500" />
+                <h3 className="font-semibold text-gray-800">Terapia Adulto ABA</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li className="flex gap-2">
+                  <span className="text-violet-500 font-bold mt-0.5">•</span>
+                  <span><strong>1x/semana:</strong> 2 sessões na guia = 1 atendimento/semana. Ex: 4 semanas → emitir <strong>8 quantidades</strong></span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-violet-500 font-bold mt-0.5">•</span>
+                  <span><strong>2x/semana:</strong> 2 sessões na guia = 1 atendimento/semana. Ex: 4 semanas → emitir <strong>8 quantidades</strong></span>
+                </li>
+              </ul>
+            </Card>
+
+            <Card>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-3 h-3 rounded-full bg-amber-500" />
+                <h3 className="font-semibold text-gray-800">Avaliação Neuropsicológica</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li className="flex gap-2">
+                  <span className="text-amber-500 font-bold mt-0.5">•</span>
+                  <span><strong>Criança:</strong> emitir código <strong>ABA</strong> (10 quantidades de terapia)</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-amber-500 font-bold mt-0.5">•</span>
+                  <div className="flex flex-col gap-1">
+                    <span><strong>Adulto:</strong> emitir código de <strong>terapia adulto</strong> (10 quantidades)</span>
+                    <span className="pl-3 text-gray-500">↳ <strong>Mês seguinte:</strong> emitir mais 10 quantidades de terapia adulto para contemplar a avaliação neuropsicológica</span>
+                  </div>
+                </li>
+              </ul>
+            </Card>
+
+          </div>
+        </div>
       </div>
     </Layout>
   );
