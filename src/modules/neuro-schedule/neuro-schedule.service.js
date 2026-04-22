@@ -1,11 +1,20 @@
 import { prisma } from "../../lib/prisma.js";
 import { validateRequired, validateNumberId } from "../../lib/validators.js";
 
+function adultCutoff() {
+  const d = new Date();
+  d.setFullYear(d.getFullYear() - 18);
+  return d;
+}
+
 export async function getNeuroSchedules(filters = {}) {
   const where = {};
 
-  // Filtrar só pacientes com AVALIACAO_NEUROPSICOLOGICA
-  where.patient = { patient_type: { contains: "AVALIACAO_NEUROPSICOLOGICA" } };
+  // Filtrar só pacientes com AVALIACAO_NEUROPSICOLOGICA e maiores de 18 anos
+  where.patient = {
+    patient_type: { contains: "AVALIACAO_NEUROPSICOLOGICA" },
+    birth_date: { lte: adultCutoff() },
+  };
 
   // Filtro por aba: pendentes (status != em_dia) ou concluidos (status = em_dia)
   if (filters.tab === "concluidos") {
@@ -76,7 +85,10 @@ export async function getNeuroSchedules(filters = {}) {
 
   // Stats: contagem geral (independente de paginação e filtros de status/search)
   const baseWhere = {
-    patient: { patient_type: { contains: "AVALIACAO_NEUROPSICOLOGICA" } },
+    patient: {
+      patient_type: { contains: "AVALIACAO_NEUROPSICOLOGICA" },
+      birth_date: { lte: adultCutoff() },
+    },
   };
 
   const now = new Date();
@@ -140,6 +152,12 @@ export async function createNeuroSchedule(data) {
   if (!patient.patient_type.includes("AVALIACAO_NEUROPSICOLOGICA")) {
     throw new Error(
       "Paciente não está marcado como Avaliação Neuropsicológica",
+    );
+  }
+
+  if (new Date(patient.birth_date) > adultCutoff()) {
+    throw new Error(
+      "Somente pacientes maiores de 18 anos podem ser agendados nesta área",
     );
   }
 
