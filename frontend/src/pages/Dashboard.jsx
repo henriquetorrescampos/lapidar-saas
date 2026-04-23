@@ -248,7 +248,7 @@ export default function Dashboard() {
                     <span>
                       <strong>2x/semana:</strong> 2 sessões na guia = 1
                       atendimento/semana. Ex: 4 semanas → emitir{" "}
-                      <strong>8 quantidades</strong>
+                      <strong>16 quantidades</strong>
                     </span>
                   </li>
                 </ul>
