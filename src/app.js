@@ -13,6 +13,11 @@ import neuroScheduleRoutes from "./modules/neuro-schedule/neuro-schedule.routes.
 
 dotenv.config();
 
+// Prisma $queryRaw retorna BigInt para colunas SERIAL — patch global para serialização JSON
+BigInt.prototype.toJSON = function () {
+  return Number(this);
+};
+
 const app = express();
 
 // Headers de segurança HTTP
