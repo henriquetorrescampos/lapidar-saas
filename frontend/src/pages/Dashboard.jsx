@@ -265,8 +265,8 @@ export default function Dashboard() {
                   <li className="flex gap-2">
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
                     <span>
-                      <strong>Criança:</strong> emitir código TEA
-                      <strong>ABA</strong> (10 quantidades de terapia)
+                      <strong>Criança:</strong> emitir código TEA (10
+                      quantidades de terapia)
                     </span>
                   </li>
                   <li className="flex gap-2">
