@@ -242,7 +242,8 @@ export default function SessionsPage() {
     if (!currentSession) return;
 
     const newCheckedState = !currentSession.checked;
-    const today = new Date().toISOString().split("T")[0];
+    const todayLocal = new Date();
+    const today = `${todayLocal.getFullYear()}-${String(todayLocal.getMonth() + 1).padStart(2, "0")}-${String(todayLocal.getDate()).padStart(2, "0")}`;
     const defaultDate = currentSession.date || today;
 
     setSessions((prev) => {
@@ -261,15 +262,11 @@ export default function SessionsPage() {
     });
 
     if (newCheckedState) {
-      if (!currentSession.date) {
-        return;
-      }
-
       try {
         const result = await appointmentService.createSingle({
           patient_id: selectedPatient.id,
           specialty,
-          date: currentSession.date,
+          date: defaultDate,
         });
 
         setSessions((prev) => {
