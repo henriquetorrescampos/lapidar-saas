@@ -4,6 +4,7 @@ import {
   createSingleSession,
   deleteSessionHistory,
   getSessionHistoryByPatient,
+  updateSessionDate,
 } from "./session.service.js";
 import { prisma } from "../../lib/prisma.js";
 
@@ -72,6 +73,18 @@ export async function archiveSessionsToHistoryController(req, res) {
   try {
     const result = await archiveSessionsToHistory(req.body, req.user);
     res.status(201).json(result);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+}
+
+export async function updateSessionDateController(req, res) {
+  try {
+    const { id } = req.params;
+    const { date } = req.body;
+    if (!date) return res.status(400).json({ error: "date is required" });
+    const result = await updateSessionDate(id, date);
+    res.json(result);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

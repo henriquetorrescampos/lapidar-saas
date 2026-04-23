@@ -338,6 +338,7 @@ export default function SessionsPage() {
   };
 
   const handleSessionDateChange = async (specialty, index, newDate) => {
+    if (!newDate) return;
     const currentSession = getSpecialtySessions(specialty)[index];
 
     setSessions((prev) => {
@@ -346,36 +347,36 @@ export default function SessionsPage() {
         : initializeSessions(selectedPatient)[specialty] || [];
       const newSessions = [...currentSpecialtySessions];
       if (!newSessions[index]) return prev;
-
-      newSessions[index] = {
-        ...newSessions[index],
-        date: newDate,
-      };
+      newSessions[index] = { ...newSessions[index], date: newDate };
       return { ...prev, [specialty]: newSessions };
     });
 
-    if (currentSession?.checked && !currentSession?.id && newDate) {
-      try {
+    if (!currentSession?.checked) return;
+
+    try {
+      if (currentSession.id) {
+        // Sessão já existe → atualiza a data
+        await appointmentService.updateDate(currentSession.id, newDate);
+      } else {
+        // Sessão ainda não foi salva → cria com a nova data
         const result = await appointmentService.createSingle({
           patient_id: selectedPatient.id,
           specialty,
           date: newDate,
         });
-
         setSessions((prev) => {
           const currentSpecialtySessions = Array.isArray(prev[specialty])
             ? prev[specialty]
             : initializeSessions(selectedPatient)[specialty] || [];
           const newSessions = [...currentSpecialtySessions];
           if (!newSessions[index]) return prev;
-
           newSessions[index] = { ...newSessions[index], id: result.id };
           return { ...prev, [specialty]: newSessions };
         });
-      } catch (err) {
-        console.error("❌ Erro ao salvar sessão após alteração de data:", err);
-        setError(`Erro ao salvar sessão: ${err.message}`);
       }
+    } catch (err) {
+      console.error("❌ Erro ao atualizar data da sessão:", err);
+      setError(`Erro ao atualizar data: ${err.message}`);
     }
   };
 

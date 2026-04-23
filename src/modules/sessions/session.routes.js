@@ -9,6 +9,7 @@ import {
   createSingleSessionController,
   deleteSessionController,
   deleteSessionHistoryController,
+  updateSessionDateController,
 } from "./session.controller.js";
 
 const router = express.Router();
@@ -57,6 +58,14 @@ router.delete(
   authMiddleware,
   authorize(["admin", "user"]),
   deleteSessionHistoryController,
+);
+
+// Atualizar data de uma sessão
+router.put(
+  "/:id",
+  authMiddleware,
+  authorize(["admin", "user"]),
+  updateSessionDateController,
 );
 
 // Deletar uma sessão

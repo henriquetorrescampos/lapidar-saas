@@ -126,6 +126,26 @@ export const appointmentService = {
     }
   },
 
+  updateDate: async (sessionId, date) => {
+    try {
+      const response = await fetch(`${API_URL}/sessions/${sessionId}`, {
+        method: "PUT",
+        headers: getHeaders(),
+        body: JSON.stringify({ date }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || error.message || "Erro ao atualizar sessão");
+      }
+
+      return response.json();
+    } catch (err) {
+      console.error("Erro na requisição:", err);
+      throw new Error(err.message || "Erro ao atualizar sessão");
+    }
+  },
+
   deleteSingle: async (sessionId) => {
     try {
       const response = await fetch(`${API_URL}/sessions/${sessionId}`, {

@@ -246,7 +246,7 @@ export default function Dashboard() {
                   <li className="flex gap-2">
                     <span className="text-violet-500 font-bold mt-0.5">•</span>
                     <span>
-                      <strong>2x/semana:</strong> 2 sessões na guia = 1
+                      <strong>2x/semana:</strong> 2 sessões na guia = 2
                       atendimento/semana. Ex: 4 semanas → emitir{" "}
                       <strong>16 quantidades</strong>
                     </span>

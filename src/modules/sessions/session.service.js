@@ -134,6 +134,19 @@ export async function createSingleSession(data) {
   });
 }
 
+export async function updateSessionDate(id, date) {
+  const sessionId = validateNumberId(id);
+  validateRequired(date, "Date");
+
+  const session = await prisma.session.findUnique({ where: { id: sessionId } });
+  if (!session) throw new Error("Session not found");
+
+  return prisma.session.update({
+    where: { id: sessionId },
+    data: { date: validateDate(date) },
+  });
+}
+
 export async function archiveSessionsToHistory(data, currentUser) {
   const { patient_id, specialty, session_ids, dates, total } = data;
 
