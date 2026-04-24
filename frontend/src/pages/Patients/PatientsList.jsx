@@ -22,6 +22,8 @@ export default function PatientsList() {
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [filterHealthPlan, setFilterHealthPlan] = useState("");
+  const [filterSpecialty, setFilterSpecialty] = useState("");
 
   useEffect(() => {
     loadPatients();
@@ -50,20 +52,28 @@ export default function PatientsList() {
     }
   };
 
-  // Filtrar pacientes por nome
-  const filteredPatients = patients.filter((patient) =>
-    patient.name.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const healthPlans = [...new Set(patients.map((p) => p.health_plan).filter(Boolean))].sort();
 
-  // Calcular paginação
+  const SPECIALTIES = [
+    { value: "ABA", label: "ABA" },
+    { value: "TERAPIA_ADULTO", label: "Terapia Adulto" },
+    { value: "AVALIACAO_NEUROPSICOLOGICA", label: "Avaliação Neuropsicológica" },
+  ];
+
+  const filteredPatients = patients.filter((patient) => {
+    const matchesName = patient.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesPlan = !filterHealthPlan || patient.health_plan === filterHealthPlan;
+    const matchesSpecialty = !filterSpecialty || (patient.patient_type || "").includes(filterSpecialty);
+    return matchesName && matchesPlan && matchesSpecialty;
+  });
+
   const totalPages = Math.ceil(filteredPatients.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const paginatedPatients = filteredPatients.slice(startIndex, endIndex);
 
-  // Reset para primeira página quando mudar filtro
-  const handleSearchChange = (value) => {
-    setSearchTerm(value);
+  const handleFilterChange = (setter) => (value) => {
+    setter(value);
     setCurrentPage(1);
   };
 
@@ -97,24 +107,56 @@ export default function PatientsList() {
         )}
 
         <Card>
-          {/* Campo de Filtro */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Buscar Paciente
-            </label>
-            <input
-              type="text"
-              placeholder="Digite o nome do paciente..."
-              value={searchTerm}
-              onChange={(e) => handleSearchChange(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            {searchTerm && (
-              <p className="text-sm text-gray-600 mt-2">
-                {filteredPatients.length} paciente(s) encontrado(s)
-              </p>
-            )}
+          {/* Filtros */}
+          <div className="flex flex-wrap gap-4 mb-6">
+            <div className="flex-1 min-w-[200px]">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Buscar por nome
+              </label>
+              <input
+                type="text"
+                placeholder="Digite o nome do paciente..."
+                value={searchTerm}
+                onChange={(e) => handleFilterChange(setSearchTerm)(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div className="min-w-[180px]">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Plano de Saúde
+              </label>
+              <select
+                value={filterHealthPlan}
+                onChange={(e) => handleFilterChange(setFilterHealthPlan)(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Todos</option>
+                {healthPlans.map((plan) => (
+                  <option key={plan} value={plan}>{plan}</option>
+                ))}
+              </select>
+            </div>
+            <div className="min-w-[200px]">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Especialidade
+              </label>
+              <select
+                value={filterSpecialty}
+                onChange={(e) => handleFilterChange(setFilterSpecialty)(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Todas</option>
+                {SPECIALTIES.map((s) => (
+                  <option key={s.value} value={s.value}>{s.label}</option>
+                ))}
+              </select>
+            </div>
           </div>
+          {(searchTerm || filterHealthPlan || filterSpecialty) && (
+            <p className="text-sm text-gray-500 mb-4">
+              {filteredPatients.length} paciente(s) encontrado(s)
+            </p>
+          )}
 
           {filteredPatients.length === 0 ? (
             <p className="text-center text-gray-600 py-8">

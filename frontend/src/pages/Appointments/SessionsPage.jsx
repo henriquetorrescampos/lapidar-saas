@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   Save,
   Trash2,
@@ -86,6 +86,34 @@ const SPECIALTY_COLORS = {
   },
 };
 
+function SessionRow({ specialty, index, sessionItem, onToggle, onDateChange }) {
+  return (
+    <div className="flex items-center gap-2">
+      <input
+        type="checkbox"
+        id={`${specialty}-${index}`}
+        checked={sessionItem?.checked || false}
+        onChange={() => onToggle(specialty, index)}
+        className="w-4 h-4 text-primary-600 rounded cursor-pointer"
+      />
+      <div className="flex-1 flex items-center gap-2 flex-wrap">
+        <label htmlFor={`${specialty}-${index}`} className="text-sm text-gray-700 cursor-pointer">
+          Sessão {index + 1}
+        </label>
+        {sessionItem?.checked && (
+          <input
+            type="date"
+            value={sessionItem?.date || ""}
+            onChange={(e) => onDateChange(specialty, index, e.target.value)}
+            className="text-xs px-2 py-1 border border-gray-300 rounded"
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+const SessionRowMemo = React.memo(SessionRow);
+
 export default function SessionsPage() {
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
@@ -110,6 +138,9 @@ export default function SessionsPage() {
   };
 
   const [sessions, setSessions] = useState(initializeSessions(null));
+  // Ref para handlers estáveis lerem o estado mais recente sem re-criar a função
+  const sessionsRef = useRef(sessions);
+  sessionsRef.current = sessions;
 
   const [history, setHistory] = useState([]);
   const [selectedHistoryItem, setSelectedHistoryItem] = useState(null);
@@ -231,13 +262,23 @@ export default function SessionsPage() {
     patient.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  const handleSessionToggle = async (specialty, index) => {
+  const getSpecialtySessions = (specialty) => {
+    if (Array.isArray(sessions[specialty])) {
+      return sessions[specialty];
+    }
+    return initializeSessions(selectedPatient)[specialty] || [];
+  };
+
+  const handleSessionToggle = useCallback(async (specialty, index) => {
     if (!selectedPatient) {
       setError("Selecione um paciente");
       return;
     }
 
-    const specialtySessions = getSpecialtySessions(specialty);
+    const current = sessionsRef.current;
+    const specialtySessions = Array.isArray(current[specialty])
+      ? current[specialty]
+      : initializeSessions(selectedPatient)[specialty] || [];
     const currentSession = specialtySessions[index];
     if (!currentSession) return;
 
@@ -247,138 +288,96 @@ export default function SessionsPage() {
     const defaultDate = currentSession.date || today;
 
     setSessions((prev) => {
-      const currentSpecialtySessions = Array.isArray(prev[specialty])
-        ? prev[specialty]
-        : initializeSessions(selectedPatient)[specialty] || [];
-      const newSessions = [...currentSpecialtySessions];
-      if (!newSessions[index]) return prev;
-
-      newSessions[index] = {
-        ...newSessions[index],
-        checked: newCheckedState,
-        date: newCheckedState ? defaultDate : newSessions[index].date,
-      };
-      return { ...prev, [specialty]: newSessions };
+      const arr = Array.isArray(prev[specialty]) ? prev[specialty] : initializeSessions(selectedPatient)[specialty] || [];
+      const ns = [...arr];
+      if (!ns[index]) return prev;
+      ns[index] = { ...ns[index], checked: newCheckedState, date: newCheckedState ? defaultDate : ns[index].date };
+      return { ...prev, [specialty]: ns };
     });
 
     if (newCheckedState) {
       try {
-        const result = await appointmentService.createSingle({
-          patient_id: selectedPatient.id,
-          specialty,
-          date: defaultDate,
-        });
-
+        const result = await appointmentService.createSingle({ patient_id: selectedPatient.id, specialty, date: defaultDate });
         setSessions((prev) => {
-          const currentSpecialtySessions = Array.isArray(prev[specialty])
-            ? prev[specialty]
-            : initializeSessions(selectedPatient)[specialty] || [];
-          const newSessions = [...currentSpecialtySessions];
-          if (!newSessions[index]) return prev;
-
-          newSessions[index] = { ...newSessions[index], id: result.id };
-          return { ...prev, [specialty]: newSessions };
+          const arr = Array.isArray(prev[specialty]) ? prev[specialty] : initializeSessions(selectedPatient)[specialty] || [];
+          const ns = [...arr];
+          if (!ns[index]) return prev;
+          ns[index] = { ...ns[index], id: result.id };
+          return { ...prev, [specialty]: ns };
         });
       } catch (err) {
         console.error("❌ Erro ao salvar sessão:", err);
-
         setSessions((prev) => {
-          const currentSpecialtySessions = Array.isArray(prev[specialty])
-            ? prev[specialty]
-            : initializeSessions(selectedPatient)[specialty] || [];
-          const newSessions = [...currentSpecialtySessions];
-          if (!newSessions[index]) return prev;
-
-          newSessions[index] = { ...newSessions[index], checked: false };
-          return { ...prev, [specialty]: newSessions };
+          const arr = Array.isArray(prev[specialty]) ? prev[specialty] : initializeSessions(selectedPatient)[specialty] || [];
+          const ns = [...arr];
+          if (!ns[index]) return prev;
+          ns[index] = { ...ns[index], checked: false };
+          return { ...prev, [specialty]: ns };
         });
-
         setError(`Erro ao salvar sessão: ${err.message}`);
       }
     } else {
       try {
         if (currentSession.id) {
           await appointmentService.deleteSingle(currentSession.id);
-
           setSessions((prev) => {
-            const currentSpecialtySessions = Array.isArray(prev[specialty])
-              ? prev[specialty]
-              : initializeSessions(selectedPatient)[specialty] || [];
-            const newSessions = [...currentSpecialtySessions];
-            if (!newSessions[index]) return prev;
-
-            newSessions[index] = { ...newSessions[index], id: null };
-            return { ...prev, [specialty]: newSessions };
+            const arr = Array.isArray(prev[specialty]) ? prev[specialty] : initializeSessions(selectedPatient)[specialty] || [];
+            const ns = [...arr];
+            if (!ns[index]) return prev;
+            ns[index] = { ...ns[index], id: null };
+            return { ...prev, [specialty]: ns };
           });
         }
       } catch (err) {
         console.error("❌ Erro ao deletar sessão:", err);
-
         setSessions((prev) => {
-          const currentSpecialtySessions = Array.isArray(prev[specialty])
-            ? prev[specialty]
-            : initializeSessions(selectedPatient)[specialty] || [];
-          const newSessions = [...currentSpecialtySessions];
-          if (!newSessions[index]) return prev;
-
-          newSessions[index] = { ...newSessions[index], checked: true };
-          return { ...prev, [specialty]: newSessions };
+          const arr = Array.isArray(prev[specialty]) ? prev[specialty] : initializeSessions(selectedPatient)[specialty] || [];
+          const ns = [...arr];
+          if (!ns[index]) return prev;
+          ns[index] = { ...ns[index], checked: true };
+          return { ...prev, [specialty]: ns };
         });
-
         setError(`Erro ao deletar sessão: ${err.message}`);
       }
     }
-  };
+  }, [selectedPatient]);
 
-  const getSpecialtySessions = (specialty) => {
-    if (Array.isArray(sessions[specialty])) {
-      return sessions[specialty];
-    }
-    return initializeSessions(selectedPatient)[specialty] || [];
-  };
-
-  const handleSessionDateChange = async (specialty, index, newDate) => {
+  const handleSessionDateChange = useCallback(async (specialty, index, newDate) => {
     if (!newDate) return;
-    const currentSession = getSpecialtySessions(specialty)[index];
+    const current = sessionsRef.current;
+    const specialtySessions = Array.isArray(current[specialty])
+      ? current[specialty]
+      : initializeSessions(selectedPatient)[specialty] || [];
+    const currentSession = specialtySessions[index];
 
     setSessions((prev) => {
-      const currentSpecialtySessions = Array.isArray(prev[specialty])
-        ? prev[specialty]
-        : initializeSessions(selectedPatient)[specialty] || [];
-      const newSessions = [...currentSpecialtySessions];
-      if (!newSessions[index]) return prev;
-      newSessions[index] = { ...newSessions[index], date: newDate };
-      return { ...prev, [specialty]: newSessions };
+      const arr = Array.isArray(prev[specialty]) ? prev[specialty] : initializeSessions(selectedPatient)[specialty] || [];
+      const ns = [...arr];
+      if (!ns[index]) return prev;
+      ns[index] = { ...ns[index], date: newDate };
+      return { ...prev, [specialty]: ns };
     });
 
     if (!currentSession?.checked) return;
 
     try {
       if (currentSession.id) {
-        // Sessão já existe → atualiza a data
         await appointmentService.updateDate(currentSession.id, newDate);
       } else {
-        // Sessão ainda não foi salva → cria com a nova data
-        const result = await appointmentService.createSingle({
-          patient_id: selectedPatient.id,
-          specialty,
-          date: newDate,
-        });
+        const result = await appointmentService.createSingle({ patient_id: selectedPatient.id, specialty, date: newDate });
         setSessions((prev) => {
-          const currentSpecialtySessions = Array.isArray(prev[specialty])
-            ? prev[specialty]
-            : initializeSessions(selectedPatient)[specialty] || [];
-          const newSessions = [...currentSpecialtySessions];
-          if (!newSessions[index]) return prev;
-          newSessions[index] = { ...newSessions[index], id: result.id };
-          return { ...prev, [specialty]: newSessions };
+          const arr = Array.isArray(prev[specialty]) ? prev[specialty] : initializeSessions(selectedPatient)[specialty] || [];
+          const ns = [...arr];
+          if (!ns[index]) return prev;
+          ns[index] = { ...ns[index], id: result.id };
+          return { ...prev, [specialty]: ns };
         });
       }
     } catch (err) {
       console.error("❌ Erro ao atualizar data da sessão:", err);
       setError(`Erro ao atualizar data: ${err.message}`);
     }
-  };
+  }, [selectedPatient]);
 
   const countCompleted = (specialty) => {
     return getSpecialtySessions(specialty).filter((s) => s.checked).length;
@@ -655,47 +654,16 @@ export default function SessionsPage() {
                   </div>
 
                   <div className="space-y-3 mb-6 max-h-80 overflow-y-auto">
-                    {Array.from({
-                      length: getSessionCount(selectedPatient),
-                    }).map((_, index) => {
-                      const sessionItem =
-                        getSpecialtySessions(specialty)[index];
-                      return (
-                        <div key={index} className="flex items-center gap-2">
-                          <input
-                            type="checkbox"
-                            id={`${specialty}-${index}`}
-                            checked={sessionItem?.checked || false}
-                            onChange={() =>
-                              handleSessionToggle(specialty, index)
-                            }
-                            className="w-4 h-4 text-primary-600 rounded cursor-pointer"
-                          />
-                          <div className="flex-1 flex items-center gap-2 flex-wrap">
-                            <label
-                              htmlFor={`${specialty}-${index}`}
-                              className="text-sm text-gray-700 cursor-pointer"
-                            >
-                              Sessão {index + 1}
-                            </label>
-                            {sessionItem?.checked && (
-                              <input
-                                type="date"
-                                value={sessionItem?.date || ""}
-                                onChange={(e) =>
-                                  handleSessionDateChange(
-                                    specialty,
-                                    index,
-                                    e.target.value,
-                                  )
-                                }
-                                className="text-xs px-2 py-1 border border-gray-300 rounded"
-                              />
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
+                    {Array.from({ length: getSessionCount(selectedPatient) }).map((_, index) => (
+                      <SessionRowMemo
+                        key={index}
+                        specialty={specialty}
+                        index={index}
+                        sessionItem={getSpecialtySessions(specialty)[index]}
+                        onToggle={handleSessionToggle}
+                        onDateChange={handleSessionDateChange}
+                      />
+                    ))}
                   </div>
 
                   <Button
