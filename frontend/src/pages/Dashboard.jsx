@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Users, DollarSign, Eye, EyeOff, Brain } from "lucide-react";
+import { Users, DollarSign, Eye, EyeOff, Brain, Mic, BookOpen, Hand, HeartPulse } from "lucide-react";
 import Layout from "../components/Layout/Layout";
 import Card from "../components/Common/Card";
 import Loading from "../components/Common/Loading";
@@ -16,6 +16,10 @@ export default function Dashboard() {
     patients_neuro: 0,
     appointments: 0,
     balance: 0,
+    sp_psicologia: 0,
+    sp_fonoaudiologia: 0,
+    sp_terapia_ocupacional: 0,
+    sp_psicopedagogia: 0,
   });
   const [loading, setLoading] = useState(true);
   const [showBalance, setShowBalance] = useState(true);
@@ -42,6 +46,11 @@ export default function Dashboard() {
         p.patient_type?.includes("AVALIACAO_NEUROPSICOLOGICA"),
       ).length;
 
+      const countSpecialty = (name) =>
+        patientsArray.filter((p) =>
+          (p.specialties || "").split(",").map((s) => s.trim()).includes(name)
+        ).length;
+
       if (user?.role === "admin") {
         summary = await financeService.getSummary();
         balance = summary?.total || 0;
@@ -54,6 +63,10 @@ export default function Dashboard() {
         patients_neuro,
         appointments: 0,
         balance,
+        sp_psicologia: countSpecialty("Psicologia"),
+        sp_fonoaudiologia: countSpecialty("Fonoaudiologia"),
+        sp_terapia_ocupacional: countSpecialty("Terapia Ocupacional"),
+        sp_psicopedagogia: countSpecialty("Psicopedagogia"),
       });
     } catch (err) {
       // Erro silenciosamente tratado
@@ -152,6 +165,57 @@ export default function Dashboard() {
               </div>
             </Card>
           )}
+        </div>
+
+        <h2 className="text-lg font-semibold text-gray-700 mb-3">Por Especialidade Clínica</h2>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <Card>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 text-sm">Psicologia</p>
+                <p className="text-2xl font-bold text-gray-800">{stats.sp_psicologia}</p>
+              </div>
+              <div className="bg-green-100 p-4 rounded-lg">
+                <HeartPulse size={32} className="text-green-600" />
+              </div>
+            </div>
+          </Card>
+
+          <Card>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 text-sm">Fonoaudiologia</p>
+                <p className="text-2xl font-bold text-gray-800">{stats.sp_fonoaudiologia}</p>
+              </div>
+              <div className="bg-blue-100 p-4 rounded-lg">
+                <Mic size={32} className="text-blue-600" />
+              </div>
+            </div>
+          </Card>
+
+          <Card>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 text-sm">Terapia Ocupacional</p>
+                <p className="text-2xl font-bold text-gray-800">{stats.sp_terapia_ocupacional}</p>
+              </div>
+              <div className="bg-orange-100 p-4 rounded-lg">
+                <Hand size={32} className="text-orange-600" />
+              </div>
+            </div>
+          </Card>
+
+          <Card>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 text-sm">Psicopedagogia</p>
+                <p className="text-2xl font-bold text-gray-800">{stats.sp_psicopedagogia}</p>
+              </div>
+              <div className="bg-violet-100 p-4 rounded-lg">
+                <BookOpen size={32} className="text-violet-600" />
+              </div>
+            </div>
+          </Card>
         </div>
 
         <Card>

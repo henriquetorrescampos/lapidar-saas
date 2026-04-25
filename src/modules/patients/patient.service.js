@@ -33,6 +33,7 @@ export async function createPatient(data) {
     data: {
       name: data.name.trim(),
       patient_type: data.patient_type,
+      specialties: data.specialties || "",
       health_plan: data.health_plan.trim(),
       birth_date: birthDate,
     },
@@ -98,6 +99,7 @@ export async function updatePatient(id, data) {
     data: {
       ...(data.name && { name: data.name.trim() }),
       ...(data.patient_type && { patient_type: data.patient_type }),
+      ...(data.specialties !== undefined && { specialties: data.specialties }),
       ...(data.health_plan && { health_plan: data.health_plan.trim() }),
       ...(data.birth_date && { birth_date: validateDate(data.birth_date) }),
     },

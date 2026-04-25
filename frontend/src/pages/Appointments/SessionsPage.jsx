@@ -164,13 +164,13 @@ export default function SessionsPage() {
   };
 
   const getAvailableSpecialties = (patient) => {
+    if (patient?.specialties) {
+      const saved = patient.specialties.split(",").filter(Boolean);
+      if (saved.length > 0) return saved;
+    }
     const patientType = patient?.patient_type || "ABA";
-    if (patientType.includes("ABA")) {
-      return SPECIALTIES_BY_PATIENT_TYPE["ABA"] || SPECIALTIES;
-    }
-    if (patientType.includes("TERAPIA_ADULTO")) {
-      return SPECIALTIES_BY_PATIENT_TYPE["TERAPIA_ADULTO"] || SPECIALTIES;
-    }
+    if (patientType.includes("ABA")) return SPECIALTIES_BY_PATIENT_TYPE["ABA"] || SPECIALTIES;
+    if (patientType.includes("TERAPIA_ADULTO")) return SPECIALTIES_BY_PATIENT_TYPE["TERAPIA_ADULTO"] || SPECIALTIES;
     return SPECIALTIES_BY_PATIENT_TYPE[patientType] || SPECIALTIES;
   };
 

@@ -27,9 +27,17 @@ export default function PatientForm() {
   const [formData, setFormData] = useState({
     name: "",
     patient_type: [],
+    specialties: [],
     health_plan: "",
     birth_date: "",
   });
+
+  const CLINICAL_SPECIALTIES = [
+    { value: "Psicologia", label: "Psicologia" },
+    { value: "Fonoaudiologia", label: "Fonoaudiologia" },
+    { value: "Psicopedagogia", label: "Psicopedagogia" },
+    { value: "Terapia Ocupacional", label: "Terapia Ocupacional" },
+  ];
 
   useEffect(() => {
     if (id) {
@@ -43,6 +51,7 @@ export default function PatientForm() {
       setFormData({
         name: data.name,
         patient_type: data.patient_type ? data.patient_type.split(",") : [],
+        specialties: data.specialties ? data.specialties.split(",").filter(Boolean) : [],
         health_plan: data.health_plan,
         birth_date: new Date(data.birth_date).toISOString().split("T")[0],
       });
@@ -92,6 +101,18 @@ export default function PatientForm() {
     });
   };
 
+  const handleSpecialtyChange = (value) => {
+    setFormData((prev) => {
+      const has = prev.specialties.includes(value);
+      return {
+        ...prev,
+        specialties: has
+          ? prev.specialties.filter((v) => v !== value)
+          : [...prev.specialties, value],
+      };
+    });
+  };
+
   const isCheckboxDisabled = (value) => {
     const current = formData.patient_type;
     if (value === "ABA" && current.includes("TERAPIA_ADULTO")) return true;
@@ -108,6 +129,7 @@ export default function PatientForm() {
       const payload = {
         ...formData,
         patient_type: formData.patient_type.join(","),
+        specialties: formData.specialties.join(","),
       };
 
       if (id) {
@@ -189,6 +211,26 @@ export default function PatientForm() {
                 ))}
               </div>
             </div>
+
+            {formData.patient_type.some((t) => t === "ABA" || t === "TERAPIA_ADULTO") && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Especialidades Clínicas
+                </label>
+                <div className="flex flex-wrap gap-6">
+                  {CLINICAL_SPECIALTIES.map((option) => (
+                    <label key={option.value} className="flex items-center gap-2 text-gray-700">
+                      <input
+                        type="checkbox"
+                        checked={formData.specialties.includes(option.value)}
+                        onChange={() => handleSpecialtyChange(option.value)}
+                      />
+                      {option.label}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">

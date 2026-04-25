@@ -21,6 +21,7 @@ model Patient {
   id                Int              @id @default(autoincrement())
   name              String
   patient_type      String           @default("ABA")
+  specialties       String           @default("")
   health_plan       String
   birth_date        DateTime
   sessions          Session[]
