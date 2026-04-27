@@ -59,9 +59,6 @@ export async function createPatient(data) {
 // READ ALL
 export async function getPatients() {
   return await prisma.patient.findMany({
-    include: {
-      sessions: true,
-    },
     orderBy: {
       name: "asc",
     },

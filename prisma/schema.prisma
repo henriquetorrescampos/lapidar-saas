@@ -37,6 +37,8 @@ model Session {
   status      String   @default("scheduled")
 
   patient     Patient @relation(fields: [patient_id], references: [id], onDelete: Cascade)
+
+  @@index([patient_id, specialty])
 }
 
 model SessionHistory {
@@ -71,8 +73,11 @@ model Revenue {
   amount        Float
   description   String?
   date          DateTime  @default(now())
-  
+
   health_plan   HealthPlan? @relation(fields: [health_plan_id], references: [id])
+
+  @@index([date])
+  @@index([health_plan_id])
 }
 
 // Despesas
@@ -82,6 +87,9 @@ model Expense {
   amount    Float
   description String?
   date      DateTime @default(now())
+
+  @@index([date])
+  @@index([category])
 }
 
 // Transações gerais (mantida para histórico)

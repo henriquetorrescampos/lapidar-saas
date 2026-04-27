@@ -202,66 +202,106 @@ export async function deleteExpense(id) {
 // ============ DASHBOARD / INDICADORES ============
 
 export async function getFinancialDashboard(filters = {}) {
-  // Receitas
-  const revenues = await getRevenues(filters);
-  const totalRevenue = revenues.reduce((sum, r) => sum + r.amount, 0);
+  const dateWhere = {};
+  if (filters.date_from || filters.date_to) {
+    if (filters.date_from) dateWhere.gte = new Date(filters.date_from);
+    if (filters.date_to) dateWhere.lte = new Date(filters.date_to);
+  }
 
-  // Receita por fonte
+  const revenueWhere = { ...(Object.keys(dateWhere).length && { date: dateWhere }) };
+  if (filters.source) revenueWhere.source = filters.source;
+  if (filters.health_plan_id) revenueWhere.health_plan_id = parseInt(filters.health_plan_id);
+
+  const expenseWhere = { ...(Object.keys(dateWhere).length && { date: dateWhere }) };
+  if (filters.category) expenseWhere.category = filters.category;
+
+  const [
+    revenueBySourceRaw,
+    revenueByHealthPlanRaw,
+    expenseByCategoryRaw,
+    revenueCounts,
+    expenseCounts,
+  ] = await Promise.all([
+    // Soma por fonte
+    prisma.revenue.groupBy({
+      by: ["source"],
+      _sum: { amount: true },
+      _count: { id: true },
+      where: revenueWhere,
+    }),
+    // Soma por plano de saúde
+    prisma.revenue.groupBy({
+      by: ["health_plan_id"],
+      _sum: { amount: true },
+      where: { ...revenueWhere, source: REVENUE_SOURCES.HEALTH_PLAN, health_plan_id: { not: null } },
+    }),
+    // Soma por categoria de despesa
+    prisma.expense.groupBy({
+      by: ["category"],
+      _sum: { amount: true },
+      _count: { id: true },
+      where: expenseWhere,
+    }),
+    prisma.revenue.count({ where: revenueWhere }),
+    prisma.expense.count({ where: expenseWhere }),
+  ]);
+
+  // Busca nomes dos planos para o agrupamento de receita por plano
+  const healthPlanIds = revenueByHealthPlanRaw
+    .map((r) => r.health_plan_id)
+    .filter(Boolean);
+  const healthPlans =
+    healthPlanIds.length > 0
+      ? await prisma.healthPlan.findMany({
+          where: { id: { in: healthPlanIds } },
+          select: { id: true, name: true },
+        })
+      : [];
+  const healthPlanMap = Object.fromEntries(healthPlans.map((hp) => [hp.id, hp.name]));
+
+  // Montar objetos de resultado
   const revenueBySource = {
-    health_plan: revenues
-      .filter((r) => r.source === REVENUE_SOURCES.HEALTH_PLAN)
-      .reduce((sum, r) => sum + r.amount, 0),
-    particular: revenues
-      .filter((r) => r.source === REVENUE_SOURCES.PARTICULAR)
-      .reduce((sum, r) => sum + r.amount, 0),
+    health_plan: 0,
+    particular: 0,
   };
+  let totalRevenue = 0;
+  for (const row of revenueBySourceRaw) {
+    const amount = row._sum.amount || 0;
+    revenueBySource[row.source] = amount;
+    totalRevenue += amount;
+  }
 
-  // Despesas
-  const expenses = await getExpenses(filters);
-  const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
-
-  // Despesas por categoria
-  const expenseByCategory = {};
-  Object.values(EXPENSE_CATEGORIES).forEach((cat) => {
-    expenseByCategory[cat] = expenses
-      .filter((e) => e.category === cat)
-      .reduce((sum, e) => sum + e.amount, 0);
-  });
-
-  // Receita por plano de saúde (filtrado por data)
   const revenueByHealthPlan = {};
-  revenues
-    .filter((r) => r.source === REVENUE_SOURCES.HEALTH_PLAN && r.health_plan)
-    .forEach((r) => {
-      if (!revenueByHealthPlan[r.health_plan.name]) {
-        revenueByHealthPlan[r.health_plan.name] = 0;
-      }
-      revenueByHealthPlan[r.health_plan.name] += r.amount;
-    });
+  for (const row of revenueByHealthPlanRaw) {
+    const name = healthPlanMap[row.health_plan_id];
+    if (name) revenueByHealthPlan[name] = row._sum.amount || 0;
+  }
 
-  // Cálculos finais
+  const expenseByCategory = {};
+  Object.values(EXPENSE_CATEGORIES).forEach((cat) => { expenseByCategory[cat] = 0; });
+  let totalExpenses = 0;
+  for (const row of expenseByCategoryRaw) {
+    const amount = row._sum.amount || 0;
+    expenseByCategory[row.category] = amount;
+    totalExpenses += amount;
+  }
+
   const tax = expenseByCategory[EXPENSE_CATEGORIES.TAX] || 0;
-  const operationalCosts = totalExpenses - tax; // Todos custos exceto imposto
+  const operationalCosts = totalExpenses - tax;
   const netProfit = totalRevenue - totalExpenses;
 
   return {
-    // Indicadores principais
     gross_revenue: totalRevenue,
     tax,
     operational_costs: operationalCosts,
     total_expenses: totalExpenses,
     net_profit: netProfit,
-    margin:
-      totalRevenue > 0 ? ((netProfit / totalRevenue) * 100).toFixed(2) : 0,
-
-    // Detalhes
+    margin: totalRevenue > 0 ? ((netProfit / totalRevenue) * 100).toFixed(2) : 0,
     revenue_by_source: revenueBySource,
     revenue_by_health_plan: revenueByHealthPlan,
     expense_by_category: expenseByCategory,
-
-    // Contadores
-    revenue_count: revenues.length,
-    expense_count: expenses.length,
+    revenue_count: revenueCounts,
+    expense_count: expenseCounts,
   };
 }
 
