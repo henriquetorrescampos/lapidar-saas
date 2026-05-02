@@ -32,7 +32,7 @@ export default function Dashboard() {
     sp_psicopedagogia: 0,
   });
   const [loading, setLoading] = useState(true);
-  const [showBalance, setShowBalance] = useState(true);
+  const [showBalance, setShowBalance] = useState(false);
 
   useEffect(() => {
     loadStats();

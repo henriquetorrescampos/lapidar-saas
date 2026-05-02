@@ -212,7 +212,7 @@ export default function PatientForm() {
               </div>
             </div>
 
-            {formData.patient_type.some((t) => t === "ABA" || t === "TERAPIA_ADULTO") && (
+            {formData.patient_type.includes("ABA") && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Especialidades Clínicas
