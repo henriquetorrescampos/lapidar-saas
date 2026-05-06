@@ -52,6 +52,7 @@ export default function GuideEmissionPage() {
   const [search, setSearch] = useState("");
   const [filterSpecialty, setFilterSpecialty] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
+  const [filterDay, setFilterDay] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
   const load = useCallback(async () => {
@@ -67,7 +68,7 @@ export default function GuideEmissionPage() {
   useEffect(() => { load(); }, [load]);
 
   // Reset página ao mudar filtros ou mês
-  useEffect(() => { setCurrentPage(1); }, [search, filterSpecialty, filterStatus, month, year]);
+  useEffect(() => { setCurrentPage(1); }, [search, filterSpecialty, filterStatus, filterDay, month, year]);
 
   function prevMonth() {
     if (month === 1) { setMonth(12); setYear((y) => y - 1); }
@@ -107,9 +108,10 @@ export default function GuideEmissionPage() {
       if (filterSpecialty && item.specialty !== filterSpecialty) return false;
       if (filterStatus === "emitted" && !item.emitted) return false;
       if (filterStatus === "pending" && item.emitted) return false;
+      if (filterDay && !(item.schedule_days || "").split(",").includes(filterDay)) return false;
       return true;
     });
-  }, [emissions, search, filterSpecialty, filterStatus]);
+  }, [emissions, search, filterSpecialty, filterStatus, filterDay]);
 
   // Agrupar por paciente
   const allGrouped = useMemo(() => {
@@ -128,12 +130,13 @@ export default function GuideEmissionPage() {
   const safePage = Math.min(currentPage, totalPages);
   const pageGroups = groupedList.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
-  const hasActiveFilter = search || filterSpecialty || filterStatus !== "all";
+  const hasActiveFilter = search || filterSpecialty || filterStatus !== "all" || filterDay;
 
   function clearFilters() {
     setSearch("");
     setFilterSpecialty("");
     setFilterStatus("all");
+    setFilterDay("");
   }
 
   return (
@@ -199,6 +202,20 @@ export default function GuideEmissionPage() {
             <option value="all">Todos</option>
             <option value="pending">Pendentes</option>
             <option value="emitted">Emitidas</option>
+          </select>
+
+          <select
+            value={filterDay}
+            onChange={(e) => setFilterDay(e.target.value)}
+            className="input-field py-2 text-sm min-w-[140px]"
+          >
+            <option value="">Todos os dias</option>
+            <option value="1">Segunda</option>
+            <option value="2">Terça</option>
+            <option value="3">Quarta</option>
+            <option value="4">Quinta</option>
+            <option value="5">Sexta</option>
+            <option value="6">Sábado</option>
           </select>
 
           {hasActiveFilter && (
