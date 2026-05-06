@@ -27,6 +27,8 @@ model Patient {
   sessions          Session[]
   session_histories SessionHistory[]
   neuro_schedules   NeuroSchedule[]
+  patient_schedules PatientSchedule[]
+  guide_emissions   GuideEmission[]
 }
 
 model Session {
@@ -137,4 +139,32 @@ model NeuroSchedule {
   patient Patient @relation(fields: [patient_id], references: [id], onDelete: Cascade)
 
   @@index([patient_id])
+}
+
+model PatientSchedule {
+  id          Int     @id @default(autoincrement())
+  patient_id  Int
+  specialty   String
+  days        String  @default("")
+
+  patient     Patient @relation(fields: [patient_id], references: [id], onDelete: Cascade)
+
+  @@unique([patient_id, specialty])
+  @@index([patient_id])
+}
+
+model GuideEmission {
+  id          Int       @id @default(autoincrement())
+  patient_id  Int
+  specialty   String
+  month       Int
+  year        Int
+  emitted     Boolean   @default(false)
+  emitted_at  DateTime?
+
+  patient     Patient   @relation(fields: [patient_id], references: [id], onDelete: Cascade)
+
+  @@unique([patient_id, specialty, month, year])
+  @@index([patient_id])
+  @@index([month, year])
 }

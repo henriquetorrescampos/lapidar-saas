@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useApi } from "../../hooks/api";
+import { employeeService } from "../../services/employeeService";
 import {
   BarChart,
   Bar,
@@ -32,6 +33,7 @@ export default function FinanceDashboard() {
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
   const [showValues, setShowValues] = useState(true);
+  const [consolidatedPayroll, setConsolidatedPayroll] = useState(null);
 
   const fetchDashboard = async () => {
     try {
@@ -41,20 +43,23 @@ export default function FinanceDashboard() {
 
       if (selectedYear) {
         if (selectedMonth) {
-          // Filtro por mês específico
           const dateFrom = new Date(selectedYear, selectedMonth - 1, 1);
           const dateTo = new Date(selectedYear, selectedMonth, 0);
           params.date_from = dateFrom.toISOString().split("T")[0];
           params.date_to = dateTo.toISOString().split("T")[0];
         } else {
-          // Filtro por ano inteiro
           params.date_from = `${selectedYear}-01-01`;
           params.date_to = `${selectedYear}-12-31`;
         }
       }
 
-      const data = await api.get("/finance/dashboard", params);
+      const [data, employeeData] = await Promise.all([
+        api.get("/finance/dashboard", params),
+        employeeService.getAll({ page: 1, limit: 1 }),
+      ]);
+
       setDashboard(data);
+      setConsolidatedPayroll(employeeData?.meta?.consolidatedPayroll ?? null);
     } catch (err) {
       setError(err.message || "Erro ao carregar dashboard");
     } finally {
@@ -98,6 +103,12 @@ export default function FinanceDashboard() {
       value: `${dashboard?.margin}%`,
       color: "text-purple-600",
       bgColor: "bg-purple-50",
+    },
+    {
+      title: "Folha de Pagamento",
+      value: consolidatedPayroll,
+      color: "text-rose-600",
+      bgColor: "bg-rose-50",
     },
   ];
 
@@ -196,16 +207,18 @@ export default function FinanceDashboard() {
           {showValues ? "Ocultar valores" : "Mostrar valores"}
         </button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {indicators.map((indicator, idx) => (
           <Card key={idx} className={`${indicator.bgColor}`}>
             <p className="text-sm text-gray-600 mb-2">{indicator.title}</p>
             <p className={`text-2xl font-bold ${indicator.color}`}>
               {!showValues
                 ? "••••••"
-                : indicator.title === "Margem"
-                  ? indicator.value
-                  : formatCurrency(Number(indicator.value))}
+                : indicator.value === null
+                  ? "–"
+                  : indicator.title === "Margem"
+                    ? indicator.value
+                    : formatCurrency(Number(indicator.value))}
             </p>
           </Card>
         ))}

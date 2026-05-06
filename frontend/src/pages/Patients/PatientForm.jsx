@@ -7,6 +7,7 @@ import Button from "../../components/Common/Button";
 import Alert from "../../components/Common/Alert";
 import Loading from "../../components/Common/Loading";
 import { patientService } from "../../services/patientService";
+import { guideEmissionService } from "../../services/guideEmissionService";
 
 const HEALTH_PLANS = [
   "CAIXA SAUDE",
@@ -16,6 +17,23 @@ const HEALTH_PLANS = [
   "CASEMBRAPA",
   "CASSI",
   "PARTICULAR",
+];
+
+const CLINICAL_SPECIALTIES = [
+  { value: "Psicologia", label: "Psicologia" },
+  { value: "Fonoaudiologia", label: "Fonoaudiologia" },
+  { value: "Psicopedagogia", label: "Psicopedagogia" },
+  { value: "Terapia Ocupacional", label: "Terapia Ocupacional" },
+];
+
+// Segunda a Sábado (0=Dom omitido)
+const WEEK_DAYS = [
+  { value: 1, label: "Seg" },
+  { value: 2, label: "Ter" },
+  { value: 3, label: "Qua" },
+  { value: 4, label: "Qui" },
+  { value: 5, label: "Sex" },
+  { value: 6, label: "Sáb" },
 ];
 
 export default function PatientForm() {
@@ -31,13 +49,8 @@ export default function PatientForm() {
     health_plan: "",
     birth_date: "",
   });
-
-  const CLINICAL_SPECIALTIES = [
-    { value: "Psicologia", label: "Psicologia" },
-    { value: "Fonoaudiologia", label: "Fonoaudiologia" },
-    { value: "Psicopedagogia", label: "Psicopedagogia" },
-    { value: "Terapia Ocupacional", label: "Terapia Ocupacional" },
-  ];
+  // schedules: { [specialty]: number[] } ex: { Psicologia: [1, 3] }
+  const [schedules, setSchedules] = useState({});
 
   useEffect(() => {
     if (id) {
@@ -47,14 +60,28 @@ export default function PatientForm() {
 
   const loadPatient = async () => {
     try {
-      const data = await patientService.getById(id);
+      const [data, existingSchedules] = await Promise.all([
+        patientService.getById(id),
+        guideEmissionService.getPatientSchedules(id),
+      ]);
+
       setFormData({
         name: data.name,
         patient_type: data.patient_type ? data.patient_type.split(",") : [],
-        specialties: data.specialties ? data.specialties.split(",").filter(Boolean) : [],
+        specialties: data.specialties
+          ? data.specialties.split(",").filter(Boolean)
+          : [],
         health_plan: data.health_plan,
         birth_date: new Date(data.birth_date).toISOString().split("T")[0],
       });
+
+      const schedulesMap = {};
+      for (const s of existingSchedules) {
+        schedulesMap[s.specialty] = s.days
+          ? s.days.split(",").map(Number).filter((d) => !isNaN(d))
+          : [];
+      }
+      setSchedules(schedulesMap);
     } catch (err) {
       setError("Erro ao carregar paciente");
     } finally {
@@ -78,25 +105,18 @@ export default function PatientForm() {
       if (has) {
         return { ...prev, patient_type: current.filter((v) => v !== value) };
       }
-
-      // Se estamos adicionando ABA, remover TERAPIA_ADULTO
       if (value === "ABA") {
         return {
           ...prev,
-          patient_type: [
-            ...current.filter((v) => v !== "TERAPIA_ADULTO"),
-            value,
-          ],
+          patient_type: [...current.filter((v) => v !== "TERAPIA_ADULTO"), value],
         };
       }
-      // Se estamos adicionando TERAPIA_ADULTO, remover ABA
       if (value === "TERAPIA_ADULTO") {
         return {
           ...prev,
           patient_type: [...current.filter((v) => v !== "ABA"), value],
         };
       }
-
       return { ...prev, patient_type: [...current, value] };
     });
   };
@@ -113,12 +133,29 @@ export default function PatientForm() {
     });
   };
 
+  const handleScheduleDayToggle = (specialty, dayValue) => {
+    setSchedules((prev) => {
+      const current = prev[specialty] || [];
+      const has = current.includes(dayValue);
+      const updated = has
+        ? current.filter((d) => d !== dayValue)
+        : [...current, dayValue].sort((a, b) => a - b);
+      return { ...prev, [specialty]: updated };
+    });
+  };
+
   const isCheckboxDisabled = (value) => {
     const current = formData.patient_type;
     if (value === "ABA" && current.includes("TERAPIA_ADULTO")) return true;
     if (value === "TERAPIA_ADULTO" && current.includes("ABA")) return true;
     return false;
   };
+
+  const isABA = formData.patient_type.includes("ABA");
+  const abaSpecialties = formData.specialties.filter((s) =>
+    CLINICAL_SPECIALTIES.some((cs) => cs.value === s)
+  );
+  const showScheduleSection = isABA && abaSpecialties.length > 0;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -132,11 +169,26 @@ export default function PatientForm() {
         specialties: formData.specialties.join(","),
       };
 
+      let patientId = id;
       if (id) {
         await patientService.update(id, payload);
       } else {
-        await patientService.create(payload);
+        const created = await patientService.create(payload);
+        patientId = created.id;
       }
+
+      // Salvar agenda para especialidades ABA
+      if (isABA && abaSpecialties.length > 0 && patientId) {
+        const schedulesToSave = abaSpecialties.map((specialty) => ({
+          specialty,
+          days: (schedules[specialty] || []).join(","),
+        }));
+        await guideEmissionService.upsertPatientSchedules(
+          patientId,
+          schedulesToSave
+        );
+      }
+
       navigate("/patients");
     } catch (err) {
       setError(err.message || "Erro ao salvar paciente");
@@ -212,14 +264,17 @@ export default function PatientForm() {
               </div>
             </div>
 
-            {formData.patient_type.includes("ABA") && (
+            {isABA && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Especialidades Clínicas
                 </label>
                 <div className="flex flex-wrap gap-6">
                   {CLINICAL_SPECIALTIES.map((option) => (
-                    <label key={option.value} className="flex items-center gap-2 text-gray-700">
+                    <label
+                      key={option.value}
+                      className="flex items-center gap-2 text-gray-700"
+                    >
                       <input
                         type="checkbox"
                         checked={formData.specialties.includes(option.value)}
@@ -227,6 +282,50 @@ export default function PatientForm() {
                       />
                       {option.label}
                     </label>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {showScheduleSection && (
+              <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Agenda por Especialidade
+                </label>
+                <p className="text-xs text-gray-400 mb-4">
+                  Selecione os dias da semana que o paciente realiza cada
+                  especialidade
+                </p>
+                <div className="space-y-4">
+                  {abaSpecialties.map((specialty) => (
+                    <div key={specialty}>
+                      <p className="text-sm font-medium text-gray-600 mb-2">
+                        {specialty}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {WEEK_DAYS.map((day) => {
+                          const selected = (
+                            schedules[specialty] || []
+                          ).includes(day.value);
+                          return (
+                            <button
+                              key={day.value}
+                              type="button"
+                              onClick={() =>
+                                handleScheduleDayToggle(specialty, day.value)
+                              }
+                              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
+                                selected
+                                  ? "bg-primary-600 text-white"
+                                  : "bg-white border border-gray-300 text-gray-600 hover:border-primary-400"
+                              }`}
+                            >
+                              {day.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>

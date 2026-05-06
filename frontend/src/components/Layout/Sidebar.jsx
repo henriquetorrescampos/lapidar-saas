@@ -9,6 +9,7 @@ import {
   LogOut,
   X,
   Brain,
+  ClipboardList,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -40,6 +41,12 @@ export default function Sidebar({ isOpen, setIsOpen }) {
       label: "Agendamento Avaliação Neuro",
       icon: Brain,
       path: "/neuro-schedule",
+      roles: ["admin", "user"],
+    },
+    {
+      label: "Emissão de Guias",
+      icon: ClipboardList,
+      path: "/guide-emission",
       roles: ["admin", "user"],
     },
     {
