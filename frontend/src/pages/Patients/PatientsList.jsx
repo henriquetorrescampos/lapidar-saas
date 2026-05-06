@@ -201,31 +201,56 @@ export default function PatientsList() {
                           {getPatientAge(patient.birth_date)} anos
                         </td>
                         <td className="p-4">
-                          <div className="flex flex-wrap gap-1">
-                            {(patient.patient_type || "")
-                              .split(",")
-                              .map((type) => {
-                                const labels = {
-                                  ABA: "ABA",
-                                  TERAPIA_ADULTO: "Terapia Adulto",
-                                  AVALIACAO_NEUROPSICOLOGICA: "Avaliação Neuro",
-                                };
-                                const colors = {
-                                  ABA: "bg-blue-100 text-blue-800",
-                                  TERAPIA_ADULTO:
-                                    "bg-purple-100 text-purple-800",
-                                  AVALIACAO_NEUROPSICOLOGICA:
-                                    "bg-green-100 text-green-800",
-                                };
-                                return (
-                                  <span
-                                    key={type}
-                                    className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${colors[type] || "bg-gray-100 text-gray-800"}`}
-                                  >
-                                    {labels[type] || type}
-                                  </span>
-                                );
-                              })}
+                          <div className="flex flex-col gap-1">
+                            <div className="flex flex-wrap gap-1">
+                              {(patient.patient_type || "")
+                                .split(",")
+                                .filter(Boolean)
+                                .map((type) => {
+                                  const labels = {
+                                    ABA: "ABA",
+                                    TERAPIA_ADULTO: "Terapia Adulto",
+                                    AVALIACAO_NEUROPSICOLOGICA: "Avaliação Neuro",
+                                  };
+                                  const colors = {
+                                    ABA: "bg-blue-100 text-blue-800",
+                                    TERAPIA_ADULTO: "bg-purple-100 text-purple-800",
+                                    AVALIACAO_NEUROPSICOLOGICA: "bg-green-100 text-green-800",
+                                  };
+                                  return (
+                                    <span
+                                      key={type}
+                                      className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${colors[type] || "bg-gray-100 text-gray-800"}`}
+                                    >
+                                      {labels[type] || type}
+                                    </span>
+                                  );
+                                })}
+                            </div>
+                            {patient.specialties && (
+                              <div className="flex flex-wrap gap-1">
+                                {patient.specialties
+                                  .split(",")
+                                  .map((s) => s.trim())
+                                  .filter(Boolean)
+                                  .map((s) => {
+                                    const colors = {
+                                      Psicologia: "bg-green-50 text-green-700",
+                                      Fonoaudiologia: "bg-sky-50 text-sky-700",
+                                      "Terapia Ocupacional": "bg-orange-50 text-orange-700",
+                                      Psicopedagogia: "bg-violet-50 text-violet-700",
+                                    };
+                                    return (
+                                      <span
+                                        key={s}
+                                        className={`inline-block rounded-full px-2 py-0.5 text-xs ${colors[s] || "bg-gray-50 text-gray-600"}`}
+                                      >
+                                        {s}
+                                      </span>
+                                    );
+                                  })}
+                              </div>
+                            )}
                           </div>
                         </td>
                         <td className="p-4 text-right space-x-2">
