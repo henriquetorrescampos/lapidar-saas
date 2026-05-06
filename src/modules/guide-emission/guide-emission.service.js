@@ -38,7 +38,10 @@ export async function getGuideEmissions(month, year) {
   const dayCountMap = buildDayCountMap(m, y);
 
   const patients = await prisma.patient.findMany({
-    where: { patient_type: { contains: "ABA" } },
+    where: {
+      patient_type: { contains: "ABA" },
+      health_plan: { not: "PARTICULAR" },
+    },
     include: {
       patient_schedules: true,
       guide_emissions: { where: { month: m, year: y } },
