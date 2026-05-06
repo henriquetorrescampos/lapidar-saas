@@ -24,6 +24,7 @@ export default function PatientsList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterHealthPlan, setFilterHealthPlan] = useState("");
   const [filterSpecialty, setFilterSpecialty] = useState("");
+  const [filterSubSpecialty, setFilterSubSpecialty] = useState("");
 
   useEffect(() => {
     loadPatients();
@@ -64,7 +65,8 @@ export default function PatientsList() {
     const matchesName = patient.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesPlan = !filterHealthPlan || patient.health_plan === filterHealthPlan;
     const matchesSpecialty = !filterSpecialty || (patient.patient_type || "").includes(filterSpecialty);
-    return matchesName && matchesPlan && matchesSpecialty;
+    const matchesSubSpecialty = !filterSubSpecialty || (patient.specialties || "").split(",").map((s) => s.trim()).includes(filterSubSpecialty);
+    return matchesName && matchesPlan && matchesSpecialty && matchesSubSpecialty;
   });
 
   const totalPages = Math.ceil(filteredPatients.length / ITEMS_PER_PAGE);
@@ -151,8 +153,24 @@ export default function PatientsList() {
                 ))}
               </select>
             </div>
+            <div className="min-w-[200px]">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Subespecialidade
+              </label>
+              <select
+                value={filterSubSpecialty}
+                onChange={(e) => handleFilterChange(setFilterSubSpecialty)(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Todas</option>
+                <option value="Psicologia">Psicologia</option>
+                <option value="Fonoaudiologia">Fonoaudiologia</option>
+                <option value="Terapia Ocupacional">Terapia Ocupacional</option>
+                <option value="Psicopedagogia">Psicopedagogia</option>
+              </select>
+            </div>
           </div>
-          {(searchTerm || filterHealthPlan || filterSpecialty) && (
+          {(searchTerm || filterHealthPlan || filterSpecialty || filterSubSpecialty) && (
             <p className="text-sm text-gray-500 mb-4">
               {filteredPatients.length} paciente(s) encontrado(s)
             </p>
