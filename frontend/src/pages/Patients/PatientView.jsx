@@ -7,11 +7,23 @@ import Button from "../../components/Common/Button";
 import Loading from "../../components/Common/Loading";
 import Alert from "../../components/Common/Alert";
 import { patientService } from "../../services/patientService";
+import { guideEmissionService } from "../../services/guideEmissionService";
+
+const DAY_LABELS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+const WEEK_DAYS = [1, 2, 3, 4, 5, 6];
+
+const SPECIALTY_COLORS = {
+  Psicologia: "bg-green-100 text-green-700",
+  Fonoaudiologia: "bg-sky-100 text-sky-700",
+  "Terapia Ocupacional": "bg-orange-100 text-orange-700",
+  Psicopedagogia: "bg-violet-100 text-violet-700",
+};
 
 export default function PatientView() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [patient, setPatient] = useState(null);
+  const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -21,8 +33,12 @@ export default function PatientView() {
 
   const loadPatient = async () => {
     try {
-      const data = await patientService.getById(id);
+      const [data, schedulesData] = await Promise.all([
+        patientService.getById(id),
+        guideEmissionService.getPatientSchedules(id),
+      ]);
       setPatient(data);
+      setSchedules(schedulesData);
     } catch (err) {
       setError("Erro ao carregar paciente");
     } finally {
@@ -110,7 +126,7 @@ export default function PatientView() {
                 Especialidades
               </label>
               <div className="flex flex-wrap gap-2">
-                {(patient.patient_type || "").split(",").map((type) => {
+                {(patient.patient_type || "").split(",").filter(Boolean).map((type) => {
                   const labels = {
                     ABA: "ABA",
                     TERAPIA_ADULTO: "Terapia Adulto",
@@ -127,6 +143,40 @@ export default function PatientView() {
                 })}
               </div>
             </div>
+
+            {schedules.length > 0 && (
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-600 mb-3">
+                  Agenda por Especialidade
+                </label>
+                <div className="flex flex-col gap-3">
+                  {schedules.map((s) => {
+                    const activeDays = (s.days || "").split(",").map(Number).filter((d) => !isNaN(d));
+                    return (
+                      <div key={s.specialty} className="flex items-center gap-3 flex-wrap">
+                        <span className={`text-xs font-semibold px-2 py-1 rounded-full ${SPECIALTY_COLORS[s.specialty] || "bg-gray-100 text-gray-600"}`}>
+                          {s.specialty}
+                        </span>
+                        <div className="flex gap-1">
+                          {WEEK_DAYS.map((d) => (
+                            <span
+                              key={d}
+                              className={`text-xs px-2 py-1 rounded-md font-medium ${
+                                activeDays.includes(d)
+                                  ? "bg-primary-600 text-white"
+                                  : "bg-gray-100 text-gray-400"
+                              }`}
+                            >
+                              {DAY_LABELS[d]}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         </Card>
       </div>
