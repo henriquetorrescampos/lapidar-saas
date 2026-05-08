@@ -246,7 +246,7 @@ export default function PatientsList() {
                                 })}
                             </div>
                             {patient.specialties && (
-                              <div className="flex flex-wrap gap-1">
+                              <div className="flex flex-col gap-1">
                                 {patient.specialties
                                   .split(",")
                                   .map((s) => s.trim())
@@ -258,13 +258,31 @@ export default function PatientsList() {
                                       "Terapia Ocupacional": "bg-orange-50 text-orange-700",
                                       Psicopedagogia: "bg-violet-50 text-violet-700",
                                     };
+                                    const schedule = (patient.patient_schedules || []).find((sc) => sc.specialty === s);
+                                    const activeDays = schedule?.days
+                                      ? schedule.days.split(",").map(Number)
+                                      : [];
+                                    const DAY_SHORT = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+                                    const dayColors = {
+                                      Psicologia: "bg-green-500 text-white",
+                                      Fonoaudiologia: "bg-sky-500 text-white",
+                                      "Terapia Ocupacional": "bg-orange-500 text-white",
+                                      Psicopedagogia: "bg-violet-500 text-white",
+                                    };
                                     return (
-                                      <span
-                                        key={s}
-                                        className={`inline-block rounded-full px-2 py-0.5 text-xs ${colors[s] || "bg-gray-50 text-gray-600"}`}
-                                      >
-                                        {s}
-                                      </span>
+                                      <div key={s} className="flex items-center gap-1.5 flex-wrap">
+                                        <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${colors[s] || "bg-gray-50 text-gray-600"}`}>
+                                          {s}
+                                        </span>
+                                        {activeDays.map((d) => (
+                                          <span
+                                            key={d}
+                                            className={`text-xs px-1.5 py-0.5 rounded font-semibold ${dayColors[s] || "bg-primary-500 text-white"}`}
+                                          >
+                                            {DAY_SHORT[d]}
+                                          </span>
+                                        ))}
+                                      </div>
                                     );
                                   })}
                               </div>

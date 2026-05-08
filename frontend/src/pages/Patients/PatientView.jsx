@@ -19,6 +19,13 @@ const SPECIALTY_COLORS = {
   Psicopedagogia: "bg-violet-100 text-violet-700",
 };
 
+const SPECIALTY_DAY_ACTIVE = {
+  Psicologia: "bg-green-500 text-white",
+  Fonoaudiologia: "bg-sky-500 text-white",
+  "Terapia Ocupacional": "bg-orange-500 text-white",
+  Psicopedagogia: "bg-violet-500 text-white",
+};
+
 export default function PatientView() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -161,10 +168,10 @@ export default function PatientView() {
                           {WEEK_DAYS.map((d) => (
                             <span
                               key={d}
-                              className={`text-xs px-2 py-1 rounded-md font-medium ${
+                              className={`text-xs px-2 py-1 rounded-md font-semibold transition-colors ${
                                 activeDays.includes(d)
-                                  ? "bg-primary-600 text-white"
-                                  : "bg-gray-100 text-gray-400"
+                                  ? SPECIALTY_DAY_ACTIVE[s.specialty] || "bg-primary-600 text-white"
+                                  : "text-gray-300"
                               }`}
                             >
                               {DAY_LABELS[d]}

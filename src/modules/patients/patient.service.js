@@ -59,9 +59,8 @@ export async function createPatient(data) {
 // READ ALL
 export async function getPatients() {
   return await prisma.patient.findMany({
-    orderBy: {
-      name: "asc",
-    },
+    orderBy: { name: "asc" },
+    include: { patient_schedules: true },
   });
 }
 
