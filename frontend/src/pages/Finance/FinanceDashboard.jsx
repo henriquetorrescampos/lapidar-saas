@@ -30,8 +30,8 @@ export default function FinanceDashboard() {
   const [dashboard, setDashboard] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedYear, setSelectedYear] = useState("");
-  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedYear, setSelectedYear] = useState(String(new Date().getFullYear()));
+  const [selectedMonth, setSelectedMonth] = useState(String(new Date().getMonth() + 1));
   const [showValues, setShowValues] = useState(true);
   const [consolidatedPayroll, setConsolidatedPayroll] = useState(null);
 

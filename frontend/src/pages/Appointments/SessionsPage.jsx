@@ -291,7 +291,7 @@ export default function SessionsPage() {
       const arr = Array.isArray(prev[specialty]) ? prev[specialty] : initializeSessions(selectedPatient)[specialty] || [];
       const ns = [...arr];
       if (!ns[index]) return prev;
-      ns[index] = { ...ns[index], checked: newCheckedState, date: newCheckedState ? defaultDate : ns[index].date };
+      ns[index] = { ...ns[index], checked: newCheckedState, date: newCheckedState ? defaultDate : "" };
       return { ...prev, [specialty]: ns };
     });
 
