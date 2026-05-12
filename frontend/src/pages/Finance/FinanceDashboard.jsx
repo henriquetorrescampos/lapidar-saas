@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useApi } from "../../hooks/api";
-import { employeeService } from "../../services/employeeService";
 import {
   BarChart,
   Bar,
@@ -33,7 +32,7 @@ export default function FinanceDashboard() {
   const [selectedYear, setSelectedYear] = useState(String(new Date().getFullYear()));
   const [selectedMonth, setSelectedMonth] = useState(String(new Date().getMonth() + 1));
   const [showValues, setShowValues] = useState(true);
-  const [consolidatedPayroll, setConsolidatedPayroll] = useState(null);
+  const [consolidatedPayroll, setConsolidatedPayroll] = useState(0);
 
   const fetchDashboard = async () => {
     try {
@@ -53,13 +52,9 @@ export default function FinanceDashboard() {
         }
       }
 
-      const [data, employeeData] = await Promise.all([
-        api.get("/finance/dashboard", params),
-        employeeService.getAll({ page: 1, limit: 1 }),
-      ]);
-
+      const data = await api.get("/finance/dashboard", params);
       setDashboard(data);
-      setConsolidatedPayroll(employeeData?.meta?.consolidatedPayroll ?? null);
+      setConsolidatedPayroll(data.payroll ?? 0);
     } catch (err) {
       setError(err.message || "Erro ao carregar dashboard");
     } finally {

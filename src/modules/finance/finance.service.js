@@ -221,6 +221,7 @@ export async function getFinancialDashboard(filters = {}) {
     expenseByCategoryRaw,
     revenueCounts,
     expenseCounts,
+    payrollAgg,
   ] = await Promise.all([
     // Soma por fonte
     prisma.revenue.groupBy({
@@ -244,6 +245,8 @@ export async function getFinancialDashboard(filters = {}) {
     }),
     prisma.revenue.count({ where: revenueWhere }),
     prisma.expense.count({ where: expenseWhere }),
+    // Folha de pagamento consolidada (soma de updated_value de todos os funcionários)
+    prisma.employee.aggregate({ _sum: { updated_value: true } }),
   ]);
 
   // Busca nomes dos planos para o agrupamento de receita por plano
@@ -277,6 +280,8 @@ export async function getFinancialDashboard(filters = {}) {
     if (name) revenueByHealthPlan[name] = row._sum.amount || 0;
   }
 
+  const payroll = payrollAgg._sum.updated_value || 0;
+
   const expenseByCategory = {};
   Object.values(EXPENSE_CATEGORIES).forEach((cat) => { expenseByCategory[cat] = 0; });
   let totalExpenses = 0;
@@ -285,6 +290,10 @@ export async function getFinancialDashboard(filters = {}) {
     expenseByCategory[row.category] = amount;
     totalExpenses += amount;
   }
+
+  // Folha de pagamento entra como despesa de salário
+  expenseByCategory[EXPENSE_CATEGORIES.SALARY] += payroll;
+  totalExpenses += payroll;
 
   const tax = expenseByCategory[EXPENSE_CATEGORIES.TAX] || 0;
   const operationalCosts = totalExpenses - tax;
@@ -302,6 +311,7 @@ export async function getFinancialDashboard(filters = {}) {
     expense_by_category: expenseByCategory,
     revenue_count: revenueCounts,
     expense_count: expenseCounts,
+    payroll,
   };
 }
 
