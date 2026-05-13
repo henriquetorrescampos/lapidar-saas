@@ -41,8 +41,8 @@ const SESSION_COUNT_BY_TYPE = {
 };
 
 const MIN_SESSIONS_BY_TYPE = {
-  ABA: 4,
-  TERAPIA_ADULTO: 4,
+  ABA: 1,
+  TERAPIA_ADULTO: 1,
 };
 
 const getSessionCount = (patient) => {
