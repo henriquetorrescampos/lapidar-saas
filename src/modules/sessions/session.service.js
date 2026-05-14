@@ -179,13 +179,18 @@ export async function archiveSessionsToHistory(data, currentUser) {
   return prisma.$transaction(async (tx) => {
     await ensureSessionHistoryTable(tx);
 
-    const patient = await tx.patient.findUnique({
-      where: { id: patientId },
-    });
+    const [patient, registrant] = await Promise.all([
+      tx.patient.findUnique({ where: { id: patientId } }),
+      currentUser?.id
+        ? tx.user.findUnique({ where: { id: currentUser.id }, select: { name: true, email: true } })
+        : Promise.resolve(null),
+    ]);
 
     if (!patient) {
       throw new Error("Patient not found");
     }
+
+    const registrantName = registrant?.name || registrant?.email || "Usuário";
 
     const existingSessions = await tx.$queryRaw(
       Prisma.sql`
@@ -218,7 +223,7 @@ export async function archiveSessionsToHistory(data, currentUser) {
         ${validatedTotal},
         CAST(${JSON.stringify(normalizedDates)} AS JSONB),
         ${currentUser?.id || null},
-        ${currentUser?.name || currentUser?.email || "Usuário"}
+        ${registrantName}
       )
       RETURNING
         id,
