@@ -29,10 +29,10 @@ export const FINANCE_TYPE = {
 export const JWT_EXPIRES_IN = "1d";
 export const BCRYPT_ROUNDS = 10;
 export const MIN_PASSWORD_LENGTH = 6;
-export const MAX_SESSIONS_PER_SPECIALTY = 10;
+export const MAX_SESSIONS_PER_SPECIALTY = 12;
 
 export const MAX_SESSIONS_BY_PATIENT_TYPE = {
-  ABA: 10,
+  ABA: 12,
   TERAPIA_ADULTO: 4,
 };
 

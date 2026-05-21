@@ -36,7 +36,7 @@ const SPECIALTIES_BY_PATIENT_TYPE = {
 };
 
 const SESSION_COUNT_BY_TYPE = {
-  ABA: 10,
+  ABA: 12,
   TERAPIA_ADULTO: 4,
 };
 
