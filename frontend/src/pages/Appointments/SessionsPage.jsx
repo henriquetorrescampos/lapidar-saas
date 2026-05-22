@@ -97,7 +97,10 @@ function SessionRow({ specialty, index, sessionItem, onToggle, onDateChange }) {
         className="w-4 h-4 text-primary-600 rounded cursor-pointer"
       />
       <div className="flex-1 flex items-center gap-2 flex-wrap">
-        <label htmlFor={`${specialty}-${index}`} className="text-sm text-gray-700 cursor-pointer">
+        <label
+          htmlFor={`${specialty}-${index}`}
+          className="text-sm text-gray-700 cursor-pointer"
+        >
           Sessão {index + 1}
         </label>
         {sessionItem?.checked && (
@@ -169,8 +172,10 @@ export default function SessionsPage() {
       if (saved.length > 0) return saved;
     }
     const patientType = patient?.patient_type || "ABA";
-    if (patientType.includes("ABA")) return SPECIALTIES_BY_PATIENT_TYPE["ABA"] || SPECIALTIES;
-    if (patientType.includes("TERAPIA_ADULTO")) return SPECIALTIES_BY_PATIENT_TYPE["TERAPIA_ADULTO"] || SPECIALTIES;
+    if (patientType.includes("ABA"))
+      return SPECIALTIES_BY_PATIENT_TYPE["ABA"] || SPECIALTIES;
+    if (patientType.includes("TERAPIA_ADULTO"))
+      return SPECIALTIES_BY_PATIENT_TYPE["TERAPIA_ADULTO"] || SPECIALTIES;
     return SPECIALTIES_BY_PATIENT_TYPE[patientType] || SPECIALTIES;
   };
 
@@ -269,115 +274,147 @@ export default function SessionsPage() {
     return initializeSessions(selectedPatient)[specialty] || [];
   };
 
-  const handleSessionToggle = useCallback(async (specialty, index) => {
-    if (!selectedPatient) {
-      setError("Selecione um paciente");
-      return;
-    }
-
-    const current = sessionsRef.current;
-    const specialtySessions = Array.isArray(current[specialty])
-      ? current[specialty]
-      : initializeSessions(selectedPatient)[specialty] || [];
-    const currentSession = specialtySessions[index];
-    if (!currentSession) return;
-
-    const newCheckedState = !currentSession.checked;
-    const todayLocal = new Date();
-    const today = `${todayLocal.getFullYear()}-${String(todayLocal.getMonth() + 1).padStart(2, "0")}-${String(todayLocal.getDate()).padStart(2, "0")}`;
-    const defaultDate = currentSession.date || today;
-
-    setSessions((prev) => {
-      const arr = Array.isArray(prev[specialty]) ? prev[specialty] : initializeSessions(selectedPatient)[specialty] || [];
-      const ns = [...arr];
-      if (!ns[index]) return prev;
-      ns[index] = { ...ns[index], checked: newCheckedState, date: newCheckedState ? defaultDate : "" };
-      return { ...prev, [specialty]: ns };
-    });
-
-    if (newCheckedState) {
-      try {
-        const result = await appointmentService.createSingle({ patient_id: selectedPatient.id, specialty, date: defaultDate });
-        setSessions((prev) => {
-          const arr = Array.isArray(prev[specialty]) ? prev[specialty] : initializeSessions(selectedPatient)[specialty] || [];
-          const ns = [...arr];
-          if (!ns[index]) return prev;
-          ns[index] = { ...ns[index], id: result.id };
-          return { ...prev, [specialty]: ns };
-        });
-      } catch (err) {
-        console.error("❌ Erro ao salvar sessão:", err);
-        setSessions((prev) => {
-          const arr = Array.isArray(prev[specialty]) ? prev[specialty] : initializeSessions(selectedPatient)[specialty] || [];
-          const ns = [...arr];
-          if (!ns[index]) return prev;
-          ns[index] = { ...ns[index], checked: false };
-          return { ...prev, [specialty]: ns };
-        });
-        setError(`Erro ao salvar sessão: ${err.message}`);
+  const handleSessionToggle = useCallback(
+    async (specialty, index) => {
+      if (!selectedPatient) {
+        setError("Selecione um paciente");
+        return;
       }
-    } else {
-      try {
-        if (currentSession.id) {
-          await appointmentService.deleteSingle(currentSession.id);
+
+      const current = sessionsRef.current;
+      const specialtySessions = Array.isArray(current[specialty])
+        ? current[specialty]
+        : initializeSessions(selectedPatient)[specialty] || [];
+      const currentSession = specialtySessions[index];
+      if (!currentSession) return;
+
+      const newCheckedState = !currentSession.checked;
+      const todayLocal = new Date();
+      const today = `${todayLocal.getFullYear()}-${String(todayLocal.getMonth() + 1).padStart(2, "0")}-${String(todayLocal.getDate()).padStart(2, "0")}`;
+      const defaultDate = currentSession.date || today;
+
+      setSessions((prev) => {
+        const arr = Array.isArray(prev[specialty])
+          ? prev[specialty]
+          : initializeSessions(selectedPatient)[specialty] || [];
+        const ns = [...arr];
+        if (!ns[index]) return prev;
+        ns[index] = {
+          ...ns[index],
+          checked: newCheckedState,
+          date: newCheckedState ? defaultDate : "",
+        };
+        return { ...prev, [specialty]: ns };
+      });
+
+      if (newCheckedState) {
+        try {
+          const result = await appointmentService.createSingle({
+            patient_id: selectedPatient.id,
+            specialty,
+            date: defaultDate,
+          });
           setSessions((prev) => {
-            const arr = Array.isArray(prev[specialty]) ? prev[specialty] : initializeSessions(selectedPatient)[specialty] || [];
+            const arr = Array.isArray(prev[specialty])
+              ? prev[specialty]
+              : initializeSessions(selectedPatient)[specialty] || [];
             const ns = [...arr];
             if (!ns[index]) return prev;
-            ns[index] = { ...ns[index], id: null };
+            ns[index] = { ...ns[index], id: result.id };
+            return { ...prev, [specialty]: ns };
+          });
+        } catch (err) {
+          console.error("❌ Erro ao salvar sessão:", err);
+          setSessions((prev) => {
+            const arr = Array.isArray(prev[specialty])
+              ? prev[specialty]
+              : initializeSessions(selectedPatient)[specialty] || [];
+            const ns = [...arr];
+            if (!ns[index]) return prev;
+            ns[index] = { ...ns[index], checked: false };
+            return { ...prev, [specialty]: ns };
+          });
+          setError(`Erro ao salvar sessão: ${err.message}`);
+        }
+      } else {
+        try {
+          if (currentSession.id) {
+            await appointmentService.deleteSingle(currentSession.id);
+            setSessions((prev) => {
+              const arr = Array.isArray(prev[specialty])
+                ? prev[specialty]
+                : initializeSessions(selectedPatient)[specialty] || [];
+              const ns = [...arr];
+              if (!ns[index]) return prev;
+              ns[index] = { ...ns[index], id: null };
+              return { ...prev, [specialty]: ns };
+            });
+          }
+        } catch (err) {
+          console.error("❌ Erro ao deletar sessão:", err);
+          setSessions((prev) => {
+            const arr = Array.isArray(prev[specialty])
+              ? prev[specialty]
+              : initializeSessions(selectedPatient)[specialty] || [];
+            const ns = [...arr];
+            if (!ns[index]) return prev;
+            ns[index] = { ...ns[index], checked: true };
+            return { ...prev, [specialty]: ns };
+          });
+          setError(`Erro ao deletar sessão: ${err.message}`);
+        }
+      }
+    },
+    [selectedPatient],
+  );
+
+  const handleSessionDateChange = useCallback(
+    async (specialty, index, newDate) => {
+      if (!newDate) return;
+      const current = sessionsRef.current;
+      const specialtySessions = Array.isArray(current[specialty])
+        ? current[specialty]
+        : initializeSessions(selectedPatient)[specialty] || [];
+      const currentSession = specialtySessions[index];
+
+      setSessions((prev) => {
+        const arr = Array.isArray(prev[specialty])
+          ? prev[specialty]
+          : initializeSessions(selectedPatient)[specialty] || [];
+        const ns = [...arr];
+        if (!ns[index]) return prev;
+        ns[index] = { ...ns[index], date: newDate };
+        return { ...prev, [specialty]: ns };
+      });
+
+      if (!currentSession?.checked) return;
+
+      try {
+        if (currentSession.id) {
+          await appointmentService.updateDate(currentSession.id, newDate);
+        } else {
+          const result = await appointmentService.createSingle({
+            patient_id: selectedPatient.id,
+            specialty,
+            date: newDate,
+          });
+          setSessions((prev) => {
+            const arr = Array.isArray(prev[specialty])
+              ? prev[specialty]
+              : initializeSessions(selectedPatient)[specialty] || [];
+            const ns = [...arr];
+            if (!ns[index]) return prev;
+            ns[index] = { ...ns[index], id: result.id };
             return { ...prev, [specialty]: ns };
           });
         }
       } catch (err) {
-        console.error("❌ Erro ao deletar sessão:", err);
-        setSessions((prev) => {
-          const arr = Array.isArray(prev[specialty]) ? prev[specialty] : initializeSessions(selectedPatient)[specialty] || [];
-          const ns = [...arr];
-          if (!ns[index]) return prev;
-          ns[index] = { ...ns[index], checked: true };
-          return { ...prev, [specialty]: ns };
-        });
-        setError(`Erro ao deletar sessão: ${err.message}`);
+        console.error("❌ Erro ao atualizar data da sessão:", err);
+        setError(`Erro ao atualizar data: ${err.message}`);
       }
-    }
-  }, [selectedPatient]);
-
-  const handleSessionDateChange = useCallback(async (specialty, index, newDate) => {
-    if (!newDate) return;
-    const current = sessionsRef.current;
-    const specialtySessions = Array.isArray(current[specialty])
-      ? current[specialty]
-      : initializeSessions(selectedPatient)[specialty] || [];
-    const currentSession = specialtySessions[index];
-
-    setSessions((prev) => {
-      const arr = Array.isArray(prev[specialty]) ? prev[specialty] : initializeSessions(selectedPatient)[specialty] || [];
-      const ns = [...arr];
-      if (!ns[index]) return prev;
-      ns[index] = { ...ns[index], date: newDate };
-      return { ...prev, [specialty]: ns };
-    });
-
-    if (!currentSession?.checked) return;
-
-    try {
-      if (currentSession.id) {
-        await appointmentService.updateDate(currentSession.id, newDate);
-      } else {
-        const result = await appointmentService.createSingle({ patient_id: selectedPatient.id, specialty, date: newDate });
-        setSessions((prev) => {
-          const arr = Array.isArray(prev[specialty]) ? prev[specialty] : initializeSessions(selectedPatient)[specialty] || [];
-          const ns = [...arr];
-          if (!ns[index]) return prev;
-          ns[index] = { ...ns[index], id: result.id };
-          return { ...prev, [specialty]: ns };
-        });
-      }
-    } catch (err) {
-      console.error("❌ Erro ao atualizar data da sessão:", err);
-      setError(`Erro ao atualizar data: ${err.message}`);
-    }
-  }, [selectedPatient]);
+    },
+    [selectedPatient],
+  );
 
   const countCompleted = (specialty) => {
     return getSpecialtySessions(specialty).filter((s) => s.checked).length;
@@ -619,6 +656,13 @@ export default function SessionsPage() {
               </details>
             )}
 
+            {selectedPatient?.patient_type?.includes("ABA") && (
+              <p className="text-xs text-gray-500 mb-4 px-1">
+                * Caso o paciente seja da Dra. Amanda, emitir guia com código de
+                psicologia ABA, sempre 8 quantidades que representa 4 sessões.
+              </p>
+            )}
+
             {/* Dicas Terapia Adulto */}
             {selectedPatient?.patient_type?.includes("TERAPIA_ADULTO") && (
               <details className="mb-4 bg-blue-50 border border-blue-200 rounded-lg">
@@ -654,7 +698,9 @@ export default function SessionsPage() {
                   </div>
 
                   <div className="space-y-3 mb-6 max-h-80 overflow-y-auto">
-                    {Array.from({ length: getSessionCount(selectedPatient) }).map((_, index) => (
+                    {Array.from({
+                      length: getSessionCount(selectedPatient),
+                    }).map((_, index) => (
                       <SessionRowMemo
                         key={index}
                         specialty={specialty}
