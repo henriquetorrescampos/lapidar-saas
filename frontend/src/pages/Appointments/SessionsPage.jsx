@@ -657,7 +657,7 @@ export default function SessionsPage() {
             )}
 
             {selectedPatient?.patient_type?.includes("ABA") && (
-              <p className="text-xs text-gray-500 mb-4 px-1">
+              <p className="text-xl text-gray-500 mb-4 px-1">
                 * Caso o paciente seja da Dra. Amanda, emitir guia com código de
                 psicologia ABA, sempre 8 quantidades que representa 4 sessões.
               </p>
