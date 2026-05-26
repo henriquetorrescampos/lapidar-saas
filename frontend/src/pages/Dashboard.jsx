@@ -383,12 +383,63 @@ export default function Dashboard() {
               </span>
               <div className="flex-1 h-px bg-gray-200" />
             </div>
-            <Card>
-              <p className="text-sm text-gray-400 italic">
-                Informações sobre emissão de guias IAMESC serão adicionadas em
-                breve.
-              </p>
-            </Card>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-3 h-3 rounded-full bg-amber-500" />
+                  <h3 className="font-semibold text-gray-800">
+                    Avaliação Neuropsicológica
+                  </h3>
+                </div>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li className="flex gap-2">
+                    <span className="text-amber-500 font-bold mt-0.5">•</span>
+                    <span>
+                      Emitir código de <strong>avaliação neuropsicológica</strong> — quantidade <strong>8</strong>
+                    </span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-amber-500 font-bold mt-0.5">•</span>
+                    <span>
+                      Emitir <strong>1 guia de consulta</strong>
+                    </span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-amber-500 font-bold mt-0.5">•</span>
+                    <div className="flex flex-col gap-1">
+                      <span>
+                        Emitir guia de <strong>sessão de psicologia</strong> — quantidade <strong>4</strong>
+                      </span>
+                      <span className="pl-3 text-gray-500">
+                        ↳ <strong>Mês seguinte:</strong> emitir sessão de psicologia — quantidade <strong>4</strong>
+                      </span>
+                    </div>
+                  </li>
+                </ul>
+              </Card>
+
+              <Card>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-3 h-3 rounded-full bg-green-500" />
+                  <h3 className="font-semibold text-gray-800">
+                    Terapia ABA Infantil ou Adulto (paciente com autismo)
+                  </h3>
+                </div>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li className="flex gap-2">
+                    <span className="text-green-500 font-bold mt-0.5">•</span>
+                    <div className="flex flex-col gap-1">
+                      <span>
+                        Emitir código de <strong>ABA</strong> — cada sessão equivale a <strong>1 atendimento</strong>
+                      </span>
+                      <span className="pl-3 text-gray-500">
+                        ↳ Ou seja, <strong>4 atendimentos no mês</strong> = <strong>4 quantidades</strong> na guia
+                      </span>
+                    </div>
+                  </li>
+                </ul>
+              </Card>
+            </div>
           </div>
         </div>
       </div>

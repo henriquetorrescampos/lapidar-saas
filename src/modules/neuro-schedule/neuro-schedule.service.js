@@ -73,7 +73,7 @@ export async function getNeuroSchedules(filters = {}) {
       where,
       include: {
         patient: {
-          select: { id: true, name: true, patient_type: true },
+          select: { id: true, name: true, patient_type: true, health_plan: true },
         },
       },
       orderBy: { date: "desc" },

@@ -431,6 +431,9 @@ export default function NeuroSchedulePage() {
                           Prazo
                         </th>
                         <th className="text-left p-4 font-semibold text-gray-700">
+                          Plano de Saúde
+                        </th>
+                        <th className="text-left p-4 font-semibold text-gray-700">
                           Status
                         </th>
                         {activeTab === "pendentes" && (
@@ -460,6 +463,9 @@ export default function NeuroSchedulePage() {
                             </td>
                             <td className="p-4 text-gray-600">
                               {formatDeadline(schedule.deadline)}
+                            </td>
+                            <td className="p-4 text-gray-600">
+                              {schedule.patient?.health_plan || "—"}
                             </td>
                             <td className="p-4">
                               <span
