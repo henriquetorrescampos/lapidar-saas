@@ -104,14 +104,20 @@ model Finance {
 }
 
 model Employee {
-  id            Int    @id @default(autoincrement())
-  name          String
-  specialty     String
-  salary        Float
-  absences      Int    @default(0)
-  daily_value   Float
-  updated_value Float
-  documents     EmployeeDocument[]
+  id                    Int    @id @default(autoincrement())
+  name                  String
+  specialty             String
+  salary                Float
+  absences              Int    @default(0)
+  full_days_per_week    Int    @default(0)
+  full_day_hours        Float  @default(10)
+  partial_days_per_week Int    @default(0)
+  partial_day_hours     Float  @default(4)
+  hourly_value          Float  @default(0)
+  daily_value           Float
+  partial_day_value     Float  @default(0)
+  updated_value         Float
+  documents             EmployeeDocument[]
 }
 
 model EmployeeDocument {

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Employee" ADD COLUMN "working_days" DOUBLE PRECISION NOT NULL DEFAULT 19.5;

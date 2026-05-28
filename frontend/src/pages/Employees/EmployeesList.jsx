@@ -135,7 +135,7 @@ export default function EmployeesList() {
                       Faltas
                     </th>
                     <th className="p-4 text-left font-semibold text-gray-700">
-                      Valor Diário
+                      Valor/Hora
                     </th>
                     <th className="p-4 text-left font-semibold text-gray-700">
                       Valor Atualizado
@@ -170,7 +170,7 @@ export default function EmployeesList() {
                       </td>
                       <td className="p-4 text-gray-600">{employee.absences}</td>
                       <td className="p-4 text-gray-600">
-                        {formatCurrency(employee.daily_value)}
+                        {formatCurrency(employee.hourly_value)}
                       </td>
                       <td className="p-4 text-gray-600">
                         {formatCurrency(employee.updated_value)}

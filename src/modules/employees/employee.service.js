@@ -21,12 +21,39 @@ function parseAbsences(value) {
   return numberValue;
 }
 
-function calculatePayrollValues(salary, absences) {
-  const dailyValue = salary / 30;
-  const updatedValue = salary - dailyValue * absences;
+function parsePositiveInt(value, fieldName) {
+  const n = Number(value);
+  if (!Number.isInteger(n) || n < 0) {
+    throw new Error(`${fieldName} must be a non-negative integer`);
+  }
+  return n;
+}
+
+function parsePositiveFloat(value, fieldName) {
+  const n = Number(value);
+  if (Number.isNaN(n) || n < 0) {
+    throw new Error(`${fieldName} must be a non-negative number`);
+  }
+  return n;
+}
+
+function calculatePayrollValues(salary, absences, schedule) {
+  const { fullDaysPerWeek, fullDayHours, partialDaysPerWeek, partialDayHours } =
+    schedule;
+
+  const weeklyHours =
+    fullDaysPerWeek * fullDayHours + partialDaysPerWeek * partialDayHours;
+  const monthlyHours = weeklyHours * 4.33;
+
+  const hourlyValue = monthlyHours > 0 ? salary / monthlyHours : 0;
+  const fullDayValue = hourlyValue * fullDayHours;
+  const partialDayValue = hourlyValue * partialDayHours;
+  const updatedValue = salary - absences * fullDayValue;
 
   return {
-    daily_value: Number(dailyValue.toFixed(2)),
+    hourly_value: Number(hourlyValue.toFixed(2)),
+    daily_value: Number(fullDayValue.toFixed(2)),
+    partial_day_value: Number(partialDayValue.toFixed(2)),
     updated_value: Number(updatedValue.toFixed(2)),
   };
 }
@@ -38,7 +65,13 @@ export async function createEmployee(data) {
 
   const salary = parseMoney(data.salary, "Salary");
   const absences = parseAbsences(data.absences ?? 0);
-  const payroll = calculatePayrollValues(salary, absences);
+  const schedule = {
+    fullDaysPerWeek: parsePositiveInt(data.full_days_per_week ?? 0, "Full days per week"),
+    fullDayHours: parsePositiveFloat(data.full_day_hours ?? 10, "Full day hours"),
+    partialDaysPerWeek: parsePositiveInt(data.partial_days_per_week ?? 0, "Partial days per week"),
+    partialDayHours: parsePositiveFloat(data.partial_day_hours ?? 4, "Partial day hours"),
+  };
+  const payroll = calculatePayrollValues(salary, absences, schedule);
 
   return await prisma.employee.create({
     data: {
@@ -46,6 +79,10 @@ export async function createEmployee(data) {
       specialty: data.specialty.trim(),
       salary,
       absences,
+      full_days_per_week: schedule.fullDaysPerWeek,
+      full_day_hours: schedule.fullDayHours,
+      partial_days_per_week: schedule.partialDaysPerWeek,
+      partial_day_hours: schedule.partialDayHours,
       ...payroll,
     },
   });
@@ -113,7 +150,26 @@ export async function updateEmployee(id, data) {
       ? parseAbsences(data.absences)
       : existingEmployee.absences;
 
-  const payroll = calculatePayrollValues(salary, absences);
+  const schedule = {
+    fullDaysPerWeek:
+      data.full_days_per_week !== undefined
+        ? parsePositiveInt(data.full_days_per_week, "Full days per week")
+        : existingEmployee.full_days_per_week,
+    fullDayHours:
+      data.full_day_hours !== undefined
+        ? parsePositiveFloat(data.full_day_hours, "Full day hours")
+        : existingEmployee.full_day_hours,
+    partialDaysPerWeek:
+      data.partial_days_per_week !== undefined
+        ? parsePositiveInt(data.partial_days_per_week, "Partial days per week")
+        : existingEmployee.partial_days_per_week,
+    partialDayHours:
+      data.partial_day_hours !== undefined
+        ? parsePositiveFloat(data.partial_day_hours, "Partial day hours")
+        : existingEmployee.partial_day_hours,
+  };
+
+  const payroll = calculatePayrollValues(salary, absences, schedule);
 
   return await prisma.employee.update({
     where: { id: employeeId },
@@ -122,6 +178,10 @@ export async function updateEmployee(id, data) {
       ...(data.specialty !== undefined && { specialty: data.specialty.trim() }),
       salary,
       absences,
+      full_days_per_week: schedule.fullDaysPerWeek,
+      full_day_hours: schedule.fullDayHours,
+      partial_days_per_week: schedule.partialDaysPerWeek,
+      partial_day_hours: schedule.partialDayHours,
       ...payroll,
     },
   });

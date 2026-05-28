@@ -56,6 +56,10 @@ export default function EmployeeForm() {
     specialty: "",
     salary: "",
     absences: "0",
+    full_days_per_week: "0",
+    full_day_hours: "10",
+    partial_days_per_week: "0",
+    partial_day_hours: "4",
   });
 
   useEffect(() => {
@@ -72,6 +76,10 @@ export default function EmployeeForm() {
         specialty: data.specialty,
         salary: formatCurrency(data.salary),
         absences: String(data.absences ?? 0),
+        full_days_per_week: String(data.full_days_per_week ?? 0),
+        full_day_hours: String(data.full_day_hours ?? 10),
+        partial_days_per_week: String(data.partial_days_per_week ?? 0),
+        partial_day_hours: String(data.partial_day_hours ?? 4),
       });
     } catch (err) {
       setError(err.message || "Erro ao carregar funcionário");
@@ -83,21 +91,37 @@ export default function EmployeeForm() {
   const payrollPreview = useMemo(() => {
     const salary = parseCurrencyInputToNumber(formData.salary);
     const absences = parseNumber(formData.absences);
-    const daily = salary / 30;
-    const updated = salary - daily * absences;
+    const fullDaysPerWeek = parseNumber(formData.full_days_per_week);
+    const fullDayHours = parseNumber(formData.full_day_hours) || 1;
+    const partialDaysPerWeek = parseNumber(formData.partial_days_per_week);
+    const partialDayHours = parseNumber(formData.partial_day_hours) || 1;
 
-    return {
-      daily,
-      updated,
-    };
-  }, [formData.salary, formData.absences]);
+    const weeklyHours = fullDaysPerWeek * fullDayHours + partialDaysPerWeek * partialDayHours;
+    const monthlyHours = weeklyHours * 4.33;
+    const hourly = monthlyHours > 0 ? salary / monthlyHours : 0;
+    const fullDay = hourly * fullDayHours;
+    const partialDay = hourly * partialDayHours;
+    const updated = salary - absences * fullDay;
+
+    return { salary, hourly, fullDay, partialDay, updated, weeklyHours, monthlyHours, fullDayHours, partialDayHours };
+  }, [
+    formData.salary,
+    formData.absences,
+    formData.full_days_per_week,
+    formData.full_day_hours,
+    formData.partial_days_per_week,
+    formData.partial_day_hours,
+  ]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    const absencesDigits = value.replace(/\D/g, "");
-    const normalizedAbsences =
-      absencesDigits === "" ? "" : String(parseInt(absencesDigits, 10));
+    if (name === "absences") {
+      const digits = value.replace(/\D/g, "");
+      const normalized = digits === "" ? "" : String(parseInt(digits, 10));
+      setFormData((prev) => ({ ...prev, absences: normalized }));
+      return;
+    }
 
     setFormData((prev) => ({
       ...prev,
@@ -106,20 +130,14 @@ export default function EmployeeForm() {
           ? value.toUpperCase()
           : name === "salary"
             ? formatCurrencyInput(value)
-            : name === "absences"
-              ? normalizedAbsences
-              : value,
+            : value,
     }));
   };
 
   const handleBlur = (e) => {
     const { name, value } = e.target;
-
     if (name === "absences" && value === "") {
-      setFormData((prev) => ({
-        ...prev,
-        absences: "0",
-      }));
+      setFormData((prev) => ({ ...prev, absences: "0" }));
     }
   };
 
@@ -130,9 +148,14 @@ export default function EmployeeForm() {
 
     try {
       const payload = {
-        ...formData,
+        name: formData.name,
+        specialty: formData.specialty,
         salary: parseCurrencyInputToNumber(formData.salary),
         absences: parseInt(formData.absences || "0", 10),
+        full_days_per_week: parseInt(formData.full_days_per_week || "0", 10),
+        full_day_hours: parseNumber(formData.full_day_hours) || 10,
+        partial_days_per_week: parseInt(formData.partial_days_per_week || "0", 10),
+        partial_day_hours: parseNumber(formData.partial_day_hours) || 4,
       };
 
       if (id) {
@@ -206,7 +229,7 @@ export default function EmployeeForm() {
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
                 <label className="mb-2 block text-sm font-medium text-gray-700">
-                  Salário (R$)
+                  Salário Mensal (R$)
                 </label>
                 <input
                   type="text"
@@ -214,7 +237,7 @@ export default function EmployeeForm() {
                   value={formData.salary}
                   onChange={handleChange}
                   className="input-field"
-                  placeholder="R$ 1.000,00"
+                  placeholder="R$ 5.000,00"
                   inputMode="numeric"
                   required
                 />
@@ -222,7 +245,7 @@ export default function EmployeeForm() {
 
               <div>
                 <label className="mb-2 block text-sm font-medium text-gray-700">
-                  Quantidade de Falta
+                  Quantidade de Faltas
                 </label>
                 <input
                   type="text"
@@ -237,19 +260,138 @@ export default function EmployeeForm() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 rounded-xl border border-gray-200 bg-gray-50 p-4 md:grid-cols-2">
-              <div>
-                <p className="text-sm text-gray-500">Valor do Dia</p>
-                <p className="text-lg font-semibold text-gray-800">
-                  {formatCurrency(payrollPreview.daily)}
-                </p>
+            <div>
+              <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-600">
+                Carga Horária Semanal
+              </p>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    Dias Completos/semana
+                  </label>
+                  <input
+                    type="number"
+                    name="full_days_per_week"
+                    value={formData.full_days_per_week}
+                    onChange={handleChange}
+                    className="input-field"
+                    min="0"
+                    max="7"
+                    step="1"
+                    placeholder="3"
+                  />
+                </div>
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    Horas líquidas/dia completo
+                  </label>
+                  <input
+                    type="number"
+                    name="full_day_hours"
+                    value={formData.full_day_hours}
+                    onChange={handleChange}
+                    className="input-field"
+                    min="0"
+                    max="24"
+                    step="0.5"
+                    placeholder="10"
+                  />
+                </div>
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    Dias Parciais/semana
+                  </label>
+                  <input
+                    type="number"
+                    name="partial_days_per_week"
+                    value={formData.partial_days_per_week}
+                    onChange={handleChange}
+                    className="input-field"
+                    min="0"
+                    max="7"
+                    step="1"
+                    placeholder="1"
+                  />
+                </div>
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    Horas/dia parcial
+                  </label>
+                  <input
+                    type="number"
+                    name="partial_day_hours"
+                    value={formData.partial_day_hours}
+                    onChange={handleChange}
+                    className="input-field"
+                    min="0"
+                    max="24"
+                    step="0.5"
+                    placeholder="4"
+                  />
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-gray-500">Valor Atualizado</p>
-                <p className="text-lg font-semibold text-gray-800">
-                  {formatCurrency(payrollPreview.updated)}
-                </p>
-              </div>
+            </div>
+
+            <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                Tabela de Referência
+              </p>
+              <table className="w-full text-sm">
+                <tbody className="divide-y divide-gray-200">
+                  <tr>
+                    <td className="py-2 text-gray-500">Horas semanais</td>
+                    <td className="py-2 text-right font-medium text-gray-700">
+                      {payrollPreview.weeklyHours.toFixed(1)}h
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 text-gray-500">Horas mensais (× 4,33)</td>
+                    <td className="py-2 text-right font-medium text-gray-700">
+                      {payrollPreview.monthlyHours.toFixed(2)}h
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 text-gray-500">Mensal</td>
+                    <td className="py-2 text-right font-semibold text-gray-800">
+                      {formatCurrency(payrollPreview.salary)}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 text-gray-500">Hora de trabalho</td>
+                    <td className="py-2 text-right font-semibold text-gray-800">
+                      {formatCurrency(payrollPreview.hourly)}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 text-gray-500">
+                      Dia Inteiro ({payrollPreview.fullDayHours}h)
+                    </td>
+                    <td className="py-2 text-right font-semibold text-gray-800">
+                      {formatCurrency(payrollPreview.fullDay)}
+                    </td>
+                  </tr>
+                  {parseNumber(formData.partial_days_per_week) > 0 && (
+                    <tr>
+                      <td className="py-2 text-gray-500">
+                        Dia Parcial ({payrollPreview.partialDayHours}h)
+                      </td>
+                      <td className="py-2 text-right font-semibold text-gray-800">
+                        {formatCurrency(payrollPreview.partialDay)}
+                      </td>
+                    </tr>
+                  )}
+                  <tr className="border-t-2 border-gray-300">
+                    <td className="pt-3 font-semibold text-gray-700">
+                      Valor Atualizado
+                      {parseNumber(formData.absences) > 0 &&
+                        ` (${formData.absences} falta${parseNumber(formData.absences) > 1 ? "s" : ""})`}
+                    </td>
+                    <td className="pt-3 text-right text-base font-bold text-primary-700">
+                      {formatCurrency(payrollPreview.updated)}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             <div className="flex gap-3">
