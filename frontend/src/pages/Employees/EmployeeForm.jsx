@@ -92,9 +92,9 @@ export default function EmployeeForm() {
     const salary = parseCurrencyInputToNumber(formData.salary);
     const absences = parseNumber(formData.absences);
     const fullDaysPerWeek = parseNumber(formData.full_days_per_week);
-    const fullDayHours = parseNumber(formData.full_day_hours) || 1;
+    const fullDayHours = parseNumber(formData.full_day_hours);
     const partialDaysPerWeek = parseNumber(formData.partial_days_per_week);
-    const partialDayHours = parseNumber(formData.partial_day_hours) || 1;
+    const partialDayHours = parseNumber(formData.partial_day_hours);
 
     const weeklyHours = fullDaysPerWeek * fullDayHours + partialDaysPerWeek * partialDayHours;
     const monthlyHours = weeklyHours * 4.33;
@@ -153,9 +153,9 @@ export default function EmployeeForm() {
         salary: parseCurrencyInputToNumber(formData.salary),
         absences: parseInt(formData.absences || "0", 10),
         full_days_per_week: parseInt(formData.full_days_per_week || "0", 10),
-        full_day_hours: parseNumber(formData.full_day_hours) || 10,
+        full_day_hours: parseNumber(formData.full_day_hours),
         partial_days_per_week: parseInt(formData.partial_days_per_week || "0", 10),
-        partial_day_hours: parseNumber(formData.partial_day_hours) || 4,
+        partial_day_hours: parseNumber(formData.partial_day_hours),
       };
 
       if (id) {
