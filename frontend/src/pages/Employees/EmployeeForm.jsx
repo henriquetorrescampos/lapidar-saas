@@ -293,7 +293,7 @@ export default function EmployeeForm() {
                     className="input-field"
                     min="0"
                     max="24"
-                    step="0.5"
+                    step="any"
                     placeholder="10"
                   />
                 </div>
@@ -325,7 +325,7 @@ export default function EmployeeForm() {
                     className="input-field"
                     min="0"
                     max="24"
-                    step="0.5"
+                    step="any"
                     placeholder="4"
                   />
                 </div>
