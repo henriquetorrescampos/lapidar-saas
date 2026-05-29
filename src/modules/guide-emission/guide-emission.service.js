@@ -40,7 +40,7 @@ export async function getGuideEmissions(month, year) {
   const patients = await prisma.patient.findMany({
     where: {
       patient_type: { contains: "ABA" },
-      health_plan: { not: "PARTICULAR" },
+      health_plan: { notIn: ["PARTICULAR", "IAMESC"] },
     },
     include: {
       patient_schedules: true,
