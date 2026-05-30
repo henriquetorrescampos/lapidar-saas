@@ -353,7 +353,8 @@ export default function Dashboard() {
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
                     <span>
                       <strong>Criança:</strong> emitir código TEA (10
-                      quantidades)
+                      quantidades) - Códigos 0.00.11.18-5, 0.00.40.04-5 ou
+                      0.00.11.19-3.
                     </span>
                   </li>
                   <li className="flex gap-2">
@@ -361,7 +362,8 @@ export default function Dashboard() {
                     <div className="flex flex-col gap-1">
                       <span>
                         <strong>Adulto:</strong> emitir código de{" "}
-                        <strong>terapia adulto</strong> (10 quantidades)
+                        <strong>terapia adulto(5.00.00.47-0)</strong> (10
+                        quantidades)
                       </span>
                       <span className="pl-3 text-gray-500">
                         ↳ <strong>Mês seguinte:</strong> emitir mais 10
@@ -395,23 +397,27 @@ export default function Dashboard() {
                   <li className="flex gap-2">
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
                     <span>
-                      Emitir código de <strong>avaliação neuropsicológica</strong> — quantidade <strong>8</strong>
+                      Emitir código de{" "}
+                      <strong>avaliação neuropsicológica</strong> — quantidade{" "}
+                      <strong>8</strong> código 80010040.
                     </span>
                   </li>
                   <li className="flex gap-2">
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
                     <span>
-                      Emitir <strong>1 guia de consulta</strong>
+                      Emitir <strong>1 guia de consulta</strong> código 10030
                     </span>
                   </li>
                   <li className="flex gap-2">
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
                     <div className="flex flex-col gap-1">
                       <span>
-                        Emitir guia de <strong>sessão de psicologia</strong> — quantidade <strong>4</strong>
+                        Emitir guia de <strong>sessão de psicologia</strong> —
+                        quantidade <strong>4</strong> código 010016
                       </span>
                       <span className="pl-3 text-gray-500">
-                        ↳ <strong>Mês seguinte:</strong> emitir sessão de psicologia — quantidade <strong>4</strong>
+                        ↳ <strong>Mês seguinte:</strong> emitir sessão de
+                        psicologia — quantidade <strong>4</strong>
                       </span>
                     </div>
                   </li>
@@ -430,10 +436,12 @@ export default function Dashboard() {
                     <span className="text-green-500 font-bold mt-0.5">•</span>
                     <div className="flex flex-col gap-1">
                       <span>
-                        Emitir código de <strong>ABA</strong> — cada sessão equivale a <strong>1 atendimento</strong>
+                        Emitir código de <strong>ABA</strong> — cada sessão
+                        equivale a <strong>1 atendimento</strong>
                       </span>
                       <span className="pl-3 text-gray-500">
-                        ↳ Ou seja, <strong>4 atendimentos no mês</strong> = <strong>4 quantidades</strong> na guia
+                        ↳ Ou seja, <strong>4 atendimentos no mês</strong> ={" "}
+                        <strong>4 quantidades</strong> na guia
                       </span>
                     </div>
                   </li>
