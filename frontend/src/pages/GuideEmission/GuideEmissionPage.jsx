@@ -54,12 +54,16 @@ export default function GuideEmissionPage() {
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterDay, setFilterDay] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [error, setError] = useState("");
 
   const load = useCallback(async () => {
     setLoading(true);
+    setError("");
     try {
       const data = await guideEmissionService.getEmissions(month, year);
       setEmissions(data);
+    } catch (err) {
+      setError(err.message || "Erro ao carregar emissões");
     } finally {
       setLoading(false);
     }
@@ -92,6 +96,8 @@ export default function GuideEmissionPage() {
             : e
         )
       );
+    } catch (err) {
+      setError(err.message || "Erro ao atualizar emissão");
     } finally {
       setToggling(null);
     }
@@ -113,22 +119,32 @@ export default function GuideEmissionPage() {
     });
   }, [emissions, search, filterSpecialty, filterStatus, filterDay]);
 
-  // Agrupar por paciente
-  const allGrouped = useMemo(() => {
-    return filtered.reduce((acc, item) => {
+  // Agrupar por paciente, ordenar alfabeticamente e paginar
+  const { groupedList, totalPatients, totalPages, pageGroups } = useMemo(() => {
+    const grouped = filtered.reduce((acc, item) => {
       if (!acc[item.patient_id]) {
         acc[item.patient_id] = { id: item.patient_id, name: item.patient_name, items: [] };
       }
       acc[item.patient_id].items.push(item);
       return acc;
     }, {});
-  }, [filtered]);
 
-  const groupedList = Object.values(allGrouped);
-  const totalPatients = groupedList.length;
-  const totalPages = Math.max(1, Math.ceil(totalPatients / PAGE_SIZE));
+    const list = Object.values(grouped).sort((a, b) =>
+      a.name.localeCompare(b.name, "pt-BR")
+    );
+    const total = list.length;
+    const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    const safe = Math.min(currentPage, pages);
+
+    return {
+      groupedList: list,
+      totalPatients: total,
+      totalPages: pages,
+      pageGroups: list.slice((safe - 1) * PAGE_SIZE, safe * PAGE_SIZE),
+    };
+  }, [filtered, currentPage]);
+
   const safePage = Math.min(currentPage, totalPages);
-  const pageGroups = groupedList.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   const hasActiveFilter = search || filterSpecialty || filterStatus !== "all" || filterDay;
 
@@ -146,6 +162,16 @@ export default function GuideEmissionPage() {
         <p className="text-gray-500 text-sm mb-8">
           Controle mensal de emissão de guias para pacientes ABA
         </p>
+
+        {error && (
+          <div className="mb-6 flex items-center gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+            <AlertCircle size={18} className="shrink-0" />
+            <span>{error}</span>
+            <button onClick={() => setError("")} className="ml-auto text-red-400 hover:text-red-600">
+              <X size={16} />
+            </button>
+          </div>
+        )}
 
         {/* Navegação de mês */}
         <div className="flex items-center gap-4 mb-6">
