@@ -1,5 +1,6 @@
 import { prisma } from "../../lib/prisma.js";
 import { validateNumberId } from "../../lib/validators.js";
+import Holidays from "date-holidays";
 
 const GUIDE_SPECIALTIES = [
   "Psicologia",
@@ -8,12 +9,29 @@ const GUIDE_SPECIALTIES = [
   "Psicopedagogia",
 ];
 
-// Pré-computa quantas vezes cada dia da semana (0-6) ocorre no mês — chamado uma vez por request
-function buildDayCountMap(month, year) {
+const hd = new Holidays("BR");
+
+// Retorna Set com os dias-do-mês que são feriados nacionais (inclui Carnaval)
+function getNationalHolidayDays(month, year) {
+  const holidayDays = new Set();
+  for (const h of hd.getHolidays(year)) {
+    if (h.type !== "public" && h.type !== "optional") continue;
+    // Parseia a string da data sem usar Date() para evitar problemas de fuso
+    const [dateStr] = h.date.split(" ");
+    const [, hMonth, hDay] = dateStr.split("-").map(Number);
+    if (hMonth === month) holidayDays.add(hDay);
+  }
+  return holidayDays;
+}
+
+// Pré-computa quantas vezes cada dia da semana (0-6) ocorre no mês, descontando feriados
+function buildDayCountMap(month, year, holidayDays) {
   const counts = new Array(7).fill(0);
   const daysInMonth = new Date(year, month, 0).getDate();
   for (let d = 1; d <= daysInMonth; d++) {
-    counts[new Date(year, month - 1, d).getDay()]++;
+    if (!holidayDays.has(d)) {
+      counts[new Date(year, month - 1, d).getDay()]++;
+    }
   }
   return counts;
 }
@@ -35,7 +53,8 @@ export async function getGuideEmissions(month, year) {
     throw new Error("Mês e ano inválidos");
   }
 
-  const dayCountMap = buildDayCountMap(m, y);
+  const holidayDays = getNationalHolidayDays(m, y);
+  const dayCountMap = buildDayCountMap(m, y, holidayDays);
 
   const patients = await prisma.patient.findMany({
     where: {
