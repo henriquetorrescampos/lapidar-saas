@@ -38,8 +38,20 @@ function buildDayCountMap(month, year, holidayDays) {
 
 function calculateSessions(days, dayCountMap) {
   if (!days) return null;
-  const dayList = days.split(",").map(Number).filter((d) => !isNaN(d));
-  if (dayList.length === 0) return null;
+  const entries = days.split(",").filter(Boolean);
+  if (entries.length === 0) return null;
+
+  // Formato novo: "3:2,4:1" (dia:quantidade)
+  if (days.includes(":")) {
+    return entries.reduce((sum, entry) => {
+      const [d, q] = entry.split(":").map(Number);
+      if (isNaN(d) || d <= 0) return sum;
+      return sum + (dayCountMap[d] ?? 0) * (isNaN(q) || q <= 0 ? 1 : q);
+    }, 0);
+  }
+
+  // Formato legado: "3,4" — mantém comportamento anterior
+  const dayList = entries.map(Number).filter((d) => !isNaN(d));
   const totalOccurrences = dayList.reduce((sum, d) => sum + (dayCountMap[d] ?? 0), 0);
   const multiplier = dayList.length === 1 ? 2 : 1;
   return totalOccurrences * multiplier;

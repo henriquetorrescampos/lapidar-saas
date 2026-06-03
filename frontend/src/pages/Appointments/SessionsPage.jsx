@@ -983,12 +983,16 @@ export default function SessionsPage() {
                         key={idx}
                         className={`p-3 rounded-lg ${getSpecialtyColor(selectedHistoryItem.specialty).light} ${getSpecialtyColor(selectedHistoryItem.specialty).text} font-medium text-center`}
                       >
-                        {new Date(date).toLocaleDateString("pt-BR", {
-                          weekday: "short",
-                          year: "numeric",
-                          month: "2-digit",
-                          day: "2-digit",
-                        })}
+                        {(() => {
+                          // Extrai apenas YYYY-MM-DD para evitar shift de fuso horário ao parsear UTC
+                          const [y, mo, d] = String(date).split("T")[0].split("-").map(Number);
+                          return new Date(y, mo - 1, d).toLocaleDateString("pt-BR", {
+                            weekday: "short",
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                          });
+                        })()}
                       </div>
                     ))
                   ) : (

@@ -49,7 +49,7 @@ export default function PatientForm() {
     health_plan: "",
     birth_date: "",
   });
-  // schedules: { [specialty]: number[] } ex: { Psicologia: [1, 3] }
+  // schedules: { [specialty]: { [day]: number } } ex: { Psicologia: { 1: 1, 3: 2 } }
   const [schedules, setSchedules] = useState({});
 
   useEffect(() => {
@@ -77,9 +77,18 @@ export default function PatientForm() {
 
       const schedulesMap = {};
       for (const s of existingSchedules) {
-        schedulesMap[s.specialty] = s.days
-          ? s.days.split(",").map(Number).filter((d) => !isNaN(d))
-          : [];
+        if (!s.days) { schedulesMap[s.specialty] = {}; continue; }
+        const entries = s.days.split(",").filter(Boolean);
+        const hasExplicitQty = s.days.includes(":");
+        // Compatibilidade com formato legado: dia único era calculado como 2×
+        const defaultQty = !hasExplicitQty && entries.length === 1 ? 2 : 1;
+        schedulesMap[s.specialty] = {};
+        for (const entry of entries) {
+          const [d, q] = entry.split(":").map(Number);
+          if (!isNaN(d) && d > 0) {
+            schedulesMap[s.specialty][d] = isNaN(q) ? defaultQty : q;
+          }
+        }
       }
       setSchedules(schedulesMap);
     } catch (err) {
@@ -135,12 +144,26 @@ export default function PatientForm() {
 
   const handleScheduleDayToggle = (specialty, dayValue) => {
     setSchedules((prev) => {
-      const current = prev[specialty] || [];
-      const has = current.includes(dayValue);
-      const updated = has
-        ? current.filter((d) => d !== dayValue)
-        : [...current, dayValue].sort((a, b) => a - b);
-      return { ...prev, [specialty]: updated };
+      const current = prev[specialty] || {};
+      if (current[dayValue]) {
+        const updated = { ...current };
+        delete updated[dayValue];
+        return { ...prev, [specialty]: updated };
+      }
+      return { ...prev, [specialty]: { ...current, [dayValue]: 1 } };
+    });
+  };
+
+  const handleScheduleDayQty = (specialty, dayValue, delta) => {
+    setSchedules((prev) => {
+      const current = prev[specialty] || {};
+      const newQty = (current[dayValue] || 0) + delta;
+      if (newQty <= 0) {
+        const updated = { ...current };
+        delete updated[dayValue];
+        return { ...prev, [specialty]: updated };
+      }
+      return { ...prev, [specialty]: { ...current, [dayValue]: newQty } };
     });
   };
 
@@ -181,7 +204,11 @@ export default function PatientForm() {
       if (isABA && abaSpecialties.length > 0 && patientId) {
         const schedulesToSave = abaSpecialties.map((specialty) => ({
           specialty,
-          days: (schedules[specialty] || []).join(","),
+          days: Object.entries(schedules[specialty] || {})
+            .filter(([, qty]) => qty > 0)
+            .sort(([a], [b]) => Number(a) - Number(b))
+            .map(([day, qty]) => `${day}:${qty}`)
+            .join(","),
         }));
         await guideEmissionService.upsertPatientSchedules(
           patientId,
@@ -302,26 +329,45 @@ export default function PatientForm() {
                       <p className="text-sm font-medium text-gray-600 mb-2">
                         {specialty}
                       </p>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-3">
                         {WEEK_DAYS.map((day) => {
-                          const selected = (
-                            schedules[specialty] || []
-                          ).includes(day.value);
+                          const qty = (schedules[specialty] || {})[day.value] || 0;
+                          const selected = qty > 0;
                           return (
-                            <button
-                              key={day.value}
-                              type="button"
-                              onClick={() =>
-                                handleScheduleDayToggle(specialty, day.value)
-                              }
-                              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
-                                selected
-                                  ? "bg-primary-600 text-white"
-                                  : "bg-white border border-gray-300 text-gray-600 hover:border-primary-400"
-                              }`}
-                            >
-                              {day.label}
-                            </button>
+                            <div key={day.value} className="flex flex-col items-center gap-1">
+                              <button
+                                type="button"
+                                onClick={() => handleScheduleDayToggle(specialty, day.value)}
+                                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
+                                  selected
+                                    ? "bg-primary-600 text-white"
+                                    : "bg-white border border-gray-300 text-gray-600 hover:border-primary-400"
+                                }`}
+                              >
+                                {day.label}
+                              </button>
+                              {selected && (
+                                <div className="flex items-center gap-1">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleScheduleDayQty(specialty, day.value, -1)}
+                                    className="w-5 h-5 flex items-center justify-center rounded bg-gray-200 hover:bg-gray-300 text-xs font-bold leading-none"
+                                  >
+                                    −
+                                  </button>
+                                  <span className="text-xs font-semibold w-5 text-center text-gray-700">
+                                    {qty}×
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleScheduleDayQty(specialty, day.value, 1)}
+                                    className="w-5 h-5 flex items-center justify-center rounded bg-gray-200 hover:bg-gray-300 text-xs font-bold leading-none"
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                              )}
+                            </div>
                           );
                         })}
                       </div>

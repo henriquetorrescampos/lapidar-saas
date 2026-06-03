@@ -139,7 +139,7 @@ export async function createNeuroSchedule(data) {
   validateRequired(data.date, "Date");
   validateRequired(data.deadline, "Deadline");
 
-  const patientId = parseInt(data.patient_id);
+  const patientId = validateNumberId(data.patient_id);
 
   const patient = await prisma.patient.findUnique({
     where: { id: patientId },

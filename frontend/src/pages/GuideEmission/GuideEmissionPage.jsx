@@ -38,7 +38,11 @@ const ALL_SPECIALTIES = [
 
 function formatDays(days) {
   if (!days) return "Sem agenda";
-  return days.split(",").map(Number).map((d) => DAY_NAMES[d]).join(", ");
+  return days.split(",").filter(Boolean).map((entry) => {
+    const [d, q] = entry.split(":").map(Number);
+    const name = DAY_NAMES[d] || "?";
+    return q > 1 ? `${name} (${q}×)` : name;
+  }).join(", ");
 }
 
 export default function GuideEmissionPage() {
@@ -114,7 +118,7 @@ export default function GuideEmissionPage() {
       if (filterSpecialty && item.specialty !== filterSpecialty) return false;
       if (filterStatus === "emitted" && !item.emitted) return false;
       if (filterStatus === "pending" && item.emitted) return false;
-      if (filterDay && !(item.schedule_days || "").split(",").includes(filterDay)) return false;
+      if (filterDay && !(item.schedule_days || "").split(",").some((e) => e.split(":")[0] === filterDay)) return false;
       return true;
     });
   }, [emissions, search, filterSpecialty, filterStatus, filterDay]);

@@ -174,7 +174,11 @@ export async function archiveSessionsToHistory(data, currentUser) {
   const normalizedSessionIds = session_ids.map((sessionId) =>
     validateNumberId(sessionId),
   );
-  const normalizedDates = dates.map((date) => validateDate(date));
+  // Valida mas mantém como string "YYYY-MM-DD" para evitar conversão UTC no JSONB
+  const normalizedDates = dates.map((date) => {
+    validateDate(date);
+    return date;
+  });
 
   return prisma.$transaction(async (tx) => {
     await ensureSessionHistoryTable(tx);

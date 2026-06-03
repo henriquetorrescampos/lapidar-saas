@@ -72,7 +72,10 @@ export async function getRevenues(filters = {}) {
       where.date.gte = new Date(filters.date_from);
     }
     if (filters.date_to) {
-      where.date.lte = new Date(filters.date_to);
+      // Usa lt com o dia seguinte para incluir todos os registros do dia informado
+      const nextDay = new Date(filters.date_to);
+      nextDay.setUTCDate(nextDay.getUTCDate() + 1);
+      where.date.lt = nextDay;
     }
   }
 
@@ -159,7 +162,9 @@ export async function getExpenses(filters = {}) {
       where.date.gte = new Date(filters.date_from);
     }
     if (filters.date_to) {
-      where.date.lte = new Date(filters.date_to);
+      const nextDay = new Date(filters.date_to);
+      nextDay.setUTCDate(nextDay.getUTCDate() + 1);
+      where.date.lt = nextDay;
     }
   }
 
@@ -205,7 +210,11 @@ export async function getFinancialDashboard(filters = {}) {
   const dateWhere = {};
   if (filters.date_from || filters.date_to) {
     if (filters.date_from) dateWhere.gte = new Date(filters.date_from);
-    if (filters.date_to) dateWhere.lte = new Date(filters.date_to);
+    if (filters.date_to) {
+      const nextDay = new Date(filters.date_to);
+      nextDay.setUTCDate(nextDay.getUTCDate() + 1);
+      dateWhere.lt = nextDay;
+    }
   }
 
   const revenueWhere = { ...(Object.keys(dateWhere).length && { date: dateWhere }) };
@@ -337,8 +346,10 @@ export async function getHealthPlans() {
 
 export async function deleteHealthPlan(id) {
   // Verificar se o plano existe e se tem revenues associadas
+  const planId = validateNumberId(id);
+
   const plan = await prisma.healthPlan.findUnique({
-    where: { id: parseInt(id) },
+    where: { id: planId },
     include: {
       revenue: true,
     },
@@ -357,7 +368,7 @@ export async function deleteHealthPlan(id) {
 
   // Excluir o plano
   return await prisma.healthPlan.delete({
-    where: { id: parseInt(id) },
+    where: { id: planId },
   });
 }
 
