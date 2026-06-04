@@ -41,20 +41,30 @@ function calculateSessions(days, dayCountMap) {
   const entries = days.split(",").filter(Boolean);
   if (entries.length === 0) return null;
 
-  // Formato novo: "3:2,4:1" (dia:quantidade)
+  // Formato novo: "3:1,4:2" (dia:sessões_por_ocorrência)
   if (days.includes(":")) {
-    return entries.reduce((sum, entry) => {
-      const [d, q] = entry.split(":").map(Number);
-      if (isNaN(d) || d <= 0) return sum;
-      return sum + (dayCountMap[d] ?? 0) * (isNaN(q) || q <= 0 ? 1 : q);
-    }, 0);
+    const parsed = entries
+      .map((entry) => {
+        const [d, q] = entry.split(":").map(Number);
+        return { day: d, qty: isNaN(q) || q <= 0 ? 1 : q };
+      })
+      .filter(({ day }) => !isNaN(day) && day > 0);
+
+    if (parsed.length === 0) return null;
+
+    // Regra: total semanal = 1 → multiplica por 2; 2+ → razão 1:1
+    const totalPerWeek = parsed.reduce((sum, { qty }) => sum + qty, 0);
+    const rawOccurrences = parsed.reduce(
+      (sum, { day, qty }) => sum + (dayCountMap[day] ?? 0) * qty,
+      0,
+    );
+    return rawOccurrences * (totalPerWeek === 1 ? 2 : 1);
   }
 
   // Formato legado: "3,4" — mantém comportamento anterior
   const dayList = entries.map(Number).filter((d) => !isNaN(d));
   const totalOccurrences = dayList.reduce((sum, d) => sum + (dayCountMap[d] ?? 0), 0);
-  const multiplier = dayList.length === 1 ? 2 : 1;
-  return totalOccurrences * multiplier;
+  return totalOccurrences * (dayList.length === 1 ? 2 : 1);
 }
 
 export async function getGuideEmissions(month, year) {

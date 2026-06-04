@@ -79,14 +79,12 @@ export default function PatientForm() {
       for (const s of existingSchedules) {
         if (!s.days) { schedulesMap[s.specialty] = {}; continue; }
         const entries = s.days.split(",").filter(Boolean);
-        const hasExplicitQty = s.days.includes(":");
-        // Compatibilidade com formato legado: dia único era calculado como 2×
-        const defaultQty = !hasExplicitQty && entries.length === 1 ? 2 : 1;
         schedulesMap[s.specialty] = {};
         for (const entry of entries) {
           const [d, q] = entry.split(":").map(Number);
           if (!isNaN(d) && d > 0) {
-            schedulesMap[s.specialty][d] = isNaN(q) ? defaultQty : q;
+            // qty representa sessões físicas por ocorrência; o ×2 para 1x/semana é regra do cálculo de guias
+            schedulesMap[s.specialty][d] = isNaN(q) ? 1 : q;
           }
         }
       }
@@ -320,8 +318,7 @@ export default function PatientForm() {
                   Agenda por Especialidade
                 </label>
                 <p className="text-xs text-gray-400 mb-4">
-                  Selecione os dias da semana que o paciente realiza cada
-                  especialidade
+                  Selecione os dias e quantas sessões o paciente realiza por dia. Paciente 1x/semana → cálculo de guia aplica ×2 automaticamente.
                 </p>
                 <div className="space-y-4">
                   {abaSpecialties.map((specialty) => (
