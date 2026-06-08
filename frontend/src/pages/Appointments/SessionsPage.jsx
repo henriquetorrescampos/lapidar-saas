@@ -23,6 +23,8 @@ const SPECIALTIES = [
   "Fonoaudiologia",
   "Psicologia",
   "Terapia Ocupacional",
+  "Psicomotricidade",
+  "Fisioterapia",
 ];
 
 const SPECIALTIES_BY_PATIENT_TYPE = {
@@ -31,6 +33,8 @@ const SPECIALTIES_BY_PATIENT_TYPE = {
     "Fonoaudiologia",
     "Psicologia",
     "Terapia Ocupacional",
+    "Psicomotricidade",
+    "Fisioterapia",
   ],
   TERAPIA_ADULTO: ["Psicologia"],
 };
@@ -83,6 +87,18 @@ const SPECIALTY_COLORS = {
     text: "text-orange-800",
     badge: "bg-orange-500",
     light: "bg-orange-50",
+  },
+  Psicomotricidade: {
+    bg: "bg-pink-100",
+    text: "text-pink-800",
+    badge: "bg-pink-500",
+    light: "bg-pink-50",
+  },
+  Fisioterapia: {
+    bg: "bg-teal-100",
+    text: "text-teal-800",
+    badge: "bg-teal-500",
+    light: "bg-teal-50",
   },
 };
 
@@ -137,6 +153,8 @@ export default function SessionsPage() {
       Fonoaudiologia: buildArray(),
       Psicologia: buildArray(),
       "Terapia Ocupacional": buildArray(),
+      Psicomotricidade: buildArray(),
+      Fisioterapia: buildArray(),
     };
   };
 
@@ -682,7 +700,7 @@ export default function SessionsPage() {
               </details>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
               {getAvailableSpecialties(selectedPatient).map((specialty) => (
                 <Card key={specialty}>
                   <div className="mb-4">

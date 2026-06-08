@@ -132,7 +132,7 @@ export default function EmployeesList() {
                       Salário
                     </th>
                     <th className="p-4 text-left font-semibold text-gray-700">
-                      Faltas
+                      Faltas (C/P)
                     </th>
                     <th className="p-4 text-left font-semibold text-gray-700">
                       Valor/Hora
@@ -168,7 +168,9 @@ export default function EmployeesList() {
                       <td className="p-4 text-gray-600">
                         {formatCurrency(employee.salary)}
                       </td>
-                      <td className="p-4 text-gray-600">{employee.absences}</td>
+                      <td className="p-4 text-gray-600">
+                        {employee.full_day_absences ?? 0}c / {employee.partial_day_absences ?? 0}p
+                      </td>
                       <td className="p-4 text-gray-600">
                         {formatCurrency(employee.hourly_value)}
                       </td>

@@ -108,7 +108,8 @@ model Employee {
   name                  String
   specialty             String
   salary                Float
-  absences              Int    @default(0)
+  full_day_absences     Int    @default(0)
+  partial_day_absences  Int    @default(0)
   full_days_per_week    Int    @default(0)
   full_day_hours        Float  @default(10)
   partial_days_per_week Int    @default(0)

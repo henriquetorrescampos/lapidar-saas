@@ -37,7 +37,7 @@ function parsePositiveFloat(value, fieldName) {
   return n;
 }
 
-function calculatePayrollValues(salary, absences, schedule) {
+function calculatePayrollValues(salary, fullDayAbsences, partialDayAbsences, schedule) {
   const { fullDaysPerWeek, fullDayHours, partialDaysPerWeek, partialDayHours } =
     schedule;
 
@@ -48,7 +48,7 @@ function calculatePayrollValues(salary, absences, schedule) {
   const hourlyValue = monthlyHours > 0 ? salary / monthlyHours : 0;
   const fullDayValue = hourlyValue * fullDayHours;
   const partialDayValue = hourlyValue * partialDayHours;
-  const updatedValue = salary - absences * fullDayValue;
+  const updatedValue = Math.max(0, salary - fullDayAbsences * fullDayValue - partialDayAbsences * partialDayValue);
 
   return {
     hourly_value: Number(hourlyValue.toFixed(2)),
@@ -64,21 +64,23 @@ export async function createEmployee(data) {
   validateRequired(data.salary, "Salary");
 
   const salary = parseMoney(data.salary, "Salary");
-  const absences = parseAbsences(data.absences ?? 0);
+  const fullDayAbsences = parseAbsences(data.full_day_absences ?? 0);
+  const partialDayAbsences = parseAbsences(data.partial_day_absences ?? 0);
   const schedule = {
     fullDaysPerWeek: parsePositiveInt(data.full_days_per_week ?? 0, "Full days per week"),
     fullDayHours: parsePositiveFloat(data.full_day_hours ?? 10, "Full day hours"),
     partialDaysPerWeek: parsePositiveInt(data.partial_days_per_week ?? 0, "Partial days per week"),
     partialDayHours: parsePositiveFloat(data.partial_day_hours ?? 4, "Partial day hours"),
   };
-  const payroll = calculatePayrollValues(salary, absences, schedule);
+  const payroll = calculatePayrollValues(salary, fullDayAbsences, partialDayAbsences, schedule);
 
   return await prisma.employee.create({
     data: {
       name: data.name.trim(),
       specialty: data.specialty.trim(),
       salary,
-      absences,
+      full_day_absences: fullDayAbsences,
+      partial_day_absences: partialDayAbsences,
       full_days_per_week: schedule.fullDaysPerWeek,
       full_day_hours: schedule.fullDayHours,
       partial_days_per_week: schedule.partialDaysPerWeek,
@@ -145,10 +147,15 @@ export async function updateEmployee(id, data) {
       ? parseMoney(data.salary, "Salary")
       : existingEmployee.salary;
 
-  const absences =
-    data.absences !== undefined
-      ? parseAbsences(data.absences)
-      : existingEmployee.absences;
+  const fullDayAbsences =
+    data.full_day_absences !== undefined
+      ? parseAbsences(data.full_day_absences)
+      : existingEmployee.full_day_absences;
+
+  const partialDayAbsences =
+    data.partial_day_absences !== undefined
+      ? parseAbsences(data.partial_day_absences)
+      : existingEmployee.partial_day_absences;
 
   const schedule = {
     fullDaysPerWeek:
@@ -169,7 +176,7 @@ export async function updateEmployee(id, data) {
         : existingEmployee.partial_day_hours,
   };
 
-  const payroll = calculatePayrollValues(salary, absences, schedule);
+  const payroll = calculatePayrollValues(salary, fullDayAbsences, partialDayAbsences, schedule);
 
   return await prisma.employee.update({
     where: { id: employeeId },
@@ -177,7 +184,8 @@ export async function updateEmployee(id, data) {
       ...(data.name !== undefined && { name: data.name.trim() }),
       ...(data.specialty !== undefined && { specialty: data.specialty.trim() }),
       salary,
-      absences,
+      full_day_absences: fullDayAbsences,
+      partial_day_absences: partialDayAbsences,
       full_days_per_week: schedule.fullDaysPerWeek,
       full_day_hours: schedule.fullDayHours,
       partial_days_per_week: schedule.partialDaysPerWeek,

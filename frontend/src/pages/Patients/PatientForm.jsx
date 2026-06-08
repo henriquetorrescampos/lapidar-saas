@@ -24,6 +24,8 @@ const CLINICAL_SPECIALTIES = [
   { value: "Fonoaudiologia", label: "Fonoaudiologia" },
   { value: "Psicopedagogia", label: "Psicopedagogia" },
   { value: "Terapia Ocupacional", label: "Terapia Ocupacional" },
+  { value: "Psicomotricidade", label: "Psicomotricidade" },
+  { value: "Fisioterapia", label: "Fisioterapia" },
 ];
 
 // Segunda a Sábado (0=Dom omitido)

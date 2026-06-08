@@ -167,6 +167,8 @@ export default function PatientsList() {
                 <option value="Fonoaudiologia">Fonoaudiologia</option>
                 <option value="Terapia Ocupacional">Terapia Ocupacional</option>
                 <option value="Psicopedagogia">Psicopedagogia</option>
+                <option value="Psicomotricidade">Psicomotricidade</option>
+                <option value="Fisioterapia">Fisioterapia</option>
               </select>
             </div>
           </div>
@@ -257,10 +259,12 @@ export default function PatientsList() {
                                       Fonoaudiologia: "bg-sky-50 text-sky-700",
                                       "Terapia Ocupacional": "bg-orange-50 text-orange-700",
                                       Psicopedagogia: "bg-violet-50 text-violet-700",
+                                      Psicomotricidade: "bg-pink-50 text-pink-700",
+                                      Fisioterapia: "bg-teal-50 text-teal-700",
                                     };
                                     const schedule = (patient.patient_schedules || []).find((sc) => sc.specialty === s);
                                     const activeDays = schedule?.days
-                                      ? schedule.days.split(",").map(Number)
+                                      ? schedule.days.split(",").filter(Boolean).map((entry) => Number(entry.split(":")[0])).filter((d) => !isNaN(d))
                                       : [];
                                     const DAY_SHORT = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
                                     const dayColors = {
@@ -268,6 +272,8 @@ export default function PatientsList() {
                                       Fonoaudiologia: "bg-sky-500 text-white",
                                       "Terapia Ocupacional": "bg-orange-500 text-white",
                                       Psicopedagogia: "bg-violet-500 text-white",
+                                      Psicomotricidade: "bg-pink-500 text-white",
+                                      Fisioterapia: "bg-teal-500 text-white",
                                     };
                                     return (
                                       <div key={s} className="flex items-center gap-1.5 flex-wrap">

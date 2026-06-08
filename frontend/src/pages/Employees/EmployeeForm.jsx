@@ -55,11 +55,12 @@ export default function EmployeeForm() {
     name: "",
     specialty: "",
     salary: "",
-    absences: "0",
     full_days_per_week: "0",
     full_day_hours: "10",
+    full_day_absences: "0",
     partial_days_per_week: "0",
     partial_day_hours: "4",
+    partial_day_absences: "0",
   });
 
   useEffect(() => {
@@ -75,11 +76,12 @@ export default function EmployeeForm() {
         name: String(data.name || "").toUpperCase(),
         specialty: data.specialty,
         salary: formatCurrency(data.salary),
-        absences: String(data.absences ?? 0),
         full_days_per_week: String(data.full_days_per_week ?? 0),
         full_day_hours: String(data.full_day_hours ?? 10),
+        full_day_absences: String(data.full_day_absences ?? 0),
         partial_days_per_week: String(data.partial_days_per_week ?? 0),
         partial_day_hours: String(data.partial_day_hours ?? 4),
+        partial_day_absences: String(data.partial_day_absences ?? 0),
       });
     } catch (err) {
       setError(err.message || "Erro ao carregar funcionário");
@@ -90,36 +92,38 @@ export default function EmployeeForm() {
 
   const payrollPreview = useMemo(() => {
     const salary = parseCurrencyInputToNumber(formData.salary);
-    const absences = parseNumber(formData.absences);
     const fullDaysPerWeek = parseNumber(formData.full_days_per_week);
     const fullDayHours = parseNumber(formData.full_day_hours);
+    const fullDayAbsences = parseNumber(formData.full_day_absences);
     const partialDaysPerWeek = parseNumber(formData.partial_days_per_week);
     const partialDayHours = parseNumber(formData.partial_day_hours);
+    const partialDayAbsences = parseNumber(formData.partial_day_absences);
 
     const weeklyHours = fullDaysPerWeek * fullDayHours + partialDaysPerWeek * partialDayHours;
     const monthlyHours = weeklyHours * 4.33;
     const hourly = monthlyHours > 0 ? salary / monthlyHours : 0;
     const fullDay = hourly * fullDayHours;
     const partialDay = hourly * partialDayHours;
-    const updated = salary - absences * fullDay;
+    const updated = salary - fullDayAbsences * fullDay - partialDayAbsences * partialDay;
 
-    return { salary, hourly, fullDay, partialDay, updated, weeklyHours, monthlyHours, fullDayHours, partialDayHours };
+    return { salary, hourly, fullDay, partialDay, updated, weeklyHours, monthlyHours, fullDayHours, partialDayHours, fullDayAbsences, partialDayAbsences };
   }, [
     formData.salary,
-    formData.absences,
     formData.full_days_per_week,
     formData.full_day_hours,
+    formData.full_day_absences,
     formData.partial_days_per_week,
     formData.partial_day_hours,
+    formData.partial_day_absences,
   ]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === "absences") {
+    if (name === "full_day_absences" || name === "partial_day_absences") {
       const digits = value.replace(/\D/g, "");
       const normalized = digits === "" ? "" : String(parseInt(digits, 10));
-      setFormData((prev) => ({ ...prev, absences: normalized }));
+      setFormData((prev) => ({ ...prev, [name]: normalized }));
       return;
     }
 
@@ -136,8 +140,8 @@ export default function EmployeeForm() {
 
   const handleBlur = (e) => {
     const { name, value } = e.target;
-    if (name === "absences" && value === "") {
-      setFormData((prev) => ({ ...prev, absences: "0" }));
+    if ((name === "full_day_absences" || name === "partial_day_absences") && value === "") {
+      setFormData((prev) => ({ ...prev, [name]: "0" }));
     }
   };
 
@@ -151,11 +155,12 @@ export default function EmployeeForm() {
         name: formData.name,
         specialty: formData.specialty,
         salary: parseCurrencyInputToNumber(formData.salary),
-        absences: parseInt(formData.absences || "0", 10),
         full_days_per_week: parseInt(formData.full_days_per_week || "0", 10),
         full_day_hours: parseNumber(formData.full_day_hours),
+        full_day_absences: parseInt(formData.full_day_absences || "0", 10),
         partial_days_per_week: parseInt(formData.partial_days_per_week || "0", 10),
         partial_day_hours: parseNumber(formData.partial_day_hours),
+        partial_day_absences: parseInt(formData.partial_day_absences || "0", 10),
       };
 
       if (id) {
@@ -226,38 +231,20 @@ export default function EmployeeForm() {
               </select>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
-                  Salário Mensal (R$)
-                </label>
-                <input
-                  type="text"
-                  name="salary"
-                  value={formData.salary}
-                  onChange={handleChange}
-                  className="input-field"
-                  placeholder="R$ 5.000,00"
-                  inputMode="numeric"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
-                  Quantidade de Faltas
-                </label>
-                <input
-                  type="text"
-                  name="absences"
-                  value={formData.absences}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className="input-field"
-                  inputMode="numeric"
-                  placeholder="0"
-                />
-              </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Salário Mensal (R$)
+              </label>
+              <input
+                type="text"
+                name="salary"
+                value={formData.salary}
+                onChange={handleChange}
+                className="input-field"
+                placeholder="R$ 5.000,00"
+                inputMode="numeric"
+                required
+              />
             </div>
 
             <div>
@@ -329,6 +316,40 @@ export default function EmployeeForm() {
                     placeholder="4"
                   />
                 </div>
+                {parseNumber(formData.full_days_per_week) > 0 && (
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                      Faltas em Dias Completos
+                    </label>
+                    <input
+                      type="text"
+                      name="full_day_absences"
+                      value={formData.full_day_absences}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className="input-field"
+                      inputMode="numeric"
+                      placeholder="0"
+                    />
+                  </div>
+                )}
+                {parseNumber(formData.partial_days_per_week) > 0 && (
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                      Faltas em Dias Parciais
+                    </label>
+                    <input
+                      type="text"
+                      name="partial_day_absences"
+                      value={formData.partial_day_absences}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className="input-field"
+                      inputMode="numeric"
+                      placeholder="0"
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
@@ -383,8 +404,13 @@ export default function EmployeeForm() {
                   <tr className="border-t-2 border-gray-300">
                     <td className="pt-3 font-semibold text-gray-700">
                       Valor Atualizado
-                      {parseNumber(formData.absences) > 0 &&
-                        ` (${formData.absences} falta${parseNumber(formData.absences) > 1 ? "s" : ""})`}
+                      {(payrollPreview.fullDayAbsences > 0 || payrollPreview.partialDayAbsences > 0) && (
+                        <span className="ml-1 font-normal text-gray-500">
+                          {payrollPreview.fullDayAbsences > 0 && parseNumber(formData.full_days_per_week) > 0 && `${payrollPreview.fullDayAbsences} completa${payrollPreview.fullDayAbsences > 1 ? "s" : ""}`}
+                          {payrollPreview.fullDayAbsences > 0 && parseNumber(formData.full_days_per_week) > 0 && payrollPreview.partialDayAbsences > 0 && parseNumber(formData.partial_days_per_week) > 0 && ", "}
+                          {payrollPreview.partialDayAbsences > 0 && parseNumber(formData.partial_days_per_week) > 0 && `${payrollPreview.partialDayAbsences} parcial${payrollPreview.partialDayAbsences > 1 ? "is" : ""}`}
+                        </span>
+                      )}
                     </td>
                     <td className="pt-3 text-right text-base font-bold text-primary-700">
                       {formatCurrency(payrollPreview.updated)}

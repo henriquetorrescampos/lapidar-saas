@@ -27,6 +27,8 @@ const SPECIALTY_COLORS = {
   Fonoaudiologia: "bg-blue-100 text-blue-700",
   "Terapia Ocupacional": "bg-orange-100 text-orange-700",
   Psicopedagogia: "bg-violet-100 text-violet-700",
+  Psicomotricidade: "bg-pink-100 text-pink-700",
+  Fisioterapia: "bg-teal-100 text-teal-700",
 };
 
 const ALL_SPECIALTIES = [
@@ -34,6 +36,8 @@ const ALL_SPECIALTIES = [
   "Fonoaudiologia",
   "Terapia Ocupacional",
   "Psicopedagogia",
+  "Psicomotricidade",
+  "Fisioterapia",
 ];
 
 function formatDays(days) {

@@ -9,6 +9,8 @@ import {
   BookOpen,
   Hand,
   HeartPulse,
+  Activity,
+  Dumbbell,
 } from "lucide-react";
 import Layout from "../components/Layout/Layout";
 import Card from "../components/Common/Card";
@@ -30,6 +32,8 @@ export default function Dashboard() {
     sp_fonoaudiologia: 0,
     sp_terapia_ocupacional: 0,
     sp_psicopedagogia: 0,
+    sp_psicomotricidade: 0,
+    sp_fisioterapia: 0,
   });
   const [loading, setLoading] = useState(true);
   const [showBalance, setShowBalance] = useState(false);
@@ -80,6 +84,8 @@ export default function Dashboard() {
         sp_fonoaudiologia: countSpecialty("Fonoaudiologia"),
         sp_terapia_ocupacional: countSpecialty("Terapia Ocupacional"),
         sp_psicopedagogia: countSpecialty("Psicopedagogia"),
+        sp_psicomotricidade: countSpecialty("Psicomotricidade"),
+        sp_fisioterapia: countSpecialty("Fisioterapia"),
       });
     } catch (err) {
       // Erro silenciosamente tratado
@@ -183,7 +189,7 @@ export default function Dashboard() {
         <h2 className="text-lg font-semibold text-gray-700 mb-3">
           Paciente por Especialidade
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-8">
           <Card>
             <div className="flex items-center justify-between">
               <div>
@@ -236,6 +242,34 @@ export default function Dashboard() {
               </div>
               <div className="bg-violet-100 p-4 rounded-lg">
                 <BookOpen size={32} className="text-violet-600" />
+              </div>
+            </div>
+          </Card>
+
+          <Card>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 text-sm">Psicomotricidade</p>
+                <p className="text-2xl font-bold text-gray-800">
+                  {stats.sp_psicomotricidade}
+                </p>
+              </div>
+              <div className="bg-pink-100 p-4 rounded-lg">
+                <Activity size={32} className="text-pink-600" />
+              </div>
+            </div>
+          </Card>
+
+          <Card>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 text-sm">Fisioterapia</p>
+                <p className="text-2xl font-bold text-gray-800">
+                  {stats.sp_fisioterapia}
+                </p>
+              </div>
+              <div className="bg-teal-100 p-4 rounded-lg">
+                <Dumbbell size={32} className="text-teal-600" />
               </div>
             </div>
           </Card>
