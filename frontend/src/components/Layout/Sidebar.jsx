@@ -20,7 +20,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
   const menuItems = [
     {
-      label: "Dashboard",
+      label: "Menu Principal",
       icon: Home,
       path: "/dashboard",
       roles: ["admin", "user"],
@@ -32,13 +32,13 @@ export default function Sidebar({ isOpen, setIsOpen }) {
       roles: ["admin", "user"],
     },
     {
-      label: "Agendamentos Terapia",
+      label: "Sessões Realizadas",
       icon: Calendar,
       path: "/appointments",
       roles: ["admin", "user"],
     },
     {
-      label: "Agendamento Avaliação Neuro",
+      label: "Sessões a serem emitidas - Avaliação Neuro",
       icon: Brain,
       path: "/neuro-schedule",
       roles: ["admin", "user"],
