@@ -38,7 +38,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
       roles: ["admin", "user"],
     },
     {
-      label: "Sessões a serem emitidas - Avaliação Neuro",
+      label: "A emitir Avaliação Neuro",
       icon: Brain,
       path: "/neuro-schedule",
       roles: ["admin", "user"],
