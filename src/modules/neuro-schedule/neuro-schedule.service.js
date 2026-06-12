@@ -10,10 +10,13 @@ function adultCutoff() {
 export async function getNeuroSchedules(filters = {}) {
   const where = {};
 
-  // Filtrar só pacientes com AVALIACAO_NEUROPSICOLOGICA e maiores de 18 anos
+  // IAMESC inclui menores de 18; demais planos exigem 18+
   where.patient = {
     patient_type: { contains: "AVALIACAO_NEUROPSICOLOGICA" },
-    birth_date: { lte: adultCutoff() },
+    OR: [
+      { birth_date: { lte: adultCutoff() } },
+      { health_plan: { contains: "IAMESC", mode: "insensitive" } },
+    ],
   };
 
   // Filtro por aba: pendentes (status != em_dia) ou concluidos (status = em_dia)
@@ -87,7 +90,10 @@ export async function getNeuroSchedules(filters = {}) {
   const baseWhere = {
     patient: {
       patient_type: { contains: "AVALIACAO_NEUROPSICOLOGICA" },
-      birth_date: { lte: adultCutoff() },
+      OR: [
+        { birth_date: { lte: adultCutoff() } },
+        { health_plan: { contains: "IAMESC", mode: "insensitive" } },
+      ],
     },
   };
 
@@ -155,7 +161,8 @@ export async function createNeuroSchedule(data) {
     );
   }
 
-  if (new Date(patient.birth_date) > adultCutoff()) {
+  const isIamesc = patient.health_plan.toUpperCase().includes("IAMESC");
+  if (!isIamesc && new Date(patient.birth_date) > adultCutoff()) {
     throw new Error(
       "Somente pacientes maiores de 18 anos podem ser agendados nesta área",
     );
