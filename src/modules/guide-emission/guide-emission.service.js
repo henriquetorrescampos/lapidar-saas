@@ -38,6 +38,32 @@ function buildDayCountMap(month, year, holidayDays) {
   return counts;
 }
 
+// IAMESC: cada ocorrência do dia = 1 sessão, sem multiplicador
+function calculateSessionsIamesc(days, dayCountMap) {
+  if (!days) return null;
+  const entries = days.split(",").filter(Boolean);
+  if (entries.length === 0) return null;
+
+  if (days.includes(":")) {
+    const parsed = entries
+      .map((entry) => {
+        const [d, q] = entry.split(":").map(Number);
+        return { day: d, qty: isNaN(q) || q <= 0 ? 1 : q };
+      })
+      .filter(({ day }) => !isNaN(day) && day > 0);
+
+    if (parsed.length === 0) return null;
+
+    return parsed.reduce(
+      (sum, { day, qty }) => sum + (dayCountMap[day] ?? 0) * qty,
+      0,
+    );
+  }
+
+  const dayList = entries.map(Number).filter((d) => !isNaN(d));
+  return dayList.reduce((sum, d) => sum + (dayCountMap[d] ?? 0), 0);
+}
+
 function calculateSessions(days, dayCountMap) {
   if (!days) return null;
   const entries = days.split(",").filter(Boolean);
@@ -80,21 +106,31 @@ export async function getGuideEmissions(month, year) {
   const holidayDays = getNationalHolidayDays(m, y);
   const dayCountMap = buildDayCountMap(m, y, holidayDays);
 
-  const patients = await prisma.patient.findMany({
-    where: {
-      patient_type: { contains: "ABA" },
-      health_plan: { notIn: ["PARTICULAR", "IAMESC"] },
-    },
-    include: {
-      patient_schedules: true,
-      guide_emissions: { where: { month: m, year: y } },
-    },
-    orderBy: { name: "asc" },
-  });
+  const [abaPatients, iamescPatients] = await Promise.all([
+    prisma.patient.findMany({
+      where: {
+        patient_type: { contains: "ABA" },
+        health_plan: { notIn: ["PARTICULAR", "IAMESC"] },
+      },
+      include: {
+        patient_schedules: true,
+        guide_emissions: { where: { month: m, year: y } },
+      },
+      orderBy: { name: "asc" },
+    }),
+    prisma.patient.findMany({
+      where: { health_plan: { contains: "IAMESC", mode: "insensitive" } },
+      include: {
+        patient_schedules: true,
+        guide_emissions: { where: { month: m, year: y } },
+      },
+      orderBy: { name: "asc" },
+    }),
+  ]);
 
   const result = [];
 
-  for (const patient of patients) {
+  for (const patient of abaPatients) {
     const patientSpecialties = patient.specialties
       .split(",")
       .map((s) => s.trim())
@@ -108,15 +144,42 @@ export async function getGuideEmissions(month, year) {
         (e) => e.specialty === specialty
       );
 
-      const quantity = calculateSessions(schedule?.days, dayCountMap);
+      result.push({
+        emission_id: emission?.id || null,
+        patient_id: patient.id,
+        patient_name: patient.name,
+        health_plan: patient.health_plan,
+        specialty,
+        schedule_days: schedule?.days || null,
+        quantity: calculateSessions(schedule?.days, dayCountMap),
+        emitted: emission?.emitted || false,
+        emitted_at: emission?.emitted_at || null,
+      });
+    }
+  }
+
+  for (const patient of iamescPatients) {
+    const patientSpecialties = patient.specialties
+      .split(",")
+      .map((s) => s.trim())
+      .filter((s) => GUIDE_SPECIALTIES.includes(s));
+
+    for (const specialty of patientSpecialties) {
+      const schedule = patient.patient_schedules.find(
+        (s) => s.specialty === specialty
+      );
+      const emission = patient.guide_emissions.find(
+        (e) => e.specialty === specialty
+      );
 
       result.push({
         emission_id: emission?.id || null,
         patient_id: patient.id,
         patient_name: patient.name,
+        health_plan: patient.health_plan,
         specialty,
         schedule_days: schedule?.days || null,
-        quantity,
+        quantity: calculateSessionsIamesc(schedule?.days, dayCountMap),
         emitted: emission?.emitted || false,
         emitted_at: emission?.emitted_at || null,
       });

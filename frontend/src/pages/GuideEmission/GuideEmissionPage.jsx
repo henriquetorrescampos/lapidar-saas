@@ -168,7 +168,7 @@ export default function GuideEmissionPage() {
       <div>
         <h1 className="text-3xl font-bold text-gray-800 mb-2">Emissão de Guias</h1>
         <p className="text-gray-500 text-sm mb-8">
-          Controle mensal de emissão de guias para pacientes ABA
+          Controle mensal de emissão de guias para pacientes ABA e IAMESC
         </p>
 
         {error && (
@@ -269,7 +269,7 @@ export default function GuideEmissionPage() {
           <Card>
             <div className="flex items-center gap-3 text-gray-400 py-4">
               <AlertCircle size={24} />
-              <p>Nenhum paciente ABA com especialidades encontrado. Configure a agenda dos pacientes no cadastro.</p>
+              <p>Nenhum paciente ABA ou IAMESC com especialidades encontrado. Configure a agenda dos pacientes no cadastro.</p>
             </div>
           </Card>
         ) : groupedList.length === 0 ? (
@@ -282,9 +282,18 @@ export default function GuideEmissionPage() {
         ) : (
           <>
             <div className="space-y-6">
-              {pageGroups.map((group) => (
+              {pageGroups.map((group) => {
+                const isIamesc = group.items.some((i) => i.health_plan?.toUpperCase().includes("IAMESC"));
+                return (
                 <Card key={group.id}>
-                  <h3 className="font-bold text-gray-800 text-lg mb-4">{group.name}</h3>
+                  <div className="flex items-center gap-2 mb-4">
+                    <h3 className="font-bold text-gray-800 text-lg">{group.name}</h3>
+                    {isIamesc && (
+                      <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">
+                        IAMESC
+                      </span>
+                    )}
+                  </div>
                   <div className="space-y-3">
                     {group.items.map((item) => {
                       const key = `${item.patient_id}-${item.specialty}`;
@@ -345,7 +354,8 @@ export default function GuideEmissionPage() {
                     })}
                   </div>
                 </Card>
-              ))}
+              );
+              })}
             </div>
 
             {/* Paginação */}
