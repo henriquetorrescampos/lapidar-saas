@@ -114,6 +114,7 @@ model Employee {
   full_day_hours        Float  @default(10)
   partial_days_per_week Int    @default(0)
   partial_day_hours     Float  @default(4)
+  deducted_hours        Float  @default(0)
   hourly_value          Float  @default(0)
   daily_value           Float
   partial_day_value     Float  @default(0)
