@@ -676,8 +676,9 @@ export default function SessionsPage() {
 
             {selectedPatient?.patient_type?.includes("ABA") && (
               <p className="text-xl text-gray-500 mb-4 px-1">
-                * Caso o paciente seja da Dra. Amanda, emitir guia com código de
-                psicologia ABA, sempre 8 quantidades que representa 4 sessões.
+                * Caso o paciente seja da Dra. Amanda e tenha TEA(autismo),
+                emitir guia com código de psicologia ABA, sempre 8 quantidades
+                que representa 4 sessões.
               </p>
             )}
 
@@ -1003,13 +1004,19 @@ export default function SessionsPage() {
                       >
                         {(() => {
                           // Extrai apenas YYYY-MM-DD para evitar shift de fuso horário ao parsear UTC
-                          const [y, mo, d] = String(date).split("T")[0].split("-").map(Number);
-                          return new Date(y, mo - 1, d).toLocaleDateString("pt-BR", {
-                            weekday: "short",
-                            year: "numeric",
-                            month: "2-digit",
-                            day: "2-digit",
-                          });
+                          const [y, mo, d] = String(date)
+                            .split("T")[0]
+                            .split("-")
+                            .map(Number);
+                          return new Date(y, mo - 1, d).toLocaleDateString(
+                            "pt-BR",
+                            {
+                              weekday: "short",
+                              year: "numeric",
+                              month: "2-digit",
+                              day: "2-digit",
+                            },
+                          );
                         })()}
                       </div>
                     ))
