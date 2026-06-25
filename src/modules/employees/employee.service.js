@@ -98,6 +98,13 @@ export async function createEmployee(data) {
   });
 }
 
+export async function getEmployeeNames() {
+  return await prisma.employee.findMany({
+    orderBy: { name: "asc" },
+    select: { id: true, name: true, specialty: true },
+  });
+}
+
 export async function getEmployees({ page, limit } = {}) {
   if (page && limit) {
     const skip = (page - 1) * limit;

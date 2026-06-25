@@ -47,8 +47,8 @@ export default function PatientsList() {
 
   const loadEmployees = async () => {
     try {
-      const data = await employeeService.getAll();
-      const list = Array.isArray(data) ? data : (data.data || []);
+      const data = await employeeService.getNames();
+      const list = Array.isArray(data) ? data : [];
       const map = {};
       for (const emp of list) map[emp.id] = emp.name;
       setEmployeesMap(map);

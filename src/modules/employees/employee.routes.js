@@ -5,6 +5,7 @@ import { employeeUpload } from "../../middleware/employee-upload.middleware.js";
 import {
   createEmployeeController,
   getEmployeesController,
+  getEmployeeNamesController,
   getEmployeeByIdController,
   updateEmployeeController,
   deleteEmployeeController,
@@ -24,6 +25,8 @@ router.post(
 );
 
 router.get("/", authMiddleware, authorize(["admin"]), getEmployeesController);
+
+router.get("/names", authMiddleware, authorize(["admin", "user"]), getEmployeeNamesController);
 
 router.get(
   "/:id",

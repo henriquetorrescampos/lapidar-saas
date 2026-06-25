@@ -25,6 +25,19 @@ function getFileHeaders() {
 }
 
 export const employeeService = {
+  getNames: async () => {
+    const response = await fetch(`${API_URL}/employees/names`, {
+      method: "GET",
+      headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro ao carregar profissionais");
+    }
+
+    return response.json();
+  },
+
   getAll: async ({ page, limit } = {}) => {
     const params = new URLSearchParams();
     if (page) params.set("page", page);

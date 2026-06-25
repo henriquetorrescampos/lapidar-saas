@@ -1,6 +1,7 @@
 import {
   createEmployee,
   getEmployees,
+  getEmployeeNames,
   getEmployeeById,
   updateEmployee,
   deleteEmployee,
@@ -14,6 +15,15 @@ export async function createEmployeeController(req, res) {
   try {
     const employee = await createEmployee(req.body);
     res.status(201).json(employee);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+}
+
+export async function getEmployeeNamesController(req, res) {
+  try {
+    const employees = await getEmployeeNames();
+    res.json(employees);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

@@ -76,9 +76,8 @@ export default function PatientForm() {
 
   const loadEmployees = async () => {
     try {
-      const data = await employeeService.getAll();
-      const list = Array.isArray(data) ? data : (data.employees || []);
-      setEmployees(list);
+      const data = await employeeService.getNames();
+      setEmployees(Array.isArray(data) ? data : []);
     } catch {
       // silently ignore — dropdown ficará vazio
     }
