@@ -7,6 +7,7 @@ import Button from "../../components/Common/Button";
 import Alert from "../../components/Common/Alert";
 import Loading from "../../components/Common/Loading";
 import { patientService } from "../../services/patientService";
+import { employeeService } from "../../services/employeeService";
 import { guideEmissionService } from "../../services/guideEmissionService";
 
 const HEALTH_PLANS = [
@@ -28,6 +29,16 @@ const CLINICAL_SPECIALTIES = [
   { value: "Fisioterapia", label: "Fisioterapia" },
 ];
 
+// Mapeamento: especialidade clínica do paciente → especialidade do funcionário
+const SPECIALTY_TO_EMPLOYEE_SPECIALTY = {
+  "Psicologia": "PSICOLOGA",
+  "Fonoaudiologia": "FONOAUDIOLOGA",
+  "Psicopedagogia": "PSICOPEDAGOGA",
+  "Terapia Ocupacional": "TERAPEUTA OCUPACIONAL",
+  "Psicomotricidade": "TERAPEUTA OCUPACIONAL",
+  "Fisioterapia": "TERAPEUTA OCUPACIONAL",
+};
+
 // Segunda a Sábado (0=Dom omitido)
 const WEEK_DAYS = [
   { value: 1, label: "Seg" },
@@ -44,10 +55,12 @@ export default function PatientForm() {
   const [loading, setLoading] = useState(!!id);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [employees, setEmployees] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
     patient_type: [],
     specialties: [],
+    specialty_professionals: {},
     health_plan: "",
     birth_date: "",
   });
@@ -55,10 +68,21 @@ export default function PatientForm() {
   const [schedules, setSchedules] = useState({});
 
   useEffect(() => {
+    loadEmployees();
     if (id) {
       loadPatient();
     }
   }, [id]);
+
+  const loadEmployees = async () => {
+    try {
+      const data = await employeeService.getAll();
+      const list = Array.isArray(data) ? data : (data.employees || []);
+      setEmployees(list);
+    } catch {
+      // silently ignore — dropdown ficará vazio
+    }
+  };
 
   const loadPatient = async () => {
     try {
@@ -67,12 +91,22 @@ export default function PatientForm() {
         guideEmissionService.getPatientSchedules(id),
       ]);
 
+      let parsedProfessionals = {};
+      try {
+        parsedProfessionals = data.specialty_professionals
+          ? JSON.parse(data.specialty_professionals)
+          : {};
+      } catch {
+        parsedProfessionals = {};
+      }
+
       setFormData({
         name: data.name,
         patient_type: data.patient_type ? data.patient_type.split(",") : [],
         specialties: data.specialties
           ? data.specialties.split(",").filter(Boolean)
           : [],
+        specialty_professionals: parsedProfessionals,
         health_plan: data.health_plan,
         birth_date: new Date(data.birth_date).toISOString().split("T")[0],
       });
@@ -112,18 +146,38 @@ export default function PatientForm() {
       const has = current.includes(value);
 
       if (has) {
-        return { ...prev, patient_type: current.filter((v) => v !== value) };
+        const updatedProfessionals = { ...prev.specialty_professionals };
+        if (value === "AVALIACAO_NEUROPSICOLOGICA") {
+          delete updatedProfessionals["Neuropsicologia"];
+        }
+        if (value === "TERAPIA_ADULTO") {
+          delete updatedProfessionals["TerapiaAdulto"];
+        }
+        if (value === "ABA") {
+          for (const cs of CLINICAL_SPECIALTIES) {
+            delete updatedProfessionals[cs.value];
+          }
+        }
+        return { ...prev, patient_type: current.filter((v) => v !== value), specialty_professionals: updatedProfessionals };
       }
       if (value === "ABA") {
+        const updatedProfessionals = { ...prev.specialty_professionals };
+        delete updatedProfessionals["TerapiaAdulto"];
         return {
           ...prev,
           patient_type: [...current.filter((v) => v !== "TERAPIA_ADULTO"), value],
+          specialty_professionals: updatedProfessionals,
         };
       }
       if (value === "TERAPIA_ADULTO") {
+        const updatedProfessionals = { ...prev.specialty_professionals };
+        for (const cs of CLINICAL_SPECIALTIES) {
+          delete updatedProfessionals[cs.value];
+        }
         return {
           ...prev,
           patient_type: [...current.filter((v) => v !== "ABA"), value],
+          specialty_professionals: updatedProfessionals,
         };
       }
       return { ...prev, patient_type: [...current, value] };
@@ -133,13 +187,39 @@ export default function PatientForm() {
   const handleSpecialtyChange = (value) => {
     setFormData((prev) => {
       const has = prev.specialties.includes(value);
+      const updatedSpecialties = has
+        ? prev.specialties.filter((v) => v !== value)
+        : [...prev.specialties, value];
+
+      const updatedProfessionals = { ...prev.specialty_professionals };
+      if (has) {
+        delete updatedProfessionals[value];
+      }
+
       return {
         ...prev,
-        specialties: has
-          ? prev.specialties.filter((v) => v !== value)
-          : [...prev.specialties, value],
+        specialties: updatedSpecialties,
+        specialty_professionals: updatedProfessionals,
       };
     });
+  };
+
+  const handleProfessionalChange = (specialty, employeeId) => {
+    setFormData((prev) => {
+      const updated = { ...prev.specialty_professionals };
+      if (employeeId) {
+        updated[specialty] = Number(employeeId);
+      } else {
+        delete updated[specialty];
+      }
+      return { ...prev, specialty_professionals: updated };
+    });
+  };
+
+  const getEmployeesForSpecialty = (specialty) => {
+    const employeeSpecialty = SPECIALTY_TO_EMPLOYEE_SPECIALTY[specialty];
+    if (!employeeSpecialty) return employees;
+    return employees.filter((e) => e.specialty === employeeSpecialty);
   };
 
   const handleScheduleDayToggle = (specialty, dayValue) => {
@@ -190,6 +270,7 @@ export default function PatientForm() {
         ...formData,
         patient_type: formData.patient_type.join(","),
         specialties: formData.specialties.join(","),
+        specialty_professionals: JSON.stringify(formData.specialty_professionals),
       };
 
       let patientId = id;
@@ -291,25 +372,86 @@ export default function PatientForm() {
               </div>
             </div>
 
+            {formData.patient_type.includes("TERAPIA_ADULTO") && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Psicóloga Responsável
+                </label>
+                <select
+                  value={formData.specialty_professionals["TerapiaAdulto"] || ""}
+                  onChange={(e) => handleProfessionalChange("TerapiaAdulto", e.target.value)}
+                  className="input-field max-w-xs"
+                >
+                  <option value="">-- Selecione a profissional --</option>
+                  {employees
+                    .filter((e) => e.specialty === "PSICOLOGA")
+                    .map((emp) => (
+                      <option key={emp.id} value={emp.id}>
+                        {emp.name}
+                      </option>
+                    ))}
+                </select>
+              </div>
+            )}
+
+            {formData.patient_type.includes("AVALIACAO_NEUROPSICOLOGICA") && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Neuropsicologa Responsável
+                </label>
+                <select
+                  value={formData.specialty_professionals["Neuropsicologia"] || ""}
+                  onChange={(e) => handleProfessionalChange("Neuropsicologia", e.target.value)}
+                  className="input-field max-w-xs"
+                >
+                  <option value="">-- Selecione a profissional --</option>
+                  {employees
+                    .filter((e) => e.specialty === "NEUROPSICOLOGA")
+                    .map((emp) => (
+                      <option key={emp.id} value={emp.id}>
+                        {emp.name}
+                      </option>
+                    ))}
+                </select>
+              </div>
+            )}
+
             {isABA && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Especialidades Clínicas
                 </label>
-                <div className="flex flex-wrap gap-6">
-                  {CLINICAL_SPECIALTIES.map((option) => (
-                    <label
-                      key={option.value}
-                      className="flex items-center gap-2 text-gray-700"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={formData.specialties.includes(option.value)}
-                        onChange={() => handleSpecialtyChange(option.value)}
-                      />
-                      {option.label}
-                    </label>
-                  ))}
+                <div className="space-y-3">
+                  {CLINICAL_SPECIALTIES.map((option) => {
+                    const isChecked = formData.specialties.includes(option.value);
+                    const availableEmployees = getEmployeesForSpecialty(option.value);
+                    return (
+                      <div key={option.value} className="flex flex-wrap items-center gap-4">
+                        <label className="flex items-center gap-2 text-gray-700 min-w-[160px]">
+                          <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={() => handleSpecialtyChange(option.value)}
+                          />
+                          {option.label}
+                        </label>
+                        {isChecked && (
+                          <select
+                            value={formData.specialty_professionals[option.value] || ""}
+                            onChange={(e) => handleProfessionalChange(option.value, e.target.value)}
+                            className="input-field max-w-xs"
+                          >
+                            <option value="">-- Selecione o profissional --</option>
+                            {availableEmployees.map((emp) => (
+                              <option key={emp.id} value={emp.id}>
+                                {emp.name}
+                              </option>
+                            ))}
+                          </select>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}

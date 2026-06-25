@@ -8,6 +8,7 @@ import Loading from "../../components/Common/Loading";
 import Alert from "../../components/Common/Alert";
 import Modal from "../../components/Common/Modal";
 import { patientService } from "../../services/patientService";
+import { employeeService } from "../../services/employeeService";
 import { getPatientAge } from "../../utils/patient";
 
 const ITEMS_PER_PAGE = 10;
@@ -15,6 +16,7 @@ const ITEMS_PER_PAGE = 10;
 export default function PatientsList() {
   const navigate = useNavigate();
   const [patients, setPatients] = useState([]);
+  const [employeesMap, setEmployeesMap] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -28,6 +30,7 @@ export default function PatientsList() {
 
   useEffect(() => {
     loadPatients();
+    loadEmployees();
   }, []);
 
   const loadPatients = async () => {
@@ -39,6 +42,18 @@ export default function PatientsList() {
       setError("Erro ao carregar pacientes");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadEmployees = async () => {
+    try {
+      const data = await employeeService.getAll();
+      const list = Array.isArray(data) ? data : (data.data || []);
+      const map = {};
+      for (const emp of list) map[emp.id] = emp.name;
+      setEmployeesMap(map);
+    } catch {
+      // silently ignore
     }
   };
 
@@ -222,7 +237,7 @@ export default function PatientsList() {
                         </td>
                         <td className="p-4">
                           <div className="flex flex-col gap-1">
-                            <div className="flex flex-wrap gap-1">
+                            <div className="flex flex-wrap gap-1 items-center">
                               {(patient.patient_type || "")
                                 .split(",")
                                 .filter(Boolean)
@@ -237,62 +252,101 @@ export default function PatientsList() {
                                     TERAPIA_ADULTO: "bg-purple-100 text-purple-800",
                                     AVALIACAO_NEUROPSICOLOGICA: "bg-green-100 text-green-800",
                                   };
+                                  let typeProf = null;
+                                  if (type === "AVALIACAO_NEUROPSICOLOGICA" || type === "TERAPIA_ADULTO") {
+                                    try {
+                                      const profs = patient.specialty_professionals ? JSON.parse(patient.specialty_professionals) : {};
+                                      const key = type === "AVALIACAO_NEUROPSICOLOGICA" ? "Neuropsicologia" : "TerapiaAdulto";
+                                      const empId = profs[key];
+                                      if (empId) typeProf = employeesMap[empId] || null;
+                                    } catch { typeProf = null; }
+                                  }
+                                  const profColors = {
+                                    AVALIACAO_NEUROPSICOLOGICA: "text-green-700",
+                                    TERAPIA_ADULTO: "text-purple-700",
+                                  };
                                   return (
-                                    <span
-                                      key={type}
-                                      className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${colors[type] || "bg-gray-100 text-gray-800"}`}
-                                    >
-                                      {labels[type] || type}
-                                    </span>
+                                    <React.Fragment key={type}>
+                                      <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${colors[type] || "bg-gray-100 text-gray-800"}`}>
+                                        {labels[type] || type}
+                                      </span>
+                                      {typeProf && (
+                                        <span className={`text-xs font-medium ${profColors[type] || "text-gray-600"}`}>
+                                          · {typeProf}
+                                        </span>
+                                      )}
+                                    </React.Fragment>
                                   );
                                 })}
                             </div>
-                            {patient.specialties && (
-                              <div className="flex flex-col gap-1">
-                                {patient.specialties
-                                  .split(",")
-                                  .map((s) => s.trim())
-                                  .filter(Boolean)
-                                  .map((s) => {
-                                    const colors = {
-                                      Psicologia: "bg-green-50 text-green-700",
-                                      Fonoaudiologia: "bg-sky-50 text-sky-700",
-                                      "Terapia Ocupacional": "bg-orange-50 text-orange-700",
-                                      Psicopedagogia: "bg-violet-50 text-violet-700",
-                                      Psicomotricidade: "bg-pink-50 text-pink-700",
-                                      Fisioterapia: "bg-teal-50 text-teal-700",
-                                    };
-                                    const schedule = (patient.patient_schedules || []).find((sc) => sc.specialty === s);
-                                    const activeDays = schedule?.days
-                                      ? schedule.days.split(",").filter(Boolean).map((entry) => Number(entry.split(":")[0])).filter((d) => !isNaN(d))
-                                      : [];
-                                    const DAY_SHORT = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-                                    const dayColors = {
-                                      Psicologia: "bg-green-500 text-white",
-                                      Fonoaudiologia: "bg-sky-500 text-white",
-                                      "Terapia Ocupacional": "bg-orange-500 text-white",
-                                      Psicopedagogia: "bg-violet-500 text-white",
-                                      Psicomotricidade: "bg-pink-500 text-white",
-                                      Fisioterapia: "bg-teal-500 text-white",
-                                    };
-                                    return (
-                                      <div key={s} className="flex items-center gap-1.5 flex-wrap">
-                                        <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${colors[s] || "bg-gray-50 text-gray-600"}`}>
-                                          {s}
-                                        </span>
-                                        {activeDays.map((d) => (
-                                          <span
-                                            key={d}
-                                            className={`text-xs px-1.5 py-0.5 rounded font-semibold ${dayColors[s] || "bg-primary-500 text-white"}`}
-                                          >
-                                            {DAY_SHORT[d]}
+                            {patient.specialties && (() => {
+                              let professionals = {};
+                              try { professionals = patient.specialty_professionals ? JSON.parse(patient.specialty_professionals) : {}; } catch { professionals = {}; }
+                              const BADGE_COLORS = {
+                                Psicologia: "bg-green-50 text-green-700",
+                                Fonoaudiologia: "bg-sky-50 text-sky-700",
+                                "Terapia Ocupacional": "bg-orange-50 text-orange-700",
+                                Psicopedagogia: "bg-violet-50 text-violet-700",
+                                Psicomotricidade: "bg-pink-50 text-pink-700",
+                                Fisioterapia: "bg-teal-50 text-teal-700",
+                                Neuropsicologia: "bg-amber-50 text-amber-700",
+                              };
+                              const DAY_COLORS = {
+                                Psicologia: "bg-green-500 text-white",
+                                Fonoaudiologia: "bg-sky-500 text-white",
+                                "Terapia Ocupacional": "bg-orange-500 text-white",
+                                Psicopedagogia: "bg-violet-500 text-white",
+                                Psicomotricidade: "bg-pink-500 text-white",
+                                Fisioterapia: "bg-teal-500 text-white",
+                                Neuropsicologia: "bg-amber-500 text-white",
+                              };
+                              const PROF_COLORS = {
+                                Psicologia: "text-green-700",
+                                Fonoaudiologia: "text-sky-700",
+                                "Terapia Ocupacional": "text-orange-700",
+                                Psicopedagogia: "text-violet-700",
+                                Psicomotricidade: "text-pink-700",
+                                Fisioterapia: "text-teal-700",
+                                Neuropsicologia: "text-amber-700",
+                              };
+                              const DAY_SHORT = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+                              return (
+                                <div className="flex flex-col gap-1">
+                                  {patient.specialties
+                                    .split(",")
+                                    .map((s) => s.trim())
+                                    .filter(Boolean)
+                                    .map((s) => {
+                                      const schedule = (patient.patient_schedules || []).find((sc) => sc.specialty === s);
+                                      const activeDays = schedule?.days
+                                        ? schedule.days.split(",").filter(Boolean).map((entry) => Number(entry.split(":")[0])).filter((d) => !isNaN(d))
+                                        : [];
+                                      const employeeId = professionals[s];
+                                      const professionalName = employeeId ? employeesMap[employeeId] : null;
+                                      return (
+                                        <div key={s} className="flex items-center gap-1.5 flex-wrap">
+                                          <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${BADGE_COLORS[s] || "bg-gray-50 text-gray-600"}`}>
+                                            {s}
                                           </span>
-                                        ))}
-                                      </div>
-                                    );
-                                  })}
-                              </div>
-                            )}
+                                          {activeDays.map((d) => (
+                                            <span
+                                              key={d}
+                                              className={`text-xs px-1.5 py-0.5 rounded font-semibold ${DAY_COLORS[s] || "bg-primary-500 text-white"}`}
+                                            >
+                                              {DAY_SHORT[d]}
+                                            </span>
+                                          ))}
+                                          {professionalName && (
+                                            <span className={`text-xs font-medium ${PROF_COLORS[s] || "text-gray-600"}`}>
+                                              · {professionalName}
+                                            </span>
+                                          )}
+                                        </div>
+                                      );
+                                    })}
+                                </div>
+                              );
+                            })()}
                           </div>
                         </td>
                         <td className="p-4 text-right space-x-2">

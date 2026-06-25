@@ -18,17 +18,18 @@ model User {
 }
 
 model Patient {
-  id                Int              @id @default(autoincrement())
-  name              String
-  patient_type      String           @default("ABA")
-  specialties       String           @default("")
-  health_plan       String
-  birth_date        DateTime
-  sessions          Session[]
-  session_histories SessionHistory[]
-  neuro_schedules   NeuroSchedule[]
-  patient_schedules PatientSchedule[]
-  guide_emissions   GuideEmission[]
+  id                      Int              @id @default(autoincrement())
+  name                    String
+  patient_type            String           @default("ABA")
+  specialties             String           @default("")
+  specialty_professionals String           @default("")
+  health_plan             String
+  birth_date              DateTime
+  sessions                Session[]
+  session_histories       SessionHistory[]
+  neuro_schedules         NeuroSchedule[]
+  patient_schedules       PatientSchedule[]
+  guide_emissions         GuideEmission[]
 }
 
 model Session {
