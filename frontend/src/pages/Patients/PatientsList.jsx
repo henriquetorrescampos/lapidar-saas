@@ -17,6 +17,7 @@ export default function PatientsList() {
   const navigate = useNavigate();
   const [patients, setPatients] = useState([]);
   const [employeesMap, setEmployeesMap] = useState({});
+  const [employeesList, setEmployeesList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -27,6 +28,7 @@ export default function PatientsList() {
   const [filterHealthPlan, setFilterHealthPlan] = useState("");
   const [filterSpecialty, setFilterSpecialty] = useState("");
   const [filterSubSpecialty, setFilterSubSpecialty] = useState("");
+  const [filterProfessional, setFilterProfessional] = useState("");
 
   useEffect(() => {
     loadPatients();
@@ -52,6 +54,7 @@ export default function PatientsList() {
       const map = {};
       for (const emp of list) map[emp.id] = emp.name;
       setEmployeesMap(map);
+      setEmployeesList(list);
     } catch {
       // silently ignore
     }
@@ -81,7 +84,16 @@ export default function PatientsList() {
     const matchesPlan = !filterHealthPlan || patient.health_plan === filterHealthPlan;
     const matchesSpecialty = !filterSpecialty || (patient.patient_type || "").includes(filterSpecialty);
     const matchesSubSpecialty = !filterSubSpecialty || (patient.specialties || "").split(",").map((s) => s.trim()).includes(filterSubSpecialty);
-    return matchesName && matchesPlan && matchesSpecialty && matchesSubSpecialty;
+    let matchesProfessional = true;
+    if (filterProfessional) {
+      try {
+        const profs = patient.specialty_professionals ? JSON.parse(patient.specialty_professionals) : {};
+        matchesProfessional = Object.values(profs).some((id) => String(id) === filterProfessional);
+      } catch {
+        matchesProfessional = false;
+      }
+    }
+    return matchesName && matchesPlan && matchesSpecialty && matchesSubSpecialty && matchesProfessional;
   });
 
   const totalPages = Math.ceil(filteredPatients.length / ITEMS_PER_PAGE);
@@ -186,8 +198,23 @@ export default function PatientsList() {
                 <option value="Fisioterapia">Fisioterapia</option>
               </select>
             </div>
+            <div className="min-w-[200px]">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Profissional
+              </label>
+              <select
+                value={filterProfessional}
+                onChange={(e) => handleFilterChange(setFilterProfessional)(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Todos</option>
+                {employeesList.map((emp) => (
+                  <option key={emp.id} value={String(emp.id)}>{emp.name}</option>
+                ))}
+              </select>
+            </div>
           </div>
-          {(searchTerm || filterHealthPlan || filterSpecialty || filterSubSpecialty) && (
+          {(searchTerm || filterHealthPlan || filterSpecialty || filterSubSpecialty || filterProfessional) && (
             <p className="text-sm text-gray-500 mb-4">
               {filteredPatients.length} paciente(s) encontrado(s)
             </p>
@@ -195,8 +222,8 @@ export default function PatientsList() {
 
           {filteredPatients.length === 0 ? (
             <p className="text-center text-gray-600 py-8">
-              {searchTerm
-                ? "Nenhum paciente encontrado com esse nome"
+              {(searchTerm || filterHealthPlan || filterSpecialty || filterSubSpecialty || filterProfessional)
+                ? "Nenhum paciente encontrado com os filtros selecionados"
                 : "Nenhum paciente cadastrado"}
             </p>
           ) : (
