@@ -26,6 +26,51 @@ function parseNumber(value) {
   return Number.isNaN(parsed) ? 0 : parsed;
 }
 
+// "10:20" → 10.333...
+function timeToDecimal(time) {
+  const [h, m] = String(time || "0:0").split(":").map(Number);
+  return (isNaN(h) ? 0 : h) + (isNaN(m) ? 0 : m / 60);
+}
+
+// 10.333 → "10:20"
+function decimalToTime(decimal) {
+  const num = Number(decimal) || 0;
+  const h = Math.floor(num);
+  const m = Math.round((num - h) * 60);
+  return `${h}:${String(m).padStart(2, "0")}`;
+}
+
+function TimeInput({ value, onChange }) {
+  const parts = String(value || "0:00").split(":");
+  const h = parts[0] ?? "0";
+  const m = parts[1] ?? "00";
+
+  return (
+    <div className="flex items-center gap-1">
+      <input
+        type="number"
+        min="0"
+        max="23"
+        value={h}
+        onChange={(e) => onChange(`${e.target.value}:${m}`)}
+        className="input-field w-20 text-center"
+        placeholder="0"
+      />
+      <span className="text-gray-500 font-medium">h</span>
+      <input
+        type="number"
+        min="0"
+        max="59"
+        value={parseInt(m, 10)}
+        onChange={(e) => onChange(`${h}:${String(e.target.value).padStart(2, "0")}`)}
+        className="input-field w-20 text-center"
+        placeholder="00"
+      />
+      <span className="text-gray-500 font-medium">min</span>
+    </div>
+  );
+}
+
 function parseCurrencyInputToNumber(value) {
   const digitsOnly = String(value || "").replace(/\D/g, "");
   if (!digitsOnly) return 0;
@@ -56,10 +101,10 @@ export default function EmployeeForm() {
     specialty: "",
     salary: "",
     full_days_per_week: "0",
-    full_day_hours: "10",
+    full_day_time: "10:00",
     full_day_absences: "0",
     partial_days_per_week: "0",
-    partial_day_hours: "4",
+    partial_day_time: "4:00",
     partial_day_absences: "0",
     deducted_hours: "0",
   });
@@ -78,10 +123,10 @@ export default function EmployeeForm() {
         specialty: data.specialty,
         salary: formatCurrency(data.salary),
         full_days_per_week: String(data.full_days_per_week ?? 0),
-        full_day_hours: String(data.full_day_hours ?? 10),
+        full_day_time: decimalToTime(data.full_day_hours ?? 10),
         full_day_absences: String(data.full_day_absences ?? 0),
         partial_days_per_week: String(data.partial_days_per_week ?? 0),
-        partial_day_hours: String(data.partial_day_hours ?? 4),
+        partial_day_time: decimalToTime(data.partial_day_hours ?? 4),
         partial_day_absences: String(data.partial_day_absences ?? 0),
         deducted_hours: String(data.deducted_hours ?? 0),
       });
@@ -95,10 +140,10 @@ export default function EmployeeForm() {
   const payrollPreview = useMemo(() => {
     const salary = parseCurrencyInputToNumber(formData.salary);
     const fullDaysPerWeek = parseNumber(formData.full_days_per_week);
-    const fullDayHours = parseNumber(formData.full_day_hours);
+    const fullDayHours = timeToDecimal(formData.full_day_time);
     const fullDayAbsences = parseNumber(formData.full_day_absences);
     const partialDaysPerWeek = parseNumber(formData.partial_days_per_week);
-    const partialDayHours = parseNumber(formData.partial_day_hours);
+    const partialDayHours = timeToDecimal(formData.partial_day_time);
     const partialDayAbsences = parseNumber(formData.partial_day_absences);
     const deductedHours = parseNumber(formData.deducted_hours);
 
@@ -113,10 +158,10 @@ export default function EmployeeForm() {
   }, [
     formData.salary,
     formData.full_days_per_week,
-    formData.full_day_hours,
+    formData.full_day_time,
     formData.full_day_absences,
     formData.partial_days_per_week,
-    formData.partial_day_hours,
+    formData.partial_day_time,
     formData.partial_day_absences,
     formData.deducted_hours,
   ]);
@@ -171,10 +216,10 @@ export default function EmployeeForm() {
         specialty: formData.specialty,
         salary: parseCurrencyInputToNumber(formData.salary),
         full_days_per_week: parseInt(formData.full_days_per_week || "0", 10),
-        full_day_hours: parseNumber(formData.full_day_hours),
+        full_day_hours: timeToDecimal(formData.full_day_time),
         full_day_absences: parseInt(formData.full_day_absences || "0", 10),
         partial_days_per_week: parseInt(formData.partial_days_per_week || "0", 10),
-        partial_day_hours: parseNumber(formData.partial_day_hours),
+        partial_day_hours: timeToDecimal(formData.partial_day_time),
         partial_day_absences: parseInt(formData.partial_day_absences || "0", 10),
         deducted_hours: parseNumber(formData.deducted_hours),
       };
@@ -288,16 +333,9 @@ export default function EmployeeForm() {
                   <label className="mb-2 block text-sm font-medium text-gray-700">
                     Horas líquidas/dia completo
                   </label>
-                  <input
-                    type="number"
-                    name="full_day_hours"
-                    value={formData.full_day_hours}
-                    onChange={handleChange}
-                    className="input-field"
-                    min="0"
-                    max="24"
-                    step="any"
-                    placeholder="10"
+                  <TimeInput
+                    value={formData.full_day_time}
+                    onChange={(val) => setFormData((prev) => ({ ...prev, full_day_time: val }))}
                   />
                 </div>
                 <div>
@@ -320,16 +358,9 @@ export default function EmployeeForm() {
                   <label className="mb-2 block text-sm font-medium text-gray-700">
                     Horas/dia parcial
                   </label>
-                  <input
-                    type="number"
-                    name="partial_day_hours"
-                    value={formData.partial_day_hours}
-                    onChange={handleChange}
-                    className="input-field"
-                    min="0"
-                    max="24"
-                    step="any"
-                    placeholder="4"
+                  <TimeInput
+                    value={formData.partial_day_time}
+                    onChange={(val) => setFormData((prev) => ({ ...prev, partial_day_time: val }))}
                   />
                 </div>
                 {parseNumber(formData.full_days_per_week) > 0 && (
@@ -416,7 +447,7 @@ export default function EmployeeForm() {
                   </tr>
                   <tr>
                     <td className="py-2 text-gray-500">
-                      Dia Inteiro ({payrollPreview.fullDayHours}h)
+                      Dia Inteiro ({formData.full_day_time.replace(":", "h")}min)
                     </td>
                     <td className="py-2 text-right font-semibold text-gray-800">
                       {formatCurrency(payrollPreview.fullDay)}
@@ -425,7 +456,7 @@ export default function EmployeeForm() {
                   {parseNumber(formData.partial_days_per_week) > 0 && (
                     <tr>
                       <td className="py-2 text-gray-500">
-                        Dia Parcial ({payrollPreview.partialDayHours}h)
+                        Dia Parcial ({formData.partial_day_time.replace(":", "h")}min)
                       </td>
                       <td className="py-2 text-right font-semibold text-gray-800">
                         {formatCurrency(payrollPreview.partialDay)}
