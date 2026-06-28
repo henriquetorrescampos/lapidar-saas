@@ -106,7 +106,7 @@ export default function EmployeeForm() {
     partial_days_per_week: "0",
     partial_day_time: "4:00",
     partial_day_absences: "0",
-    deducted_hours: "0",
+    deducted_time: "0:00",
   });
 
   useEffect(() => {
@@ -128,7 +128,7 @@ export default function EmployeeForm() {
         partial_days_per_week: String(data.partial_days_per_week ?? 0),
         partial_day_time: decimalToTime(data.partial_day_hours ?? 4),
         partial_day_absences: String(data.partial_day_absences ?? 0),
-        deducted_hours: String(data.deducted_hours ?? 0),
+        deducted_time: decimalToTime(data.deducted_hours ?? 0),
       });
     } catch (err) {
       setError(err.message || "Erro ao carregar funcionário");
@@ -145,7 +145,7 @@ export default function EmployeeForm() {
     const partialDaysPerWeek = parseNumber(formData.partial_days_per_week);
     const partialDayHours = timeToDecimal(formData.partial_day_time);
     const partialDayAbsences = parseNumber(formData.partial_day_absences);
-    const deductedHours = parseNumber(formData.deducted_hours);
+    const deductedHours = timeToDecimal(formData.deducted_time);
 
     const weeklyHours = fullDaysPerWeek * fullDayHours + partialDaysPerWeek * partialDayHours;
     const monthlyHours = weeklyHours * 4.33;
@@ -163,7 +163,7 @@ export default function EmployeeForm() {
     formData.partial_days_per_week,
     formData.partial_day_time,
     formData.partial_day_absences,
-    formData.deducted_hours,
+    formData.deducted_time,
   ]);
 
   const handleChange = (e) => {
@@ -173,13 +173,6 @@ export default function EmployeeForm() {
       const digits = value.replace(/\D/g, "");
       const normalized = digits === "" ? "" : String(parseInt(digits, 10));
       setFormData((prev) => ({ ...prev, [name]: normalized }));
-      return;
-    }
-
-    if (name === "deducted_hours") {
-      // permite decimais (ex: 2.5)
-      const sanitized = value.replace(/[^0-9.]/g, "").replace(/^(\d*\.?\d*).*$/, "$1");
-      setFormData((prev) => ({ ...prev, deducted_hours: sanitized }));
       return;
     }
 
@@ -199,10 +192,6 @@ export default function EmployeeForm() {
     if ((name === "full_day_absences" || name === "partial_day_absences") && value === "") {
       setFormData((prev) => ({ ...prev, [name]: "0" }));
     }
-    if (name === "deducted_hours") {
-      const trimmed = value === "" || value === "." ? "0" : value.replace(/\.$/, "");
-      if (trimmed !== value) setFormData((prev) => ({ ...prev, deducted_hours: trimmed }));
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -221,7 +210,7 @@ export default function EmployeeForm() {
         partial_days_per_week: parseInt(formData.partial_days_per_week || "0", 10),
         partial_day_hours: timeToDecimal(formData.partial_day_time),
         partial_day_absences: parseInt(formData.partial_day_absences || "0", 10),
-        deducted_hours: parseNumber(formData.deducted_hours),
+        deducted_hours: timeToDecimal(formData.deducted_time),
       };
 
       if (id) {
@@ -401,15 +390,9 @@ export default function EmployeeForm() {
                   <label className="mb-2 block text-sm font-medium text-gray-700">
                     Dedução de Horas
                   </label>
-                  <input
-                    type="text"
-                    name="deducted_hours"
-                    value={formData.deducted_hours}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className="input-field"
-                    inputMode="decimal"
-                    placeholder="0"
+                  <TimeInput
+                    value={formData.deducted_time}
+                    onChange={(val) => setFormData((prev) => ({ ...prev, deducted_time: val }))}
                   />
                 </div>
               </div>
@@ -472,7 +455,7 @@ export default function EmployeeForm() {
                           {payrollPreview.fullDayAbsences > 0 && parseNumber(formData.full_days_per_week) > 0 && (payrollPreview.partialDayAbsences > 0 || payrollPreview.deductedHours > 0) && ", "}
                           {payrollPreview.partialDayAbsences > 0 && parseNumber(formData.partial_days_per_week) > 0 && `${payrollPreview.partialDayAbsences} parcial${payrollPreview.partialDayAbsences > 1 ? "is" : ""}`}
                           {payrollPreview.partialDayAbsences > 0 && parseNumber(formData.partial_days_per_week) > 0 && payrollPreview.deductedHours > 0 && ", "}
-                          {payrollPreview.deductedHours > 0 && `${payrollPreview.deductedHours}h deduzida${payrollPreview.deductedHours !== 1 ? "s" : ""}`}
+                          {payrollPreview.deductedHours > 0 && `${formData.deducted_time.replace(":", "h")}min deduzida${payrollPreview.deductedHours !== 1 ? "s" : ""}`}
                         </span>
                       )}
                     </td>
