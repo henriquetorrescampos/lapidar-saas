@@ -162,6 +162,19 @@ model PatientSchedule {
   @@index([patient_id])
 }
 
+model WaitingList {
+  id              Int      @id @default(autoincrement())
+  name            String
+  phone           String
+  specialty       String   @default("")
+  professional_id Int?
+  day_of_week     String
+  desired_time    String
+  notes           String   @default("")
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+}
+
 model GuideEmission {
   id          Int       @id @default(autoincrement())
   patient_id  Int

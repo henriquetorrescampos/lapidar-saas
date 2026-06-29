@@ -10,6 +10,7 @@ import {
   X,
   Brain,
   ClipboardList,
+  Clock,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -47,6 +48,12 @@ export default function Sidebar({ isOpen, setIsOpen }) {
       label: "Emissão de Guias",
       icon: ClipboardList,
       path: "/guide-emission",
+      roles: ["admin", "user"],
+    },
+    {
+      label: "Lista de Espera",
+      icon: Clock,
+      path: "/waiting-list",
       roles: ["admin", "user"],
     },
     {

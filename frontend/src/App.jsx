@@ -18,6 +18,7 @@ import EmployeeDocuments from "./pages/Employees/EmployeeDocuments";
 import SessionsPage from "./pages/Appointments/SessionsPage";
 import NeuroSchedulePage from "./pages/NeuroSchedule/NeuroSchedulePage";
 import GuideEmissionPage from "./pages/GuideEmission/GuideEmissionPage";
+import WaitingListPage from "./pages/WaitingList/WaitingListPage";
 import ProtectedRoute from "./pages/ProtectedRoute";
 
 function App() {
@@ -100,6 +101,16 @@ function App() {
             element={
               <ProtectedRoute requiredRole={["admin", "user"]}>
                 <GuideEmissionPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Waiting List */}
+          <Route
+            path="/waiting-list"
+            element={
+              <ProtectedRoute requiredRole={["admin", "user"]}>
+                <WaitingListPage />
               </ProtectedRoute>
             }
           />
