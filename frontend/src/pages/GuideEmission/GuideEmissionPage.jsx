@@ -339,7 +339,11 @@ export default function GuideEmissionPage() {
                               <p className="text-sm text-gray-500 mt-1">
                                 {noSchedule
                                   ? "Configure os dias na edição do paciente"
-                                  : `${formatDays(item.schedule_days)} — ${item.quantity} sessões`}
+                                  : (
+                                    <span className="text-xl font-bold text-gray-700">
+                                      {formatDays(item.schedule_days)} — {item.quantity} sessões
+                                    </span>
+                                  )}
                               </p>
                             </div>
                           </div>
