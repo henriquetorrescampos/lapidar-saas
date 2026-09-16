@@ -8,7 +8,6 @@ import {
   BadgeDollarSign,
   LogOut,
   X,
-  Brain,
   ClipboardList,
   Clock,
 } from "lucide-react";
@@ -36,12 +35,6 @@ export default function Sidebar({ isOpen, setIsOpen }) {
       label: "Sessões Realizadas",
       icon: Calendar,
       path: "/appointments",
-      roles: ["admin", "user"],
-    },
-    {
-      label: "A emitir Avaliação Neuro",
-      icon: Brain,
-      path: "/neuro-schedule",
       roles: ["admin", "user"],
     },
     {

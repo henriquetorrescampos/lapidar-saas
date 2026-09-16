@@ -9,7 +9,6 @@ import userRoutes from "./modules/users/user.routes.js";
 import financeRoutes from "./modules/finance/finance.routes.js";
 import sessionRoutes from "./modules/sessions/session.routes.js";
 import employeeRoutes from "./modules/employees/employee.routes.js";
-import neuroScheduleRoutes from "./modules/neuro-schedule/neuro-schedule.routes.js";
 import guideEmissionRoutes from "./modules/guide-emission/guide-emission.routes.js";
 import waitingListRoutes from "./modules/waiting-list/waiting-list.routes.js";
 
@@ -51,7 +50,6 @@ app.use("/finance", financeRoutes);
 app.use("/users", userRoutes);
 app.use("/sessions", sessionRoutes);
 app.use("/employees", employeeRoutes);
-app.use("/neuro-schedules", neuroScheduleRoutes);
 app.use("/guide-emissions", guideEmissionRoutes);
 app.use("/waiting-list", waitingListRoutes);
 

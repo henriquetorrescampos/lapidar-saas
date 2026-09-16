@@ -16,7 +16,6 @@ import EmployeesList from "./pages/Employees/EmployeesList";
 import EmployeeForm from "./pages/Employees/EmployeeForm";
 import EmployeeDocuments from "./pages/Employees/EmployeeDocuments";
 import SessionsPage from "./pages/Appointments/SessionsPage";
-import NeuroSchedulePage from "./pages/NeuroSchedule/NeuroSchedulePage";
 import GuideEmissionPage from "./pages/GuideEmission/GuideEmissionPage";
 import WaitingListPage from "./pages/WaitingList/WaitingListPage";
 import ProtectedRoute from "./pages/ProtectedRoute";
@@ -81,16 +80,6 @@ function App() {
             element={
               <ProtectedRoute requiredRole={["admin", "user"]}>
                 <SessionsPage />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Neuro Schedule */}
-          <Route
-            path="/neuro-schedule"
-            element={
-              <ProtectedRoute requiredRole={["admin", "user"]}>
-                <NeuroSchedulePage />
               </ProtectedRoute>
             }
           />

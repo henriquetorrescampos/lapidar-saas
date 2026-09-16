@@ -27,7 +27,6 @@ model Patient {
   birth_date              DateTime
   sessions                Session[]
   session_histories       SessionHistory[]
-  neuro_schedules         NeuroSchedule[]
   patient_schedules       PatientSchedule[]
   guide_emissions         GuideEmission[]
 }
@@ -134,20 +133,6 @@ model EmployeeDocument {
   created_at    DateTime @default(now())
 
   employee Employee @relation(fields: [employee_id], references: [id], onDelete: Cascade)
-}
-
-model NeuroSchedule {
-  id          Int      @id @default(autoincrement())
-  patient_id  Int
-  date        DateTime
-  deadline    DateTime
-  status      String   @default("pendente")
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-
-  patient Patient @relation(fields: [patient_id], references: [id], onDelete: Cascade)
-
-  @@index([patient_id])
 }
 
 model PatientSchedule {
