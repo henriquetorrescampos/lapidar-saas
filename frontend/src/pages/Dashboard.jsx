@@ -300,15 +300,23 @@ export default function Dashboard() {
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-3 h-3 rounded-full bg-cyan-500" />
                   <h3 className="font-semibold text-gray-800">
-                    Terapia Adulto
+                    Terapia Adulto (Psico ou Fono)
                   </h3>
                 </div>
                 <ul className="space-y-2 text-sm text-gray-600">
                   <li className="flex gap-2">
                     <span className="text-cyan-500 font-bold mt-0.5">•</span>
                     <span>
+                      Utilizar código <strong>5.00.00.47-0</strong> (10
+                      quantidades) + <strong>5.00.00.61-6</strong> (5
+                      quantidades)
+                    </span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-cyan-500 font-bold mt-0.5">•</span>
+                    <span>
                       <strong>10 quantidades</strong> na guia ={" "}
-                      <strong>4 sessões</strong>
+                      <strong>4 atendimentos</strong>
                     </span>
                   </li>
                   <li className="flex gap-2">
@@ -393,18 +401,12 @@ export default function Dashboard() {
                   </li>
                   <li className="flex gap-2">
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
-                    <div className="flex flex-col gap-1">
-                      <span>
-                        <strong>Adulto:</strong> emitir código de{" "}
-                        <strong>terapia adulto(5.00.00.47-0)</strong> (10
-                        quantidades)
-                      </span>
-                      <span className="pl-3 text-gray-500">
-                        ↳ <strong>Mês seguinte:</strong> emitir mais 10
-                        quantidades de terapia adulto para contemplar a
-                        avaliação neuropsicológica
-                      </span>
-                    </div>
+                    <span>
+                      <strong>Adulto:</strong> emitir código de{" "}
+                      <strong>terapia adulto (5.00.00.47-0)</strong> (10
+                      quantidades) + <strong>5.00.00.61-6</strong> (10
+                      quantidades)
+                    </span>
                   </li>
                 </ul>
               </Card>
@@ -444,16 +446,10 @@ export default function Dashboard() {
                   </li>
                   <li className="flex gap-2">
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
-                    <div className="flex flex-col gap-1">
-                      <span>
-                        Emitir guia de <strong>sessão de psicologia</strong> —
-                        quantidade <strong>4</strong> código 010016
-                      </span>
-                      <span className="pl-3 text-gray-500">
-                        ↳ <strong>Mês seguinte:</strong> emitir sessão de
-                        psicologia — quantidade <strong>4</strong>
-                      </span>
-                    </div>
+                    <span>
+                      Emitir guia de <strong>sessão de psicologia</strong> —
+                      quantidade <strong>4</strong> código 010016
+                    </span>
                   </li>
                 </ul>
               </Card>
