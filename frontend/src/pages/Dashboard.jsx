@@ -307,9 +307,10 @@ export default function Dashboard() {
                   <li className="flex gap-2">
                     <span className="text-cyan-500 font-bold mt-0.5">•</span>
                     <span>
-                      Utilizar código <strong>5.00.00.47-0</strong> (10
-                      quantidades) + <strong>5.00.00.61-6</strong> (5
-                      quantidades)
+                      Utilizar código <strong>5.00.00.47-0</strong>{" "}
+                      (<strong>10 quantidades</strong>) +{" "}
+                      <strong>5.00.00.61-6</strong>{" "}
+                      (<strong>5 quantidades</strong>)
                     </span>
                   </li>
                   <li className="flex gap-2">
@@ -394,18 +395,21 @@ export default function Dashboard() {
                   <li className="flex gap-2">
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
                     <span>
-                      <strong>Criança:</strong> emitir código TEA (10
-                      quantidades) - Códigos 0.00.11.18-5, 0.00.40.04-5 ou
-                      0.00.11.19-3.
+                      <strong>Criança:</strong> emitir código TEA{" "}
+                      (<strong>10 quantidades</strong>) - Códigos{" "}
+                      <strong>0.00.11.18-5</strong>,{" "}
+                      <strong>0.00.40.04-5</strong> ou{" "}
+                      <strong>0.00.11.19-3</strong>.
                     </span>
                   </li>
                   <li className="flex gap-2">
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
                     <span>
-                      <strong>Adulto:</strong> emitir código de{" "}
-                      <strong>terapia adulto (5.00.00.47-0)</strong> (10
-                      quantidades) + <strong>5.00.00.61-6</strong> (10
-                      quantidades)
+                      <strong>Adulto:</strong> emitir código de terapia adulto{" "}
+                      <strong>5.00.00.47-0</strong>{" "}
+                      (<strong>10 quantidades</strong>) +{" "}
+                      <strong>5.00.00.61-6</strong>{" "}
+                      (<strong>10 quantidades</strong>)
                     </span>
                   </li>
                 </ul>
@@ -435,20 +439,20 @@ export default function Dashboard() {
                     <span>
                       Emitir código de{" "}
                       <strong>avaliação neuropsicológica</strong> — quantidade{" "}
-                      <strong>8</strong> código 80010040.
+                      <strong>8</strong> código <strong>80010040</strong>.
                     </span>
                   </li>
                   <li className="flex gap-2">
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
                     <span>
-                      Emitir <strong>1 guia de consulta</strong> código 10030
+                      Emitir <strong>1 guia de consulta</strong> código <strong>10030</strong>
                     </span>
                   </li>
                   <li className="flex gap-2">
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
                     <span>
                       Emitir guia de <strong>sessão de psicologia</strong> —
-                      quantidade <strong>4</strong> código 010016
+                      quantidade <strong>4</strong> código <strong>010016</strong>
                     </span>
                   </li>
                 </ul>
