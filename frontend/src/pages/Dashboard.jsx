@@ -310,7 +310,7 @@ export default function Dashboard() {
                       Utilizar código <strong>5.00.00.47-0</strong> (
                       <strong>10 quantidades</strong>) +{" "}
                       <strong>5.00.00.61-6</strong> (
-                      <strong>10 quantidades</strong>)
+                      <strong>4 quantidades</strong>)
                     </span>
                   </li>
                   <li className="flex gap-2">
@@ -331,7 +331,7 @@ export default function Dashboard() {
                     <span className="text-cyan-500 font-bold mt-0.5">•</span>
                     <span>
                       Para atendimentos avulsos (de acordo com a
-                      disponibilidade) será <strong>4 quantidades</strong> do
+                      disponibilidade) será <strong>3 quantidades</strong> do
                       código <strong>5.00.00.47-0</strong> ou{" "}
                       <strong>5.00.00.61-6</strong>
                     </span>
@@ -418,7 +418,7 @@ export default function Dashboard() {
                       <strong>5.00.00.47-0</strong> (
                       <strong>10 quantidades</strong>) +{" "}
                       <strong>5.00.00.61-6</strong> (
-                      <strong>10 quantidades</strong>)
+                      <strong>8 quantidades</strong>)
                     </span>
                   </li>
                 </ul>
