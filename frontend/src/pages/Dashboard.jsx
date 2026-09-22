@@ -300,24 +300,24 @@ export default function Dashboard() {
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-3 h-3 rounded-full bg-cyan-500" />
                   <h3 className="font-semibold text-gray-800">
-                    Terapia Adulto (Psico ou Fono)
+                    Terapia Adulto (Psico, Fono, T.O ou Fisio)
                   </h3>
                 </div>
                 <ul className="space-y-2 text-sm text-gray-600">
                   <li className="flex gap-2">
                     <span className="text-cyan-500 font-bold mt-0.5">•</span>
                     <span>
-                      Utilizar código <strong>5.00.00.47-0</strong>{" "}
-                      (<strong>10 quantidades</strong>) +{" "}
-                      <strong>5.00.00.61-6</strong>{" "}
-                      (<strong>5 quantidades</strong>)
+                      Utilizar código <strong>5.00.00.47-0</strong> (
+                      <strong>10 quantidades</strong>) +{" "}
+                      <strong>5.00.00.61-6</strong> (
+                      <strong>5 quantidades</strong>)
                     </span>
                   </li>
                   <li className="flex gap-2">
                     <span className="text-cyan-500 font-bold mt-0.5">•</span>
                     <span>
                       <strong>10 quantidades</strong> na guia ={" "}
-                      <strong>4 atendimentos</strong>
+                      <strong>5 atendimentos</strong>
                     </span>
                   </li>
                   <li className="flex gap-2">
@@ -330,9 +330,9 @@ export default function Dashboard() {
                   <li className="flex gap-2">
                     <span className="text-cyan-500 font-bold mt-0.5">•</span>
                     <span>
-                      Para atendimentos avulsos (de acordo com a disponibilidade)
-                      será <strong>4 quantidades</strong> do código{" "}
-                      <strong>5.00.00.47-0</strong> ou{" "}
+                      Para atendimentos avulsos (de acordo com a
+                      disponibilidade) será <strong>4 quantidades</strong> do
+                      código <strong>5.00.00.47-0</strong> ou{" "}
                       <strong>5.00.00.61-6</strong>
                     </span>
                   </li>
@@ -404,8 +404,8 @@ export default function Dashboard() {
                   <li className="flex gap-2">
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
                     <span>
-                      <strong>Criança:</strong> emitir código TEA{" "}
-                      (<strong>10 quantidades</strong>) - Códigos{" "}
+                      <strong>Criança:</strong> emitir código TEA (
+                      <strong>10 quantidades</strong>) - Códigos{" "}
                       <strong>0.00.11.18-5</strong>,{" "}
                       <strong>0.00.40.04-5</strong> ou{" "}
                       <strong>0.00.11.19-3</strong>.
@@ -415,10 +415,10 @@ export default function Dashboard() {
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
                     <span>
                       <strong>Adulto:</strong> emitir código de terapia adulto{" "}
-                      <strong>5.00.00.47-0</strong>{" "}
-                      (<strong>10 quantidades</strong>) +{" "}
-                      <strong>5.00.00.61-6</strong>{" "}
-                      (<strong>10 quantidades</strong>)
+                      <strong>5.00.00.47-0</strong> (
+                      <strong>10 quantidades</strong>) +{" "}
+                      <strong>5.00.00.61-6</strong> (
+                      <strong>10 quantidades</strong>)
                     </span>
                   </li>
                 </ul>
@@ -454,14 +454,16 @@ export default function Dashboard() {
                   <li className="flex gap-2">
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
                     <span>
-                      Emitir <strong>1 guia de consulta</strong> código <strong>10030</strong>
+                      Emitir <strong>1 guia de consulta</strong> código{" "}
+                      <strong>10030</strong>
                     </span>
                   </li>
                   <li className="flex gap-2">
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
                     <span>
                       Emitir guia de <strong>sessão de psicologia</strong> —
-                      quantidade <strong>4</strong> código <strong>010016</strong>
+                      quantidade <strong>4</strong> código{" "}
+                      <strong>010016</strong>
                     </span>
                   </li>
                 </ul>
