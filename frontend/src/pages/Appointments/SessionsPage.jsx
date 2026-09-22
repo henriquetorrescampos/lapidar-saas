@@ -53,6 +53,14 @@ const getSessionCount = (patient) => {
   const type = patient?.patient_type || "ABA";
   if (type.includes("TERAPIA_ADULTO"))
     return SESSION_COUNT_BY_TYPE.TERAPIA_ADULTO;
+  const specialties = (patient?.specialties || "").split(",").map((s) => s.trim());
+  const age = getPatientAge(patient?.birth_date);
+  if (
+    type.includes("ABA") &&
+    age > 18 &&
+    (specialties.includes("Fisioterapia") || specialties.includes("Fonoaudiologia"))
+  )
+    return SESSION_COUNT_BY_TYPE.TERAPIA_ADULTO;
   return SESSION_COUNT_BY_TYPE.ABA;
 };
 
