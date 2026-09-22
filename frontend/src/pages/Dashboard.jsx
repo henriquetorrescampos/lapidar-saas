@@ -327,6 +327,15 @@ export default function Dashboard() {
                       reservar o horário do paciente
                     </span>
                   </li>
+                  <li className="flex gap-2">
+                    <span className="text-cyan-500 font-bold mt-0.5">•</span>
+                    <span>
+                      Para atendimentos avulsos (de acordo com a disponibilidade)
+                      será <strong>4 quantidades</strong> do código{" "}
+                      <strong>5.00.00.47-0</strong> ou{" "}
+                      <strong>5.00.00.61-6</strong>
+                    </span>
+                  </li>
                 </ul>
               </Card>
 
