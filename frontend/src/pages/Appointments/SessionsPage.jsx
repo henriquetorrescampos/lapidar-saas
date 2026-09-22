@@ -41,7 +41,7 @@ const SPECIALTIES_BY_PATIENT_TYPE = {
 
 const SESSION_COUNT_BY_TYPE = {
   ABA: 12,
-  TERAPIA_ADULTO: 4,
+  TERAPIA_ADULTO: 5,
 };
 
 const MIN_SESSIONS_BY_TYPE = {
@@ -676,9 +676,9 @@ export default function SessionsPage() {
 
             {selectedPatient?.patient_type?.includes("ABA") && (
               <p className="text-xl text-gray-500 mb-4 px-1">
-                * Caso o paciente seja da Dra. Amanda e tenha TEA(autismo),
-                emitir guia com código de psicologia ABA, sempre 8 quantidades
-                que representa 4 sessões.
+                * Caso o paciente seja da Gislene e tenha TEA(autismo), emitir
+                guia com código de psicologia ABA, sempre 8 quantidades que
+                representa 4 sessões.
               </p>
             )}
 
@@ -693,7 +693,7 @@ export default function SessionsPage() {
                 </summary>
                 <ul className="px-4 pb-3 pt-1 space-y-1.5 text-lg text-blue-700 list-disc list-inside">
                   <li>
-                    A guia de terapia adulto com 10 quantidades representa 4
+                    A guia de terapia adulto com 10 quantidades representa 5
                     sessões. Sempre emitir a guia na última sessão para reservar
                     o horário para o paciente.
                   </li>
