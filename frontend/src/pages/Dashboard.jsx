@@ -421,6 +421,14 @@ export default function Dashboard() {
                       <strong>8 quantidades</strong>)
                     </span>
                   </li>
+                  <li className="flex gap-2">
+                    <span className="text-amber-500 font-bold mt-0.5">•</span>
+                    <span>
+                      <strong>Falta (devolutiva ou sessão):</strong> emitir{" "}
+                      <strong>3 quantidades</strong> do código{" "}
+                      <strong>5.00.00.47-0</strong>
+                    </span>
+                  </li>
                 </ul>
               </Card>
             </div>
@@ -463,6 +471,14 @@ export default function Dashboard() {
                     <span>
                       Emitir guia de <strong>sessão de psicologia</strong> —
                       quantidade <strong>4</strong> código{" "}
+                      <strong>010016</strong>
+                    </span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-amber-500 font-bold mt-0.5">•</span>
+                    <span>
+                      <strong>Falta (devolutiva ou sessão):</strong> cobrar{" "}
+                      <strong>2 quantidades</strong> do código{" "}
                       <strong>010016</strong>
                     </span>
                   </li>
