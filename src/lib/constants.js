@@ -33,12 +33,12 @@ export const MAX_SESSIONS_PER_SPECIALTY = 12;
 
 export const MAX_SESSIONS_BY_PATIENT_TYPE = {
   ABA: 12,
-  TERAPIA_ADULTO: 4,
+  TERAPIA_ADULTO: 5,
 };
 
 export const MIN_SESSIONS_TO_ARCHIVE = {
   ABA: 8,
-  TERAPIA_ADULTO: 4,
+  TERAPIA_ADULTO: 5,
 };
 
 export function getMaxSessionsForPatientType(patientType) {
