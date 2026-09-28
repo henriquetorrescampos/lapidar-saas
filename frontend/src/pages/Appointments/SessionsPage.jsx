@@ -42,6 +42,7 @@ const SPECIALTIES_BY_PATIENT_TYPE = {
 const SESSION_COUNT_BY_TYPE = {
   ABA: 12,
   TERAPIA_ADULTO: 5,
+  NON_AUTISTIC: 4,
 };
 
 const MIN_SESSIONS_BY_TYPE = {
@@ -50,6 +51,8 @@ const MIN_SESSIONS_BY_TYPE = {
 };
 
 const getSessionCount = (patient) => {
+  if (patient?.autism_status === "nao_autista")
+    return SESSION_COUNT_BY_TYPE.NON_AUTISTIC;
   const type = patient?.patient_type || "ABA";
   if (type.includes("TERAPIA_ADULTO"))
     return SESSION_COUNT_BY_TYPE.TERAPIA_ADULTO;
@@ -688,6 +691,48 @@ export default function SessionsPage() {
                 guia com código de psicologia ABA, sempre 8 quantidades que
                 representa 4 sessões.
               </p>
+            )}
+
+            {/* Dicas ABA adulto Fisioterapia/Fonoaudiologia (não TEA) */}
+            {selectedPatient?.patient_type?.includes("ABA") &&
+              selectedPatient?.autism_status !== "nao_autista" &&
+              getPatientAge(selectedPatient?.birth_date) > 18 &&
+              (selectedPatient?.specialties?.includes("Fisioterapia") ||
+                selectedPatient?.specialties?.includes("Fonoaudiologia")) && (
+              <details className="mb-4 bg-teal-50 border border-teal-200 rounded-lg">
+                <summary className="flex items-center gap-2 px-4 py-2.5 cursor-pointer select-none">
+                  <Info size={16} className="text-teal-500 shrink-0" />
+                  <span className="text-sm font-medium text-teal-800">
+                    Dicas para emissão de guias — Adulto (Fisioterapia/Fonoaudiologia)
+                  </span>
+                </summary>
+                <ul className="px-4 pb-3 pt-1 space-y-1.5 text-lg text-teal-700 list-disc list-inside">
+                  <li>
+                    Emitir <strong>5.00.00.47-0</strong> (10 quantidades) +{" "}
+                    <strong>5.00.00.61-6</strong> (4 quantidades) por
+                    especialidade.
+                  </li>
+                </ul>
+              </details>
+            )}
+
+            {/* Dicas Paciente Não Autista */}
+            {selectedPatient?.autism_status === "nao_autista" && (
+              <details className="mb-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <summary className="flex items-center gap-2 px-4 py-2.5 cursor-pointer select-none">
+                  <Info size={16} className="text-amber-500 shrink-0" />
+                  <span className="text-sm font-medium text-amber-800">
+                    Dicas para emissão de guias — Paciente Não Autista
+                  </span>
+                </summary>
+                <ul className="px-4 pb-3 pt-1 space-y-1.5 text-lg text-amber-700 list-disc list-inside">
+                  <li>
+                    Emitir <strong>5.00.00.47-0</strong> (10 quantidades) +{" "}
+                    <strong>5.00.00.61-6</strong> (8 quantidades) por
+                    especialidade — equivale a 4 atendimentos.
+                  </li>
+                </ul>
+              </details>
             )}
 
             {/* Dicas Terapia Adulto */}

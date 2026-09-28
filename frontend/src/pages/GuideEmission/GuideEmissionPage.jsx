@@ -339,6 +339,14 @@ export default function GuideEmissionPage() {
                               <p className="text-sm text-gray-500 mt-1">
                                 {noSchedule
                                   ? "Configure os dias na edição do paciente"
+                                  : item.autism_status === "nao_autista"
+                                  ? (
+                                    <span className="text-base font-bold text-gray-700">
+                                      {formatDays(item.schedule_days)} —{" "}
+                                      <span className="text-cyan-700">5.00.00.47-0</span> (10 qtd) +{" "}
+                                      <span className="text-cyan-700">5.00.00.61-6</span> (8 qtd) = 4 atendimentos
+                                    </span>
+                                  )
                                   : (
                                     <span className="text-xl font-bold text-gray-700">
                                       {formatDays(item.schedule_days)} — {item.quantity} sessões

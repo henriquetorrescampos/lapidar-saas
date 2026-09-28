@@ -71,7 +71,7 @@ export async function createManySessions(data) {
     throw new Error("Patient not found");
   }
 
-  const maxSessions = getMaxSessionsForPatientType(patient.patient_type);
+  const maxSessions = getMaxSessionsForPatientType(patient.patient_type, patient.autism_status);
 
   const existingSessions = await prisma.session.count({
     where: {
@@ -111,7 +111,7 @@ export async function createSingleSession(data) {
     throw new Error("Patient not found");
   }
 
-  const maxSessions = getMaxSessionsForPatientType(patient.patient_type);
+  const maxSessions = getMaxSessionsForPatientType(patient.patient_type, patient.autism_status);
 
   const existingSessions = await prisma.session.count({
     where: {

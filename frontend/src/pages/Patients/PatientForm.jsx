@@ -61,6 +61,7 @@ export default function PatientForm() {
     patient_type: [],
     specialties: [],
     specialty_professionals: {},
+    autism_status: "",
     health_plan: "",
     birth_date: "",
   });
@@ -106,6 +107,7 @@ export default function PatientForm() {
           ? data.specialties.split(",").filter(Boolean)
           : [],
         specialty_professionals: parsedProfessionals,
+        autism_status: data.autism_status || "",
         health_plan: data.health_plan,
         birth_date: new Date(data.birth_date).toISOString().split("T")[0],
       });
@@ -157,7 +159,14 @@ export default function PatientForm() {
             delete updatedProfessionals[cs.value];
           }
         }
-        return { ...prev, patient_type: current.filter((v) => v !== value), specialty_professionals: updatedProfessionals };
+        const newType = current.filter((v) => v !== value);
+        const hasAutismType = newType.includes("ABA") || newType.includes("TERAPIA_ADULTO");
+        return {
+          ...prev,
+          patient_type: newType,
+          specialty_professionals: updatedProfessionals,
+          ...((!hasAutismType) && { autism_status: "" }),
+        };
       }
       if (value === "ABA") {
         const updatedProfessionals = { ...prev.specialty_professionals };
@@ -370,6 +379,41 @@ export default function PatientForm() {
                 ))}
               </div>
             </div>
+
+            {(formData.patient_type.includes("ABA") ||
+              formData.patient_type.includes("TERAPIA_ADULTO")) && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Condição do Paciente
+                </label>
+                <div className="flex flex-wrap gap-6">
+                  {[
+                    { value: "autista", label: "Paciente Autista" },
+                    { value: "nao_autista", label: "Paciente Não Autista" },
+                  ].map((option) => (
+                    <label
+                      key={option.value}
+                      className="flex items-center gap-2 text-gray-700 cursor-pointer"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={formData.autism_status === option.value}
+                        onChange={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            autism_status:
+                              prev.autism_status === option.value
+                                ? ""
+                                : option.value,
+                          }))
+                        }
+                      />
+                      {option.label}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {formData.patient_type.includes("TERAPIA_ADULTO") && (
               <div>

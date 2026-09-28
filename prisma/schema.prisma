@@ -23,6 +23,7 @@ model Patient {
   patient_type            String           @default("ABA")
   specialties             String           @default("")
   specialty_professionals String           @default("")
+  autism_status           String           @default("")
   health_plan             String
   birth_date              DateTime
   sessions                Session[]

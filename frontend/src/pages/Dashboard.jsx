@@ -300,7 +300,7 @@ export default function Dashboard() {
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-3 h-3 rounded-full bg-cyan-500" />
                   <h3 className="font-semibold text-gray-800">
-                    Terapia Adulto (Psico, Fono, T.O ou Fisio)
+                    Terapia Adulto - PSICOLOGIA
                   </h3>
                 </div>
                 <ul className="space-y-2 text-sm text-gray-600">
@@ -343,7 +343,7 @@ export default function Dashboard() {
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-3 h-3 rounded-full bg-indigo-500" />
                   <h3 className="font-semibold text-gray-800">
-                    Terapia ABA Infantil (até 18 anos de idade) - Código TEA
+                    Terapia ABA — Pacientes <span className="text-indigo-600">com autismo</span> (Código TEA)
                   </h3>
                 </div>
                 <ul className="space-y-2 text-sm text-gray-600">
@@ -361,6 +361,27 @@ export default function Dashboard() {
                       <strong>2x/semana:</strong> 1 sessão na guia = 1
                       atendimento. Ex: 4 semanas → emitir{" "}
                       <strong>8 quantidades</strong>
+                    </span>
+                  </li>
+                </ul>
+              </Card>
+
+              <Card>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-3 h-3 rounded-full bg-teal-500" />
+                  <h3 className="font-semibold text-gray-800">
+                    Terapia ABA — Pacientes <span className="text-teal-600">sem autismo</span>
+                  </h3>
+                </div>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li className="flex gap-2">
+                    <span className="text-teal-500 font-bold mt-0.5">•</span>
+                    <span>
+                      Utilizar código <strong>5.00.00.47-0</strong>{" "}
+                      (<strong>10 quantidades</strong>) +{" "}
+                      <strong>5.00.00.61-6</strong>{" "}
+                      (<strong>4 quantidades</strong>) — representa{" "}
+                      <strong>4 atendimentos</strong>
                     </span>
                   </li>
                 </ul>

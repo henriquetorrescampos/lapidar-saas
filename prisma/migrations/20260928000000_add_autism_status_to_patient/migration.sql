@@ -1,0 +1,1 @@
+ALTER TABLE "Patient" ADD COLUMN IF NOT EXISTS "autism_status" TEXT NOT NULL DEFAULT '';

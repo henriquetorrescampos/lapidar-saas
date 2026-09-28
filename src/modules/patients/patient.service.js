@@ -35,24 +35,11 @@ export async function createPatient(data) {
       patient_type: data.patient_type,
       specialties: data.specialties || "",
       specialty_professionals: data.specialty_professionals || "",
+      autism_status: data.autism_status || "",
       health_plan: data.health_plan.trim(),
       birth_date: birthDate,
     },
   });
-
-  // Auto-create NeuroSchedule if patient has AVALIACAO_NEUROPSICOLOGICA
-  if (data.patient_type.includes("AVALIACAO_NEUROPSICOLOGICA")) {
-    const now = new Date();
-    const deadline = new Date(now.getFullYear(), now.getMonth() + 2, 0); // último dia do mês seguinte
-    await prisma.neuroSchedule.create({
-      data: {
-        patient_id: patient.id,
-        date: now,
-        deadline: deadline,
-        status: "pendente",
-      },
-    });
-  }
 
   return patient;
 }
@@ -98,6 +85,7 @@ export async function updatePatient(id, data) {
       ...(data.patient_type && { patient_type: data.patient_type }),
       ...(data.specialties !== undefined && { specialties: data.specialties }),
       ...(data.specialty_professionals !== undefined && { specialty_professionals: data.specialty_professionals }),
+      ...(data.autism_status !== undefined && { autism_status: data.autism_status }),
       ...(data.health_plan && { health_plan: data.health_plan.trim() }),
       ...(data.birth_date && { birth_date: validateDate(data.birth_date) }),
     },
