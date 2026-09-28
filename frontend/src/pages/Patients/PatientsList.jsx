@@ -420,7 +420,7 @@ export default function PatientsList() {
                     {Math.min(endIndex, filteredPatients.length)} de{" "}
                     {filteredPatients.length} pacientes
                   </p>
-                  <div className="flex gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <Button
                       variant="secondary"
                       size="sm"
@@ -429,20 +429,39 @@ export default function PatientsList() {
                     >
                       ← Anterior
                     </Button>
-                    <div className="flex items-center gap-2">
-                      {Array.from({ length: totalPages }).map((_, i) => (
-                        <button
-                          key={i + 1}
-                          onClick={() => setCurrentPage(i + 1)}
-                          className={`px-3 py-1 rounded-lg transition ${
-                            currentPage === i + 1
-                              ? "bg-blue-600 text-white"
-                              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                          }`}
-                        >
-                          {i + 1}
-                        </button>
-                      ))}
+                    <div className="flex items-center gap-1 flex-wrap">
+                      {(() => {
+                        const pages = [];
+                        const delta = 2;
+                        const left = currentPage - delta;
+                        const right = currentPage + delta;
+
+                        let lastPrinted = 0;
+                        for (let i = 1; i <= totalPages; i++) {
+                          if (i === 1 || i === totalPages || (i >= left && i <= right)) {
+                            if (lastPrinted && i - lastPrinted > 1) {
+                              pages.push(
+                                <span key={`ellipsis-${i}`} className="px-1 text-gray-400 select-none">…</span>
+                              );
+                            }
+                            pages.push(
+                              <button
+                                key={i}
+                                onClick={() => setCurrentPage(i)}
+                                className={`px-3 py-1 rounded-lg transition text-sm ${
+                                  currentPage === i
+                                    ? "bg-blue-600 text-white"
+                                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                                }`}
+                              >
+                                {i}
+                              </button>
+                            );
+                            lastPrinted = i;
+                          }
+                        }
+                        return pages;
+                      })()}
                     </div>
                     <Button
                       variant="secondary"
