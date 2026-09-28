@@ -343,7 +343,9 @@ export default function Dashboard() {
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-3 h-3 rounded-full bg-indigo-500" />
                   <h3 className="font-semibold text-gray-800">
-                    Terapia ABA — Pacientes <span className="text-indigo-600">com autismo</span> (Código TEA)
+                    Terapia ABA — Pacientes{" "}
+                    <span className="text-indigo-600">com autismo</span> (Código
+                    TEA)
                   </h3>
                 </div>
                 <ul className="space-y-2 text-sm text-gray-600">
@@ -370,17 +372,18 @@ export default function Dashboard() {
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-3 h-3 rounded-full bg-teal-500" />
                   <h3 className="font-semibold text-gray-800">
-                    Terapia ABA — Pacientes <span className="text-teal-600">sem autismo</span>
+                    Terapia ABA — Pacientes{" "}
+                    <span className="text-teal-600">sem autismo</span>
                   </h3>
                 </div>
                 <ul className="space-y-2 text-sm text-gray-600">
                   <li className="flex gap-2">
                     <span className="text-teal-500 font-bold mt-0.5">•</span>
                     <span>
-                      Utilizar código <strong>5.00.00.47-0</strong>{" "}
-                      (<strong>10 quantidades</strong>) +{" "}
-                      <strong>5.00.00.61-6</strong>{" "}
-                      (<strong>4 quantidades</strong>) — representa{" "}
+                      Utilizar código <strong>5.00.00.47-0</strong> (
+                      <strong>10 quantidades</strong>) +{" "}
+                      <strong>5.00.00.61-6</strong> (
+                      <strong>8 quantidades</strong>) — representa{" "}
                       <strong>4 atendimentos</strong>
                     </span>
                   </li>
