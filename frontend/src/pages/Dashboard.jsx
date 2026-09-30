@@ -429,11 +429,11 @@ export default function Dashboard() {
                   <li className="flex gap-2">
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
                     <span>
-                      <strong>Criança:</strong> emitir código TEA (
-                      <strong>10 quantidades</strong>) - Códigos{" "}
-                      <strong>0.00.11.18-5</strong>,{" "}
-                      <strong>0.00.40.04-5</strong> ou{" "}
-                      <strong>0.00.11.19-3</strong>.
+                      <strong>Criança:</strong> emitir códigos{" "}
+                      <strong>5.00.00.47-0</strong> (
+                      <strong>10 quantidades</strong>) +{" "}
+                      <strong>5.00.00.61-6</strong> (
+                      <strong>10 quantidades</strong>)
                     </span>
                   </li>
                   <li className="flex gap-2">
