@@ -10,11 +10,13 @@ import Modal from "../../components/Common/Modal";
 import { patientService } from "../../services/patientService";
 import { employeeService } from "../../services/employeeService";
 import { getPatientAge } from "../../utils/patient";
+import { useAuth } from "../../hooks/useAuth";
 
 const ITEMS_PER_PAGE = 10;
 
 export default function PatientsList() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [patients, setPatients] = useState([]);
   const [employeesMap, setEmployeesMap] = useState({});
   const [employeesList, setEmployeesList] = useState([]);
@@ -395,16 +397,18 @@ export default function PatientsList() {
                           >
                             <Edit2 size={18} />
                           </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => {
-                              setSelectedPatient(patient);
-                              setDeleteModalOpen(true);
-                            }}
-                          >
-                            <Trash2 size={18} className="text-red-600" />
-                          </Button>
+                          {user?.role === "admin" && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                setSelectedPatient(patient);
+                                setDeleteModalOpen(true);
+                              }}
+                            >
+                              <Trash2 size={18} className="text-red-600" />
+                            </Button>
+                          )}
                         </td>
                       </tr>
                     ))}
