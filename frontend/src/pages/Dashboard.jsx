@@ -303,15 +303,17 @@ export default function Dashboard() {
                     Terapia Adulto — Pacientes{" "}
                   </h3>
                 </div>
-                <ul className="space-y-2 text-sm text-gray-600">
+                <ul className="space-y-2 text-base text-gray-600">
                   <li className="flex gap-2">
                     <span className="text-cyan-500 font-bold mt-0.5">•</span>
                     <span>
                       Utilizar código <strong>5.00.00.47-0</strong> (
                       <strong>10 quantidades</strong>) +{" "}
                       <strong>5.00.00.61-6</strong> (
-                      <strong>4 quantidades - Represente 5 atendimentos</strong>
-                      )
+                      <strong>4 quantidades</strong>) +{" "}
+                      <strong>5.00.01.22-1</strong> (
+                      <strong>1 quantidade</strong>) — representa{" "}
+                      <strong>5 atendimentos</strong>
                     </span>
                   </li>
                   <li className="flex gap-2">
@@ -349,7 +351,7 @@ export default function Dashboard() {
                     TEA)
                   </h3>
                 </div>
-                <ul className="space-y-2 text-sm text-gray-600">
+                <ul className="space-y-2 text-base text-gray-600">
                   <li className="flex gap-2">
                     <span className="text-indigo-500 font-bold mt-0.5">•</span>
                     <span>
@@ -374,17 +376,21 @@ export default function Dashboard() {
                   <div className="w-3 h-3 rounded-full bg-teal-500" />
                   <h3 className="font-semibold text-gray-800">
                     Terapia ABA — Pacientes{" "}
-                    <span className="text-teal-600">sem autismo CRIANÇAS</span>
+                    <span className="text-teal-600">
+                      sem autismo CRIANÇAS ATÉ 18 ANOS
+                    </span>
                   </h3>
                 </div>
-                <ul className="space-y-2 text-sm text-gray-600">
+                <ul className="space-y-2 text-base text-gray-600">
                   <li className="flex gap-2">
                     <span className="text-teal-500 font-bold mt-0.5">•</span>
                     <span>
                       Utilizar código <strong>5.00.00.47-0</strong> (
                       <strong>10 quantidades</strong>) +{" "}
                       <strong>5.00.00.61-6</strong> (
-                      <strong>8 quantidades</strong>) — representa{" "}
+                      <strong>8 quantidades</strong>) +{" "}
+                      <strong>5.00.01.22-1</strong> (
+                      <strong>1 quantidade</strong>) — representa{" "}
                       <strong>4 atendimentos</strong>
                     </span>
                   </li>
@@ -398,7 +404,7 @@ export default function Dashboard() {
                     Terapia Adulto ABA - Código TEA
                   </h3>
                 </div>
-                <ul className="space-y-2 text-sm text-gray-600">
+                <ul className="space-y-2 text-base text-gray-600">
                   <li className="flex gap-2">
                     <span className="text-violet-500 font-bold mt-0.5">•</span>
                     <span>
@@ -425,7 +431,7 @@ export default function Dashboard() {
                     Avaliação Neuropsicológica
                   </h3>
                 </div>
-                <ul className="space-y-2 text-sm text-gray-600">
+                <ul className="space-y-2 text-base text-gray-600">
                   <li className="flex gap-2">
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
                     <span>
@@ -475,7 +481,7 @@ export default function Dashboard() {
                     Avaliação Neuropsicológica
                   </h3>
                 </div>
-                <ul className="space-y-2 text-sm text-gray-600">
+                <ul className="space-y-2 text-base text-gray-600">
                   <li className="flex gap-2">
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
                     <span>
@@ -517,7 +523,7 @@ export default function Dashboard() {
                     Terapia ABA Infantil ou Adulto (paciente com autismo)
                   </h3>
                 </div>
-                <ul className="space-y-2 text-sm text-gray-600">
+                <ul className="space-y-2 text-base text-gray-600">
                   <li className="flex gap-2">
                     <span className="text-green-500 font-bold mt-0.5">•</span>
                     <div className="flex flex-col gap-1">
