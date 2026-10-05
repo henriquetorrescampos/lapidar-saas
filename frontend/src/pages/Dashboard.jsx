@@ -394,6 +394,16 @@ export default function Dashboard() {
                       <strong>4 atendimentos</strong>
                     </span>
                   </li>
+                  <li className="flex gap-2">
+                    <span className="text-teal-500 font-bold mt-0.5">•</span>
+                    <span>
+                      <strong>Obs:</strong> caso solicite{" "}
+                      <strong>2 especialidades</strong> em uma mesma guia,
+                      adicionar também o código{" "}
+                      <strong>5.00.00.58-6</strong> (
+                      <strong>1 quantidade</strong>)
+                    </span>
+                  </li>
                 </ul>
               </Card>
 
