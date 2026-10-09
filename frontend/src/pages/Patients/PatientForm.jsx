@@ -62,6 +62,7 @@ export default function PatientForm() {
     specialties: [],
     specialty_professionals: {},
     autism_status: "",
+    active: true,
     health_plan: "",
     birth_date: "",
   });
@@ -108,6 +109,7 @@ export default function PatientForm() {
           : [],
         specialty_professionals: parsedProfessionals,
         autism_status: data.autism_status || "",
+        active: data.active !== false,
         health_plan: data.health_plan,
         birth_date: new Date(data.birth_date).toISOString().split("T")[0],
       });
@@ -593,6 +595,34 @@ export default function PatientForm() {
                 className="input-field"
                 required
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Status do Paciente
+              </label>
+              <label className="flex items-center gap-3 cursor-pointer w-fit">
+                <input
+                  type="checkbox"
+                  checked={formData.active}
+                  onChange={() =>
+                    setFormData((prev) => ({ ...prev, active: !prev.active }))
+                  }
+                  className="w-4 h-4 text-primary-600 rounded cursor-pointer"
+                />
+                <span className="text-sm text-gray-700">
+                  Paciente ativo
+                </span>
+                <span
+                  className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+                    formData.active
+                      ? "bg-green-100 text-green-700"
+                      : "bg-red-100 text-red-600"
+                  }`}
+                >
+                  {formData.active ? "Ativo" : "Inativo"}
+                </span>
+              </label>
             </div>
 
             <div className="flex gap-3">

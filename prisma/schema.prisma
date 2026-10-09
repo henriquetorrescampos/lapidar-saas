@@ -24,6 +24,7 @@ model Patient {
   specialties             String           @default("")
   specialty_professionals String           @default("")
   autism_status           String           @default("")
+  active                  Boolean          @default(true)
   health_plan             String
   birth_date              DateTime
   sessions                Session[]

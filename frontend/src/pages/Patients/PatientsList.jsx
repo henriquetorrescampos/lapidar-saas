@@ -259,7 +259,20 @@ export default function PatientsList() {
                         key={patient.id}
                         className="border-b border-gray-100 hover:bg-gray-50 transition"
                       >
-                        <td className="p-4 text-gray-800">{patient.name}</td>
+                        <td className="p-4">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-gray-800">{patient.name}</span>
+                            <span
+                              className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+                                patient.active !== false
+                                  ? "bg-green-100 text-green-700"
+                                  : "bg-red-100 text-red-600"
+                              }`}
+                            >
+                              {patient.active !== false ? "Ativo" : "Inativo"}
+                            </span>
+                          </div>
+                        </td>
                         <td className="p-4 text-gray-600">
                           {patient.health_plan}
                         </td>
