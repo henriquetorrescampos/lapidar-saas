@@ -26,7 +26,7 @@ router.post(
 
 router.get("/", authMiddleware, authorize(["admin"]), getEmployeesController);
 
-router.get("/names", authMiddleware, authorize(["admin", "user"]), getEmployeeNamesController);
+router.get("/names", authMiddleware, authorize(["admin", "supervisor", "user"]), getEmployeeNamesController);
 
 router.get(
   "/:id",

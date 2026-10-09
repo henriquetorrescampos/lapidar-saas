@@ -410,7 +410,7 @@ export default function PatientsList() {
                           >
                             <Edit2 size={18} />
                           </Button>
-                          {user?.role === "admin" && (
+                          {(user?.role === "admin" || user?.role === "supervisor") && (
                             <Button
                               variant="ghost"
                               size="sm"

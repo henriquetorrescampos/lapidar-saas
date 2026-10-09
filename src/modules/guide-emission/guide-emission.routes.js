@@ -13,28 +13,28 @@ const router = express.Router();
 router.get(
   "/",
   authMiddleware,
-  authorize(["admin", "user"]),
+  authorize(["admin", "supervisor", "user"]),
   getGuideEmissionsController
 );
 
 router.post(
   "/toggle",
   authMiddleware,
-  authorize(["admin", "user"]),
+  authorize(["admin", "supervisor", "user"]),
   toggleGuideEmissionController
 );
 
 router.get(
   "/schedules/:patientId",
   authMiddleware,
-  authorize(["admin", "user"]),
+  authorize(["admin", "supervisor", "user"]),
   getPatientSchedulesController
 );
 
 router.put(
   "/schedules/:patientId",
   authMiddleware,
-  authorize(["admin", "user"]),
+  authorize(["admin", "supervisor", "user"]),
   upsertPatientSchedulesController
 );
 

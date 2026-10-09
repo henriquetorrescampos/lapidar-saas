@@ -10,9 +10,9 @@ import {
 
 const router = express.Router();
 
-router.get("/", authMiddleware, authorize(["admin", "user"]), getWaitingListController);
-router.post("/", authMiddleware, authorize(["admin", "user"]), createWaitingEntryController);
-router.put("/:id", authMiddleware, authorize(["admin", "user"]), updateWaitingEntryController);
-router.delete("/:id", authMiddleware, authorize(["admin", "user"]), deleteWaitingEntryController);
+router.get("/", authMiddleware, authorize(["admin", "supervisor", "user"]), getWaitingListController);
+router.post("/", authMiddleware, authorize(["admin", "supervisor", "user"]), createWaitingEntryController);
+router.put("/:id", authMiddleware, authorize(["admin", "supervisor", "user"]), updateWaitingEntryController);
+router.delete("/:id", authMiddleware, authorize(["admin", "supervisor", "user"]), deleteWaitingEntryController);
 
 export default router;

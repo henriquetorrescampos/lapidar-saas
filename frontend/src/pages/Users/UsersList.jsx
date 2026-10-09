@@ -107,8 +107,14 @@ export default function UsersList() {
                       <td className="p-4 text-gray-800">{user.name}</td>
                       <td className="p-4 text-gray-600">{user.email}</td>
                       <td className="p-4">
-                        <span className="px-3 py-1 rounded-full text-sm font-medium bg-primary-100 text-primary-800">
-                          {user.role}
+                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                          user.role === "admin"
+                            ? "bg-red-100 text-red-700"
+                            : user.role === "supervisor"
+                            ? "bg-purple-100 text-purple-700"
+                            : "bg-primary-100 text-primary-800"
+                        }`}>
+                          {user.role === "admin" ? "Admin" : user.role === "supervisor" ? "Supervisor" : "Usuário"}
                         </span>
                       </td>
                       <td className="p-4 text-gray-600">{user.unit}</td>

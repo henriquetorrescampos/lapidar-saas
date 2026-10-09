@@ -44,7 +44,7 @@ function App() {
           <Route
             path="/patients"
             element={
-              <ProtectedRoute requiredRole={["admin", "user"]}>
+              <ProtectedRoute requiredRole={["admin", "supervisor", "user"]}>
                 <PatientsList />
               </ProtectedRoute>
             }
@@ -52,7 +52,7 @@ function App() {
           <Route
             path="/patients/new"
             element={
-              <ProtectedRoute requiredRole={["admin", "user"]}>
+              <ProtectedRoute requiredRole={["admin", "supervisor", "user"]}>
                 <PatientForm />
               </ProtectedRoute>
             }
@@ -60,7 +60,7 @@ function App() {
           <Route
             path="/patients/:id"
             element={
-              <ProtectedRoute requiredRole={["admin", "user"]}>
+              <ProtectedRoute requiredRole={["admin", "supervisor", "user"]}>
                 <PatientView />
               </ProtectedRoute>
             }
@@ -68,7 +68,7 @@ function App() {
           <Route
             path="/patients/:id/edit"
             element={
-              <ProtectedRoute requiredRole={["admin", "user"]}>
+              <ProtectedRoute requiredRole={["admin", "supervisor", "user"]}>
                 <PatientForm />
               </ProtectedRoute>
             }
@@ -78,7 +78,7 @@ function App() {
           <Route
             path="/appointments"
             element={
-              <ProtectedRoute requiredRole={["admin", "user"]}>
+              <ProtectedRoute requiredRole={["admin", "supervisor", "user"]}>
                 <SessionsPage />
               </ProtectedRoute>
             }
@@ -88,7 +88,7 @@ function App() {
           <Route
             path="/guide-emission"
             element={
-              <ProtectedRoute requiredRole={["admin", "user"]}>
+              <ProtectedRoute requiredRole={["admin", "supervisor", "user"]}>
                 <GuideEmissionPage />
               </ProtectedRoute>
             }
@@ -98,7 +98,7 @@ function App() {
           <Route
             path="/waiting-list"
             element={
-              <ProtectedRoute requiredRole={["admin", "user"]}>
+              <ProtectedRoute requiredRole={["admin", "supervisor", "user"]}>
                 <WaitingListPage />
               </ProtectedRoute>
             }

@@ -18,14 +18,14 @@ const router = express.Router();
 router.get(
   "/",
   authMiddleware,
-  authorize(["admin", "user"]),
+  authorize(["admin", "supervisor", "user"]),
   getSessionsByPatientAndSpecialtyController,
 );
 
 router.get(
   "/history",
   authMiddleware,
-  authorize(["admin", "user"]),
+  authorize(["admin", "supervisor", "user"]),
   getSessionHistoryController,
 );
 
@@ -33,14 +33,14 @@ router.get(
 router.post(
   "/",
   authMiddleware,
-  authorize(["admin", "user"]),
+  authorize(["admin", "supervisor", "user"]),
   createSingleSessionController,
 );
 
 router.post(
   "/history",
   authMiddleware,
-  authorize(["admin", "user"]),
+  authorize(["admin", "supervisor", "user"]),
   archiveSessionsToHistoryController,
 );
 
@@ -48,7 +48,7 @@ router.post(
 router.post(
   "/bulk",
   authMiddleware,
-  authorize(["admin", "user"]),
+  authorize(["admin", "supervisor", "user"]),
   createManySessionsController,
 );
 
@@ -56,7 +56,7 @@ router.post(
 router.delete(
   "/history/:id",
   authMiddleware,
-  authorize(["admin", "user"]),
+  authorize(["admin", "supervisor", "user"]),
   deleteSessionHistoryController,
 );
 
@@ -64,7 +64,7 @@ router.delete(
 router.put(
   "/:id",
   authMiddleware,
-  authorize(["admin", "user"]),
+  authorize(["admin", "supervisor", "user"]),
   updateSessionDateController,
 );
 
@@ -72,7 +72,7 @@ router.put(
 router.delete(
   "/:id",
   authMiddleware,
-  authorize(["admin", "user"]),
+  authorize(["admin", "supervisor", "user"]),
   deleteSessionController,
 );
 

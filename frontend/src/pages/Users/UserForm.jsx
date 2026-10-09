@@ -131,6 +131,7 @@ export default function UserForm() {
                 className="input-field"
               >
                 <option value="user">Usuário</option>
+                <option value="supervisor">Supervisor</option>
                 <option value="admin">Admin</option>
               </select>
             </div>
