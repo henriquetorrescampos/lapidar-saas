@@ -389,13 +389,10 @@ export default function Dashboard() {
                       Utilizar código <strong>5.00.00.47-0</strong> (
                       <strong>10 quantidades</strong>) +{" "}
                       <strong>5.00.00.61-6</strong> (
-                      <strong>8 quantidades</strong>) +{" "}
+                      <strong>4 quantidades</strong>) +{" "}
                       <strong>5.00.01.22-1</strong>— representa{" "}
                       <strong>4 atendimentos</strong>
                     </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-teal-500 font-bold mt-0.5">•</span>
                   </li>
                 </ul>
               </Card>
@@ -438,21 +435,11 @@ export default function Dashboard() {
                   <li className="flex gap-2">
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
                     <span>
-                      <strong>Criança:</strong> emitir códigos{" "}
+                      <strong>Adulto e Criança:</strong> emitir códigos{" "}
                       <strong>5.00.00.47-0</strong> (
                       <strong>10 quantidades</strong>) +{" "}
                       <strong>5.00.00.61-6</strong> (
                       <strong>10 quantidades</strong>)
-                    </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-amber-500 font-bold mt-0.5">•</span>
-                    <span>
-                      <strong>Adulto:</strong> emitir código de terapia adulto{" "}
-                      <strong>5.00.00.47-0</strong> (
-                      <strong>10 quantidades</strong>) +{" "}
-                      <strong>5.00.00.61-6</strong> (
-                      <strong>8 quantidades</strong>)
                     </span>
                   </li>
                   <li className="flex gap-2">

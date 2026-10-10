@@ -755,7 +755,14 @@ export default function SessionsPage() {
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-              {getAvailableSpecialties(selectedPatient).map((specialty) => (
+              {getAvailableSpecialties(selectedPatient).map((specialty) => {
+                const historySessions = history
+                  .filter((item) => item.specialty === specialty)
+                  .reduce((sum, item) => sum + (item.completed || 0), 0);
+                const activeSessions = countCompleted(specialty);
+                const totalSessions = historySessions + activeSessions;
+
+                return (
                 <Card key={specialty}>
                   <div className="mb-4">
                     <div className="flex items-center gap-2 mb-2">
@@ -763,9 +770,12 @@ export default function SessionsPage() {
                         {specialty}
                       </h3>
                     </div>
-                    <p className="text-sm text-gray-600 mb-4">
-                      {countCompleted(specialty)}/
-                      {getSessionCount(selectedPatient)} sessões
+                    <p className="text-sm text-gray-600 mb-1">
+                      {activeSessions}/
+                      {getSessionCount(selectedPatient)} sessões (ciclo atual)
+                    </p>
+                    <p className="text-xs font-semibold text-teal-700 bg-teal-50 rounded px-2 py-0.5 inline-block mb-3">
+                      {totalSessions} sessão{totalSessions !== 1 ? "ões" : ""} realizadas no total
                     </p>
                   </div>
 
@@ -796,7 +806,8 @@ export default function SessionsPage() {
                     Gravar Histórico
                   </Button>
                 </Card>
-              ))}
+              );
+              })}
             </div>
           </>
         )}
@@ -833,6 +844,12 @@ export default function SessionsPage() {
                   currentPage * HISTORY_PAGE_SIZE,
                 );
                 const isExpanded = expandedSpecialties[specialty] !== false;
+                const totalHistorySessions = specialtyItems.reduce(
+                  (sum, item) => sum + (item.completed || 0),
+                  0,
+                );
+                const totalActiveSessions = countCompleted(specialty);
+                const totalSessions = totalHistorySessions + totalActiveSessions;
 
                 return (
                   <div
@@ -860,6 +877,12 @@ export default function SessionsPage() {
                         >
                           {specialtyItems.length} registro
                           {specialtyItems.length !== 1 ? "s" : ""}
+                        </span>
+                        <span
+                          className={`text-xs px-2 py-0.5 rounded-full font-semibold bg-white ${color.text}`}
+                        >
+                          {totalSessions} sessão
+                          {totalSessions !== 1 ? "ões" : ""} no total
                         </span>
                       </div>
                       <ChevronDown
