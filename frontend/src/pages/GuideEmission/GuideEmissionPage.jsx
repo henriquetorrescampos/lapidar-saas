@@ -345,8 +345,7 @@ export default function GuideEmissionPage() {
                                       <span className="text-base font-bold text-gray-700">
                                         {formatDays(item.schedule_days)} —{" "}
                                         <span className="text-cyan-700">5.00.00.47-0</span> (10 qtd) +{" "}
-                                        <span className="text-cyan-700">5.00.00.61-6</span> (8 qtd) +{" "}
-                                        <span className="text-cyan-700">5.00.01.22-1</span> (1 qtd) = 4 atendimentos
+                                        <span className="text-cyan-700">5.00.00.61-6</span> (4 qtd) = 4 atendimentos
                                       </span>
                                       <span className="text-xs text-gray-500">
                                         Obs: se houver <strong>2 especialidades</strong> na mesma guia, adicionar{" "}

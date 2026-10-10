@@ -111,6 +111,7 @@ export async function getGuideEmissions(month, year) {
       where: {
         patient_type: { contains: "ABA" },
         health_plan: { notIn: ["PARTICULAR", "IAMESC"] },
+        active: true,
       },
       include: {
         patient_schedules: true,
@@ -119,7 +120,10 @@ export async function getGuideEmissions(month, year) {
       orderBy: { name: "asc" },
     }),
     prisma.patient.findMany({
-      where: { health_plan: { contains: "IAMESC", mode: "insensitive" } },
+      where: {
+        health_plan: { contains: "IAMESC", mode: "insensitive" },
+        active: true,
+      },
       include: {
         patient_schedules: true,
         guide_emissions: { where: { month: m, year: y } },
