@@ -390,8 +390,10 @@ export default function Dashboard() {
                       <strong>10 quantidades</strong>) +{" "}
                       <strong>5.00.00.61-6</strong> (
                       <strong>4 quantidades</strong>) +{" "}
-                      <strong>5.00.01.22-1</strong>— representa{" "}
-                      <strong>4 atendimentos</strong>
+                      <strong>
+                        5.00.01.22-1 (<strong>1 quantidade</strong>)
+                      </strong>
+                      — representa <strong>4 atendimentos</strong>
                     </span>
                   </li>
                 </ul>
