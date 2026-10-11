@@ -36,6 +36,24 @@ export async function getSessionsByPatientAndSpecialtyController(req, res) {
   }
 }
 
+export async function getAllSessionsByPatientController(req, res) {
+  try {
+    const patientId = parseInt(req.params.id);
+    if (isNaN(patientId)) {
+      return res.status(400).json({ error: "patient_id inválido" });
+    }
+
+    const sessions = await prisma.session.findMany({
+      where: { patient_id: patientId },
+      orderBy: { date: "asc" },
+    });
+
+    res.json(sessions);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+}
+
 export async function createManySessionsController(req, res) {
   try {
     const result = await createManySessions(req.body);

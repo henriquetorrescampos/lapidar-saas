@@ -4,6 +4,7 @@ import { authorize } from "../../middleware/role.middleware.js";
 import {
   archiveSessionsToHistoryController,
   getSessionsByPatientAndSpecialtyController,
+  getAllSessionsByPatientController,
   getSessionHistoryController,
   createManySessionsController,
   createSingleSessionController,
@@ -20,6 +21,14 @@ router.get(
   authMiddleware,
   authorize(["admin", "supervisor", "user"]),
   getSessionsByPatientAndSpecialtyController,
+);
+
+// Buscar todas as sessões de um paciente de uma só vez
+router.get(
+  "/patient/:id",
+  authMiddleware,
+  authorize(["admin", "supervisor", "user"]),
+  getAllSessionsByPatientController,
 );
 
 router.get(

@@ -12,6 +12,25 @@ function getHeaders() {
 }
 
 export const appointmentService = {
+  getAllByPatient: async (patientId) => {
+    try {
+      const response = await fetch(`${API_URL}/sessions/patient/${patientId}`, {
+        method: "GET",
+        headers: getHeaders(),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || error.message || "Erro ao buscar sessões");
+      }
+
+      return response.json();
+    } catch (err) {
+      console.error("Erro na requisição:", err);
+      throw new Error(err.message || "Erro ao buscar sessões");
+    }
+  },
+
   getByPatientAndSpecialty: async (patientId, specialty) => {
     try {
       const response = await fetch(

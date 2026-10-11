@@ -215,8 +215,10 @@ export default function SessionsPage() {
   useEffect(() => {
     if (selectedPatient) {
       setSessions(initializeSessions(selectedPatient));
-      loadExistingSessions();
-      loadSessionHistory(selectedPatient.id);
+      Promise.all([
+        loadExistingSessions(),
+        loadSessionHistory(selectedPatient.id),
+      ]);
     } else {
       setHistory([]);
       setSelectedHistoryItem(null);
@@ -241,31 +243,22 @@ export default function SessionsPage() {
     if (!selectedPatient) return;
 
     try {
+      const allSessions = await appointmentService.getAllByPatient(selectedPatient.id);
+      const allSessionsArray = Array.isArray(allSessions) ? allSessions : [];
+
       const availableSpecialties = getAvailableSpecialties(selectedPatient);
+      const defaultMap = initializeSessions(selectedPatient);
       const sessionsData = {};
 
       for (const specialty of availableSpecialties) {
-        const existingSessions =
-          await appointmentService.getByPatientAndSpecialty(
-            selectedPatient.id,
-            specialty,
-          );
+        const sorted = allSessionsArray
+          .filter((s) => s.specialty === specialty)
+          .sort((a, b) => new Date(a.date) - new Date(b.date));
 
-        const defaultSessions = initializeSessions(selectedPatient)[specialty];
-        const sortedExistingSessions = Array.isArray(existingSessions)
-          ? [...existingSessions].sort(
-              (a, b) => new Date(a.date) - new Date(b.date),
-            )
-          : [];
-
-        sessionsData[specialty] = defaultSessions.map((session, index) => {
-          const existingSession = sortedExistingSessions[index];
-          return existingSession
-            ? {
-                checked: true,
-                date: existingSession.date.split("T")[0],
-                id: existingSession.id,
-              }
+        sessionsData[specialty] = defaultMap[specialty].map((session, index) => {
+          const existing = sorted[index];
+          return existing
+            ? { checked: true, date: existing.date.split("T")[0], id: existing.id }
             : session;
         });
       }
