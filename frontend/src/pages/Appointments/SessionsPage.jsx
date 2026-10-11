@@ -728,7 +728,8 @@ export default function SessionsPage() {
                 <ul className="px-4 pb-3 pt-1 space-y-1.5 text-lg text-amber-700 list-disc list-inside">
                   <li>
                     Emitir <strong>5.00.00.47-0</strong> (10 quantidades) +{" "}
-                    <strong>5.00.00.61-6</strong> (8 quantidades) por
+                    <strong>5.00.00.61-6</strong> (4 quantidades) +{" "}
+                    <strong>5.00.01.22-1</strong> (1 quantidade) por
                     especialidade — equivale a 4 atendimentos.
                   </li>
                 </ul>
