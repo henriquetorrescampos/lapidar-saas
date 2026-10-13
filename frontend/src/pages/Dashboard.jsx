@@ -509,7 +509,7 @@ export default function Dashboard() {
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
                     <span>
                       <strong>Falta (devolutiva ou sessão):</strong> emitir{" "}
-                      <strong>3 quantidades</strong> do código{" "}
+                      <strong>2 quantidades</strong> do código{" "}
                       <strong>5.00.00.47-0</strong>
                     </span>
                   </li>
