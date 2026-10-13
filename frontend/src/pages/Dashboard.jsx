@@ -386,14 +386,22 @@ export default function Dashboard() {
                   <li className="flex gap-2">
                     <span className="text-teal-500 font-bold mt-0.5">•</span>
                     <span>
-                      Utilizar código <strong>5.00.00.47-0</strong> (
-                      <strong>10 quantidades</strong>) +{" "}
+                      Psicologia: Utilizar código <strong>5.00.00.47-0</strong>{" "}
+                      (<strong>14 quantidades</strong>) +{" "}
+                      <strong>5.00.01.22-1</strong> (
+                      <strong>1 quantidade</strong>) — representa{" "}
+                      <strong>4 atendimentos</strong>
+                    </span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-teal-500 font-bold mt-0.5">•</span>
+                    <span>
+                      Fonoaudiologia: Utilizar código{" "}
                       <strong>5.00.00.61-6</strong> (
-                      <strong>4 quantidades</strong>) +{" "}
-                      <strong>
-                        5.00.01.22-1 (<strong>1 quantidade</strong>)
-                      </strong>
-                      — representa <strong>4 atendimentos</strong>
+                      <strong>14 quantidades</strong>) +{" "}
+                      <strong>5.00.00.58-6</strong> (
+                      <strong>1 quantidade</strong>) — representa{" "}
+                      <strong>4 atendimentos</strong>
                     </span>
                   </li>
                 </ul>
