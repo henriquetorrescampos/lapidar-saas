@@ -122,7 +122,7 @@ export default function PatientForm() {
         for (const entry of entries) {
           const [d, q] = entry.split(":").map(Number);
           if (!isNaN(d) && d > 0) {
-            // qty representa sessões físicas por ocorrência; o ×2 para 1x/semana é regra do cálculo de guias
+            // qty representa sessões físicas por ocorrência (razão 1:1 no cálculo de guias)
             schedulesMap[s.specialty][d] = isNaN(q) ? 1 : q;
           }
         }
@@ -507,7 +507,7 @@ export default function PatientForm() {
                   Agenda por Especialidade
                 </label>
                 <p className="text-xs text-gray-400 mb-4">
-                  Selecione os dias e quantas sessões o paciente realiza por dia. Paciente 1x/semana → cálculo de guia aplica ×2 automaticamente.
+                  Selecione os dias e quantas sessões o paciente realiza por dia. O cálculo de guia é 1 sessão = 1 quantidade (razão 1:1).
                 </p>
                 <div className="space-y-4">
                   {abaSpecialties.map((specialty) => (

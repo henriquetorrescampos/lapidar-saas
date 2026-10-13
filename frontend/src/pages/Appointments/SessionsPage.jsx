@@ -665,9 +665,9 @@ export default function SessionsPage() {
                 </summary>
                 <ul className="px-4 pb-3 pt-1 space-y-1.5 text-lg text-blue-700 list-disc list-inside">
                   <li>
-                    Paciente 1x/semana → 2 sessões na guia equivalem a 1
+                    Paciente 1x/semana → 1 sessão na guia equivale a 1
                     atendimento. Checar quantas semanas no mês (ex: 4 semanas =
-                    emitir 8 sessões).
+                    emitir 4 sessões).
                   </li>
                   <li>
                     Paciente 2x/semana → 1 sessão na guia equivale a 1
@@ -681,8 +681,8 @@ export default function SessionsPage() {
             {selectedPatient?.patient_type?.includes("ABA") && (
               <p className="text-xl text-gray-500 mb-4 px-1">
                 * Caso o paciente seja da Gislene e tenha TEA(autismo), emitir
-                guia com código de psicologia ABA, sempre 8 quantidades que
-                representa 4 sessões.
+                guia com código de psicologia ABA: 1x/semana = 4 quantidades,
+                2x/semana = 8 quantidades (1 sessão = 1 atendimento).
               </p>
             )}
 
