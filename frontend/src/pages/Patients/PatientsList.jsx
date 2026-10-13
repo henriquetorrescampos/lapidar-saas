@@ -73,6 +73,19 @@ export default function PatientsList() {
     }
   };
 
+  const handleToggleActive = async (patient) => {
+    const newActive = patient.active === false ? true : false;
+    try {
+      await patientService.update(patient.id, { active: newActive });
+      setPatients((prev) =>
+        prev.map((p) => (p.id === patient.id ? { ...p, active: newActive } : p))
+      );
+      setSuccess(`Paciente ${newActive ? "ativado" : "inativado"} com sucesso`);
+    } catch (err) {
+      setError("Erro ao atualizar status do paciente");
+    }
+  };
+
   const healthPlans = [...new Set(patients.map((p) => p.health_plan).filter(Boolean))].sort();
 
   const SPECIALTIES = [
@@ -262,15 +275,17 @@ export default function PatientsList() {
                         <td className="p-4">
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className="text-gray-800">{patient.name}</span>
-                            <span
-                              className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+                            <button
+                              onClick={() => handleToggleActive(patient)}
+                              title={patient.active !== false ? "Clique para inativar" : "Clique para ativar"}
+                              className={`text-xs font-semibold px-2 py-0.5 rounded-full transition hover:opacity-75 cursor-pointer ${
                                 patient.active !== false
-                                  ? "bg-green-100 text-green-700"
-                                  : "bg-red-100 text-red-600"
+                                  ? "bg-green-100 text-green-700 hover:bg-green-200"
+                                  : "bg-red-100 text-red-600 hover:bg-red-200"
                               }`}
                             >
                               {patient.active !== false ? "Ativo" : "Inativo"}
-                            </span>
+                            </button>
                           </div>
                         </td>
                         <td className="p-4 text-gray-600">
