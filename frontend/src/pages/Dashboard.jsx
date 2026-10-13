@@ -404,6 +404,36 @@ export default function Dashboard() {
                       <strong>4 atendimentos</strong>
                     </span>
                   </li>
+                  <li className="flex gap-2">
+                    <span className="text-teal-500 font-bold mt-0.5">•</span>
+                    <span>
+                      Terapia Ocupacional: Utilizar código{" "}
+                      <strong>5.00.00.47-0</strong> (
+                      <strong>14 quantidades</strong>) +{" "}
+                      <strong>5.00.01.22-1</strong> (
+                      <strong>1 quantidade</strong>) — representa{" "}
+                      <strong>4 atendimentos</strong>{" "}
+                      <span className="text-gray-400 text-sm">
+                        (o plano do IPASGO não disponibiliza o código de Terapia
+                        Ocupacional para todos os beneficiários)
+                      </span>
+                    </span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-teal-500 font-bold mt-0.5">•</span>
+                    <span>
+                      Fisioterapia: Utilizar código{" "}
+                      <strong>5.00.00.47-0</strong> (
+                      <strong>14 quantidades</strong>) +{" "}
+                      <strong>5.00.01.22-1</strong> (
+                      <strong>1 quantidade</strong>) — representa{" "}
+                      <strong>4 atendimentos</strong>{" "}
+                      <span className="text-gray-400 text-sm">
+                        (ainda estamos em processo de adicionar os códigos de
+                        Fisioterapia no nosso sistema do IPASGO)
+                      </span>
+                    </span>
+                  </li>
                 </ul>
               </Card>
 
