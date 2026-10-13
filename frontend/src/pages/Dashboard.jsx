@@ -311,14 +311,18 @@ export default function Dashboard() {
                       <strong>10 quantidades</strong>) +{" "}
                       <strong>5.00.01.22-1</strong> (
                       <strong>1 quantidade</strong>) — representa{" "}
-                      <strong>5 atendimentos</strong>
+                      <strong>
+                        5 atendimentos 40 minutos = (20 minutos + 20 minutos)
+                      </strong>
                     </span>
                   </li>
                   <li className="flex gap-2">
                     <span className="text-cyan-500 font-bold mt-0.5">•</span>
                     <span>
-                      <strong>14 quantidades</strong> na guia ={" "}
-                      <strong>5 atendimentos</strong>
+                      <strong>10 quantidades</strong> na guia ={" "}
+                      <strong>
+                        5 atendimentos 40 minutos = (20 minutos + 20 minutos)
+                      </strong>
                     </span>
                   </li>
                   <li className="flex gap-2">
@@ -388,7 +392,9 @@ export default function Dashboard() {
                       (<strong>10 quantidades</strong>) +{" "}
                       <strong>5.00.01.22-1</strong> (
                       <strong>1 quantidade</strong>) — representa{" "}
-                      <strong>5 atendimentos</strong>
+                      <strong>
+                        5 atendimentos 40 minutos = (20 minutos + 20 minutos)
+                      </strong>
                     </span>
                   </li>
                   <li className="flex gap-2">
@@ -399,7 +405,9 @@ export default function Dashboard() {
                       <strong>10 quantidades</strong>) +{" "}
                       <strong>5.00.00.58-6</strong> (
                       <strong>1 quantidade</strong>) — representa{" "}
-                      <strong>5 atendimentos</strong>
+                      <strong>
+                        5 atendimentos 40 minutos = (20 minutos + 20 minutos)
+                      </strong>
                     </span>
                   </li>
                   <li className="flex gap-2">
@@ -410,7 +418,9 @@ export default function Dashboard() {
                       <strong>10 quantidades</strong>) +{" "}
                       <strong>5.00.01.22-1</strong> (
                       <strong>1 quantidade</strong>) — representa{" "}
-                      <strong>5 atendimentos</strong>
+                      <strong>
+                        5 atendimentos 40 minutos = (20 minutos + 20 minutos)
+                      </strong>
                     </span>
                   </li>
                   <li className="flex gap-2">
@@ -421,7 +431,9 @@ export default function Dashboard() {
                       <strong>10 quantidades</strong>) +{" "}
                       <strong>5.00.01.22-1</strong> (
                       <strong>1 quantidade</strong>) — representa{" "}
-                      <strong>5 atendimentos</strong>{" "}
+                      <strong>
+                        5 atendimentos 40 minutos = (20 minutos + 20 minutos)
+                      </strong>
                       <span className="text-gray-400 text-sm">
                         (o plano do IPASGO não disponibiliza o código de Terapia
                         Ocupacional para todos os beneficiários)
@@ -436,7 +448,9 @@ export default function Dashboard() {
                       <strong>10 quantidades</strong>) +{" "}
                       <strong>5.00.01.22-1</strong> (
                       <strong>1 quantidade</strong>) — representa{" "}
-                      <strong>5 atendimentos</strong>{" "}
+                      <strong>
+                        5 atendimentos 40 minutos = (20 minutos + 20 minutos)
+                      </strong>
                       <span className="text-gray-400 text-sm">
                         (ainda estamos em processo de adicionar os códigos de
                         Fisioterapia no nosso sistema do IPASGO)
