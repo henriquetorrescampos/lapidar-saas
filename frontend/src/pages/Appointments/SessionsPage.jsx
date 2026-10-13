@@ -42,7 +42,7 @@ const SPECIALTIES_BY_PATIENT_TYPE = {
 const SESSION_COUNT_BY_TYPE = {
   ABA: 12,
   TERAPIA_ADULTO: 5,
-  NON_AUTISTIC: 4,
+  NON_AUTISTIC: 5,
 };
 
 const MIN_SESSIONS_BY_TYPE = {
@@ -721,9 +721,8 @@ export default function SessionsPage() {
                 <ul className="px-4 pb-3 pt-1 space-y-1.5 text-lg text-amber-700 list-disc list-inside">
                   <li>
                     Emitir <strong>5.00.00.47-0</strong> (10 quantidades) +{" "}
-                    <strong>5.00.00.61-6</strong> (4 quantidades) +{" "}
                     <strong>5.00.01.22-1</strong> (1 quantidade) por
-                    especialidade — equivale a 4 atendimentos.
+                    especialidade — equivale a 5 atendimentos.
                   </li>
                 </ul>
               </details>
