@@ -308,7 +308,7 @@ export default function Dashboard() {
                     <span className="text-cyan-500 font-bold mt-0.5">•</span>
                     <span>
                       Utilizar código <strong>5.00.00.47-0</strong> (
-                      <strong>14 quantidades</strong>) +{" "}
+                      <strong>10 quantidades</strong>) +{" "}
                       <strong>5.00.01.22-1</strong> (
                       <strong>1 quantidade</strong>) — representa{" "}
                       <strong>5 atendimentos</strong>
@@ -385,10 +385,10 @@ export default function Dashboard() {
                     <span className="text-teal-500 font-bold mt-0.5">•</span>
                     <span>
                       Psicologia: Utilizar código <strong>5.00.00.47-0</strong>{" "}
-                      (<strong>14 quantidades</strong>) +{" "}
+                      (<strong>10 quantidades</strong>) +{" "}
                       <strong>5.00.01.22-1</strong> (
                       <strong>1 quantidade</strong>) — representa{" "}
-                      <strong>4 atendimentos</strong>
+                      <strong>5 atendimentos</strong>
                     </span>
                   </li>
                   <li className="flex gap-2">
@@ -396,10 +396,21 @@ export default function Dashboard() {
                     <span>
                       Fonoaudiologia: Utilizar código{" "}
                       <strong>5.00.00.61-6</strong> (
-                      <strong>14 quantidades</strong>) +{" "}
+                      <strong>10 quantidades</strong>) +{" "}
                       <strong>5.00.00.58-6</strong> (
                       <strong>1 quantidade</strong>) — representa{" "}
-                      <strong>4 atendimentos</strong>
+                      <strong>5 atendimentos</strong>
+                    </span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-teal-500 font-bold mt-0.5">•</span>
+                    <span>
+                      Psicopedagogia: Utilizar código{" "}
+                      <strong>5.00.00.47-0</strong> (
+                      <strong>10 quantidades</strong>) +{" "}
+                      <strong>5.00.01.22-1</strong> (
+                      <strong>1 quantidade</strong>) — representa{" "}
+                      <strong>5 atendimentos</strong>
                     </span>
                   </li>
                   <li className="flex gap-2">
@@ -407,10 +418,10 @@ export default function Dashboard() {
                     <span>
                       Terapia Ocupacional: Utilizar código{" "}
                       <strong>5.00.00.47-0</strong> (
-                      <strong>14 quantidades</strong>) +{" "}
+                      <strong>10 quantidades</strong>) +{" "}
                       <strong>5.00.01.22-1</strong> (
                       <strong>1 quantidade</strong>) — representa{" "}
-                      <strong>4 atendimentos</strong>{" "}
+                      <strong>5 atendimentos</strong>{" "}
                       <span className="text-gray-400 text-sm">
                         (o plano do IPASGO não disponibiliza o código de Terapia
                         Ocupacional para todos os beneficiários)
@@ -422,10 +433,10 @@ export default function Dashboard() {
                     <span>
                       Fisioterapia: Utilizar código{" "}
                       <strong>5.00.00.47-0</strong> (
-                      <strong>14 quantidades</strong>) +{" "}
+                      <strong>10 quantidades</strong>) +{" "}
                       <strong>5.00.01.22-1</strong> (
                       <strong>1 quantidade</strong>) — representa{" "}
-                      <strong>4 atendimentos</strong>{" "}
+                      <strong>5 atendimentos</strong>{" "}
                       <span className="text-gray-400 text-sm">
                         (ainda estamos em processo de adicionar os códigos de
                         Fisioterapia no nosso sistema do IPASGO)
