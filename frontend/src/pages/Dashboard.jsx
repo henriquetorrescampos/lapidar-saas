@@ -308,9 +308,7 @@ export default function Dashboard() {
                     <span className="text-cyan-500 font-bold mt-0.5">•</span>
                     <span>
                       Utilizar código <strong>5.00.00.47-0</strong> (
-                      <strong>10 quantidades</strong>) +{" "}
-                      <strong>5.00.00.61-6</strong> (
-                      <strong>4 quantidades</strong>) +{" "}
+                      <strong>14 quantidades</strong>) +{" "}
                       <strong>5.00.01.22-1</strong> (
                       <strong>1 quantidade</strong>) — representa{" "}
                       <strong>5 atendimentos</strong>
@@ -319,7 +317,7 @@ export default function Dashboard() {
                   <li className="flex gap-2">
                     <span className="text-cyan-500 font-bold mt-0.5">•</span>
                     <span>
-                      <strong>10 quantidades</strong> na guia ={" "}
+                      <strong>14 quantidades</strong> na guia ={" "}
                       <strong>5 atendimentos</strong>
                     </span>
                   </li>
