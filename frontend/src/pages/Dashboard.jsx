@@ -341,6 +341,15 @@ export default function Dashboard() {
                       <strong>5.00.00.61-6</strong>
                     </span>
                   </li>
+                  <li className="flex gap-2">
+                    <span className="text-cyan-500 font-bold mt-0.5">ℹ</span>
+                    <span className="text-sm text-gray-500 italic">
+                      <strong className="not-italic">Obs:</strong> Caso o
+                      paciente questione e queira fazer 20 minutos, nós fazemos
+                      sem problema. Aí é para emitir{" "}
+                      <strong className="not-italic">5 quantidades</strong>.
+                    </span>
+                  </li>
                 </ul>
               </Card>
 
@@ -368,6 +377,15 @@ export default function Dashboard() {
                       <strong>2x/semana:</strong> 1 sessão na guia = 1
                       atendimento. Ex: 4 semanas → emitir{" "}
                       <strong>8 quantidades</strong>
+                    </span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-indigo-500 font-bold mt-0.5">ℹ</span>
+                    <span className="text-sm text-gray-500 italic">
+                      <strong className="not-italic">Obs:</strong> Caso o
+                      paciente questione e queira fazer 20 minutos, nós fazemos
+                      sem problema. Aí é para emitir{" "}
+                      <strong className="not-italic">5 quantidades</strong>.
                     </span>
                   </li>
                 </ul>
