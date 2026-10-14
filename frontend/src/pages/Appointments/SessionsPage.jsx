@@ -43,6 +43,7 @@ const SESSION_COUNT_BY_TYPE = {
   ABA: 12,
   TERAPIA_ADULTO: 5,
   NON_AUTISTIC: 5,
+  PARTICULAR: 4,
 };
 
 const MIN_SESSIONS_BY_TYPE = {
@@ -51,6 +52,8 @@ const MIN_SESSIONS_BY_TYPE = {
 };
 
 const getSessionCount = (patient) => {
+  if (patient?.health_plan?.toUpperCase() === "PARTICULAR")
+    return SESSION_COUNT_BY_TYPE.PARTICULAR;
   if (patient?.autism_status === "nao_autista")
     return SESSION_COUNT_BY_TYPE.NON_AUTISTIC;
   const type = patient?.patient_type || "ABA";
