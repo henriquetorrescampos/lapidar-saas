@@ -657,6 +657,8 @@ export default function SessionsPage() {
         {/* Grid de Especialidades */}
         {selectedPatient && (
           <>
+            {selectedPatient?.health_plan?.toUpperCase() !== "PARTICULAR" && (<>
+
             {/* Dicas ABA */}
             {selectedPatient?.patient_type?.includes("ABA") && (
               <details className="mb-4 bg-blue-50 border border-blue-200 rounded-lg">
@@ -749,6 +751,7 @@ export default function SessionsPage() {
                 </ul>
               </details>
             )}
+            </>)}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
               {getAvailableSpecialties(selectedPatient).map((specialty) => {
