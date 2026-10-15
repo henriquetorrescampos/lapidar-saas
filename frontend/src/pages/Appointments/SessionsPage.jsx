@@ -670,8 +670,8 @@ export default function SessionsPage() {
                 </summary>
                 <ul className="px-4 pb-3 pt-1 space-y-1.5 text-lg text-blue-700 list-disc list-inside">
                   <li>
-                    Paciente 1x/semana → 2 quantidades na guia = 1 atendimento
-                    (20 min + 20 min). Ex: 4 semanas → emitir 8 quantidades.
+                    Paciente 1x/semana → 1 quantidade na guia = 1 atendimento
+                    (40 min). Ex: 4 semanas → emitir 4 quantidades.
                   </li>
                   <li>
                     Paciente 2x/semana → 1 sessão na guia equivale a 1
@@ -685,8 +685,8 @@ export default function SessionsPage() {
             {selectedPatient?.patient_type?.includes("ABA") && (
               <p className="text-xl text-gray-500 mb-4 px-1">
                 * Caso o paciente seja da Gislene e tenha TEA(autismo), emitir
-                guia com código de psicologia ABA: 1x/semana = 8 quantidades
-                (2 qtd = 1 atendimento), 2x/semana = 8 quantidades (1 qtd = 1 atendimento).
+                guia com código de psicologia ABA: 1x/semana = 4 quantidades,
+                2x/semana = 8 quantidades (1 qtd = 1 atendimento, 40 min).
               </p>
             )}
 
