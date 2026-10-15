@@ -336,7 +336,7 @@ export default function Dashboard() {
                     <span className="text-cyan-500 font-bold mt-0.5">•</span>
                     <span>
                       Para atendimentos avulsos (de acordo com a
-                      disponibilidade) será <strong>3 quantidades</strong> do
+                      disponibilidade) será <strong>2 quantidades</strong> do
                       código <strong>5.00.00.47-0</strong> ou{" "}
                       <strong>5.00.00.61-6</strong>
                     </span>
@@ -504,7 +504,7 @@ export default function Dashboard() {
                       <strong>Adulto e Criança:</strong> emitir códigos{" "}
                       <strong>5.00.00.47-0</strong> (
                       <strong>10 quantidades</strong>) +{" "}
-                      <strong>5.00.00.61-6</strong> (
+                      <strong>6.00.20.01-6</strong> (
                       <strong>10 quantidades</strong>)
                     </span>
                   </li>
