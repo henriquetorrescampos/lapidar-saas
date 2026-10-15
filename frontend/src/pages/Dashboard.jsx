@@ -358,8 +358,10 @@ export default function Dashboard() {
                   <div className="w-3 h-3 rounded-full bg-indigo-500" />
                   <h3 className="font-semibold text-gray-800">
                     Terapia ABA — Pacientes{" "}
-                    <span className="text-indigo-600">com autismo</span> (Código
-                    TEA)
+                    <span className="text-indigo-600">
+                      com autismo ou sindrome de down
+                    </span>{" "}
+                    (Código TEA)
                   </h3>
                 </div>
                 <ul className="space-y-2 text-base text-gray-600">
