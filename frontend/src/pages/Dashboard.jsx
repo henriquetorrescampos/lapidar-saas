@@ -366,9 +366,9 @@ export default function Dashboard() {
                   <li className="flex gap-2">
                     <span className="text-indigo-500 font-bold mt-0.5">•</span>
                     <span>
-                      <strong>1x/semana:</strong> 1 sessão na guia = 1
-                      atendimento. Ex: 4 semanas → emitir{" "}
-                      <strong>4 quantidades</strong>
+                      <strong>1x/semana:</strong> 2 quantidades na guia = 1
+                      atendimento (20 min + 20 min). Ex: 4 semanas → emitir{" "}
+                      <strong>8 quantidades</strong>
                     </span>
                   </li>
                   <li className="flex gap-2">
@@ -480,9 +480,9 @@ export default function Dashboard() {
                   <li className="flex gap-2">
                     <span className="text-violet-500 font-bold mt-0.5">•</span>
                     <span>
-                      <strong>1x/semana:</strong> 1 sessão na guia = 1
-                      atendimento/semana. Ex: 4 semanas → emitir{" "}
-                      <strong>4 quantidades</strong>
+                      <strong>1x/semana:</strong> 2 quantidades na guia = 1
+                      atendimento/semana (20 min + 20 min). Ex: 4 semanas → emitir{" "}
+                      <strong>8 quantidades</strong>
                     </span>
                   </li>
                 </ul>

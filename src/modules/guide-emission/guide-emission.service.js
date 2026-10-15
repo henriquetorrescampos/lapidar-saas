@@ -80,16 +80,19 @@ function calculateSessions(days, dayCountMap) {
 
     if (parsed.length === 0) return null;
 
+    // Regra: total semanal = 1 → multiplica por 2 (20min+20min); 2+ → razão 1:1
+    const totalPerWeek = parsed.reduce((sum, { qty }) => sum + qty, 0);
     const rawOccurrences = parsed.reduce(
       (sum, { day, qty }) => sum + (dayCountMap[day] ?? 0) * qty,
       0,
     );
-    return rawOccurrences;
+    return rawOccurrences * (totalPerWeek === 1 ? 2 : 1);
   }
 
   // Formato legado: "3,4" — mantém comportamento anterior
   const dayList = entries.map(Number).filter((d) => !isNaN(d));
-  return dayList.reduce((sum, d) => sum + (dayCountMap[d] ?? 0), 0);
+  const totalOccurrences = dayList.reduce((sum, d) => sum + (dayCountMap[d] ?? 0), 0);
+  return totalOccurrences * (dayList.length === 1 ? 2 : 1);
 }
 
 export async function getGuideEmissions(month, year) {
