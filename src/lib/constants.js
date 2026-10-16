@@ -35,11 +35,14 @@ export const MAX_SESSIONS_PER_SPECIALTY = 12;
 export const MAX_SESSIONS_BY_PATIENT_TYPE = {
   ABA: 12,
   TERAPIA_ADULTO: 5,
-  NON_AUTISTIC: 4,
+  NON_AUTISTIC: 5,
+  PARTICULAR: 4,
 };
 
-
-export function getMaxSessionsForPatientType(patientType, autismStatus) {
+export function getMaxSessionsForPatientType(patientType, autismStatus, healthPlan) {
+  if (healthPlan && healthPlan.toUpperCase() === "PARTICULAR") {
+    return MAX_SESSIONS_BY_PATIENT_TYPE.PARTICULAR;
+  }
   if (autismStatus === "nao_autista") {
     return MAX_SESSIONS_BY_PATIENT_TYPE.NON_AUTISTIC;
   }
