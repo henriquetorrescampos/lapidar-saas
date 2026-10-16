@@ -440,7 +440,7 @@ export default function Dashboard() {
                       Terapia Ocupacional: Utilizar código{" "}
                       <strong>5.00.00.47-0</strong> (
                       <strong>10 quantidades</strong>) +{" "}
-                      <strong>5.00.01.22-1</strong> (
+                      <strong>5.00.00.05-5</strong> (
                       <strong>1 quantidade</strong>) — representa{" "}
                       <strong>
                         5 atendimentos 40 minutos = (20 minutos + 20 minutos)
