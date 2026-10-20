@@ -48,8 +48,10 @@ export default function Dashboard() {
       let summary = null;
       let balance = 0;
 
-      // Contar pacientes por tipo
-      const patientsArray = Array.isArray(patients) ? patients : [];
+      // Contar somente pacientes ativos
+      const patientsArray = (Array.isArray(patients) ? patients : []).filter(
+        (p) => p.active !== false,
+      );
       const patients_aba = patientsArray.filter((p) =>
         p.patient_type?.includes("ABA"),
       ).length;
