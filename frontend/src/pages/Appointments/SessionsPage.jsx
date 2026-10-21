@@ -116,7 +116,7 @@ const SPECIALTY_COLORS = {
   },
 };
 
-function SessionRow({ specialty, index, sessionItem, onToggle, onDateChange }) {
+function SessionRow({ specialty, index, sessionItem, onToggle, onDateChange, disabled }) {
   return (
     <div className="flex items-center gap-2">
       <input
@@ -124,7 +124,8 @@ function SessionRow({ specialty, index, sessionItem, onToggle, onDateChange }) {
         id={`${specialty}-${index}`}
         checked={sessionItem?.checked || false}
         onChange={() => onToggle(specialty, index)}
-        className="w-4 h-4 text-primary-600 rounded cursor-pointer"
+        disabled={disabled}
+        className="w-4 h-4 text-primary-600 rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
       />
       <div className="flex-1 flex items-center gap-2 flex-wrap">
         <label
@@ -152,6 +153,7 @@ export default function SessionsPage() {
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [sessionsLoading, setSessionsLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -242,8 +244,9 @@ export default function SessionsPage() {
     }
   };
 
-  const loadExistingSessions = async () => {
+  const loadExistingSessions = async (force = false) => {
     if (!selectedPatient) return;
+    if (!force) setSessionsLoading(true);
 
     try {
       const allSessions = await appointmentService.getAllByPatient(selectedPatient.id);
@@ -270,6 +273,8 @@ export default function SessionsPage() {
     } catch (err) {
       console.error("Erro ao carregar sessões:", err);
       setSessions(initializeSessions(selectedPatient));
+    } finally {
+      if (!force) setSessionsLoading(false);
     }
   };
 
@@ -512,7 +517,7 @@ export default function SessionsPage() {
       });
 
       await Promise.all([
-        loadExistingSessions(),
+        loadExistingSessions(true),
         loadSessionHistory(selectedPatient.id),
       ]);
 
@@ -788,6 +793,7 @@ export default function SessionsPage() {
                         sessionItem={getSpecialtySessions(specialty)[index]}
                         onToggle={handleSessionToggle}
                         onDateChange={handleSessionDateChange}
+                        disabled={sessionsLoading || submitting}
                       />
                     ))}
                   </div>
