@@ -504,10 +504,12 @@ export default function Dashboard() {
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
                     <span>
                       <strong>Adulto e Criança:</strong> emitir códigos{" "}
-                      <strong>5.00.00.47-0</strong> (
-                      <strong>10 quantidades</strong>) +{" "}
                       <strong>6.00.20.01-6</strong> (
+                      <strong>10 quantidades</strong>) +{" "}
+                      <strong>6.00.30.02-0</strong> (
                       <strong>10 quantidades</strong>)
+                      <strong>5.00.01.22-1</strong> (
+                      <strong>1 quantidade</strong>)
                     </span>
                   </li>
                   <li className="flex gap-2">
@@ -515,7 +517,7 @@ export default function Dashboard() {
                     <span>
                       <strong>Falta (devolutiva ou sessão):</strong> emitir{" "}
                       <strong>2 quantidades</strong> do código{" "}
-                      <strong>5.00.00.47-0</strong>
+                      <strong>6.00.20.01-6</strong>
                     </span>
                   </li>
                 </ul>
