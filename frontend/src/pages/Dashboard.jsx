@@ -37,6 +37,8 @@ export default function Dashboard() {
   });
   const [loading, setLoading] = useState(true);
   const [showBalance, setShowBalance] = useState(false);
+  const [autisticPatients, setAutisticPatients] = useState([]);
+  const [autisticSearch, setAutisticSearch] = useState("");
 
   useEffect(() => {
     loadStats();
@@ -89,6 +91,10 @@ export default function Dashboard() {
         sp_psicomotricidade: countSpecialty("Psicomotricidade"),
         sp_fisioterapia: countSpecialty("Fisioterapia"),
       });
+
+      setAutisticPatients(
+        patientsArray.filter((p) => p.autism_status !== "nao_autista"),
+      );
     } catch (err) {
       // Erro silenciosamente tratado
     } finally {
@@ -284,6 +290,102 @@ export default function Dashboard() {
           </p>
         </Card>
 
+        {/* Lista de pacientes autistas */}
+        <Card className="mt-6">
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+            <div>
+              <h2 className="text-xl font-bold text-gray-800">
+                Pacientes com Autismo
+              </h2>
+              <p className="text-sm text-gray-500 mt-0.5">
+                {autisticPatients.length} paciente
+                {autisticPatients.length !== 1 ? "s" : ""} ativo
+                {autisticPatients.length !== 1 ? "s" : ""}
+              </p>
+            </div>
+            <input
+              type="text"
+              placeholder="Buscar por nome..."
+              value={autisticSearch}
+              onChange={(e) => setAutisticSearch(e.target.value)}
+              className="input-field w-full md:w-64"
+            />
+          </div>
+
+          {autisticPatients.length === 0 ? (
+            <p className="text-center text-gray-500 py-6">
+              Nenhum paciente autista ativo encontrado.
+            </p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-200">
+                    <th className="text-left py-2 px-3 text-gray-600 font-medium">
+                      Nome
+                    </th>
+                    <th className="text-left py-2 px-3 text-gray-600 font-medium">
+                      Plano
+                    </th>
+                    <th className="text-left py-2 px-3 text-gray-600 font-medium">
+                      Tipo
+                    </th>
+                    <th className="text-left py-2 px-3 text-gray-600 font-medium">
+                      Especialidades
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {autisticPatients
+                    .filter((p) =>
+                      p.name
+                        .toLowerCase()
+                        .includes(autisticSearch.toLowerCase()),
+                    )
+                    .map((p) => (
+                      <tr
+                        key={p.id}
+                        className="border-b border-gray-100 hover:bg-gray-50 transition"
+                      >
+                        <td className="py-2 px-3 font-medium text-gray-800">
+                          {p.name}
+                        </td>
+                        <td className="py-2 px-3 text-gray-600">
+                          {p.health_plan || "—"}
+                        </td>
+                        <td className="py-2 px-3 text-gray-600">
+                          {p.patient_type === "ABA"
+                            ? "ABA"
+                            : p.patient_type === "TERAPIA_ADULTO"
+                              ? "Terapia Adulto"
+                              : p.patient_type || "—"}
+                        </td>
+                        <td className="py-2 px-3 text-gray-600">
+                          {p.specialties
+                            ? p.specialties
+                                .split(",")
+                                .map((s) => s.trim())
+                                .filter(Boolean)
+                                .join(", ")
+                            : "—"}
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+              {autisticPatients.filter((p) =>
+                p.name.toLowerCase().includes(autisticSearch.toLowerCase()),
+              ).length === 0 &&
+                autisticSearch && (
+                  <p className="text-center text-gray-500 py-4">
+                    Nenhum paciente encontrado para &ldquo;{autisticSearch}
+                    &rdquo;.
+                  </p>
+                )}
+            </div>
+          )}
+        </Card>
+
         <div className="mt-8">
           <h2 className="text-xl font-bold text-gray-800 mb-6">
             Guia de Emissão de Guias
@@ -310,20 +412,20 @@ export default function Dashboard() {
                     <span className="text-cyan-500 font-bold mt-0.5">•</span>
                     <span>
                       Utilizar código <strong>5.00.00.47-0</strong> (
-                      <strong>10 quantidades</strong>) +{" "}
+                      <strong>8 quantidades</strong>) +{" "}
                       <strong>5.00.01.22-1</strong> (
                       <strong>1 quantidade</strong>) — representa{" "}
                       <strong>
-                        5 atendimentos 40 minutos = (20 minutos + 20 minutos)
+                        4 atendimentos 40 minutos = (20 minutos + 20 minutos)
                       </strong>
                     </span>
                   </li>
                   <li className="flex gap-2">
                     <span className="text-cyan-500 font-bold mt-0.5">•</span>
                     <span>
-                      <strong>10 quantidades</strong> na guia ={" "}
+                      <strong>8 quantidades</strong> na guia ={" "}
                       <strong>
-                        5 atendimentos 40 minutos = (20 minutos + 20 minutos)
+                        4 atendimentos 40 minutos = (20 minutos + 20 minutos)
                       </strong>
                     </span>
                   </li>
@@ -402,11 +504,11 @@ export default function Dashboard() {
                     <span className="text-teal-500 font-bold mt-0.5">•</span>
                     <span>
                       Psicologia: Utilizar código <strong>5.00.00.47-0</strong>{" "}
-                      (<strong>10 quantidades</strong>) +{" "}
+                      (<strong>8 quantidades</strong>) +{" "}
                       <strong>5.00.01.22-1</strong> (
                       <strong>1 quantidade</strong>) — representa{" "}
                       <strong>
-                        5 atendimentos 40 minutos = (20 minutos + 20 minutos)
+                        4 atendimentos 40 minutos = (20 minutos + 20 minutos)
                       </strong>
                     </span>
                   </li>
@@ -415,11 +517,11 @@ export default function Dashboard() {
                     <span>
                       Fonoaudiologia: Utilizar código{" "}
                       <strong>5.00.00.61-6</strong> (
-                      <strong>10 quantidades</strong>) +{" "}
+                      <strong>8 quantidades</strong>) +{" "}
                       <strong>5.00.00.58-6</strong> (
                       <strong>1 quantidade</strong>) — representa{" "}
                       <strong>
-                        5 atendimentos 40 minutos = (20 minutos + 20 minutos)
+                        4 atendimentos 40 minutos = (20 minutos + 20 minutos)
                       </strong>
                     </span>
                   </li>
@@ -428,11 +530,11 @@ export default function Dashboard() {
                     <span>
                       Psicopedagogia: Utilizar código{" "}
                       <strong>5.00.00.47-0</strong> (
-                      <strong>10 quantidades</strong>) +{" "}
+                      <strong>8 quantidades</strong>) +{" "}
                       <strong>5.00.01.22-1</strong> (
                       <strong>1 quantidade</strong>) — representa{" "}
                       <strong>
-                        5 atendimentos 40 minutos = (20 minutos + 20 minutos)
+                        4 atendimentos 40 minutos = (20 minutos + 20 minutos)
                       </strong>
                     </span>
                   </li>
@@ -441,11 +543,11 @@ export default function Dashboard() {
                     <span>
                       Terapia Ocupacional: Utilizar código{" "}
                       <strong>5.00.00.47-0</strong> (
-                      <strong>10 quantidades</strong>) +{" "}
+                      <strong>8 quantidades</strong>) +{" "}
                       <strong>5.00.00.05-5</strong> (
                       <strong>1 quantidade</strong>) — representa{" "}
                       <strong>
-                        5 atendimentos 40 minutos = (20 minutos + 20 minutos)
+                        4 atendimentos 40 minutos = (20 minutos + 20 minutos)
                       </strong>
                       <span className="text-gray-400 text-sm">
                         (o plano do IPASGO não disponibiliza o código de Terapia
@@ -458,11 +560,11 @@ export default function Dashboard() {
                     <span>
                       Fisioterapia: Utilizar código{" "}
                       <strong>5.00.00.47-0</strong> (
-                      <strong>10 quantidades</strong>) +{" "}
+                      <strong>8 quantidades</strong>) +{" "}
                       <strong>5.00.01.22-1</strong> (
                       <strong>1 quantidade</strong>) — representa{" "}
                       <strong>
-                        5 atendimentos 40 minutos = (20 minutos + 20 minutos)
+                        4 atendimentos 40 minutos = (20 minutos + 20 minutos)
                       </strong>
                       <span className="text-gray-400 text-sm">
                         (ainda estamos em processo de adicionar os códigos de
