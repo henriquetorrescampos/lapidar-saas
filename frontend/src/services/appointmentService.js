@@ -206,4 +206,38 @@ export const appointmentService = {
       throw new Error(err.message || "Erro ao deletar histórico");
     }
   },
+
+  getParticularPayment: async (patientId) => {
+    try {
+      const response = await fetch(
+        `${API_URL}/particular-payments/${patientId}`,
+        { method: "GET", headers: getHeaders() },
+      );
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || error.message || "Erro ao buscar pagamento");
+      }
+      return response.json();
+    } catch (err) {
+      console.error("Erro na requisição:", err);
+      throw new Error(err.message || "Erro ao buscar pagamento");
+    }
+  },
+
+  markParticularAsPaid: async (patientId) => {
+    try {
+      const response = await fetch(
+        `${API_URL}/particular-payments/${patientId}/pay`,
+        { method: "PUT", headers: getHeaders() },
+      );
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || error.message || "Erro ao registrar pagamento");
+      }
+      return response.json();
+    } catch (err) {
+      console.error("Erro na requisição:", err);
+      throw new Error(err.message || "Erro ao registrar pagamento");
+    }
+  },
 };

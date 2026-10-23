@@ -11,6 +11,7 @@ import sessionRoutes from "./modules/sessions/session.routes.js";
 import employeeRoutes from "./modules/employees/employee.routes.js";
 import guideEmissionRoutes from "./modules/guide-emission/guide-emission.routes.js";
 import waitingListRoutes from "./modules/waiting-list/waiting-list.routes.js";
+import particularPaymentRoutes from "./modules/particular-payments/particular-payment.routes.js";
 
 dotenv.config();
 
@@ -52,6 +53,7 @@ app.use("/sessions", sessionRoutes);
 app.use("/employees", employeeRoutes);
 app.use("/guide-emissions", guideEmissionRoutes);
 app.use("/waiting-list", waitingListRoutes);
+app.use("/particular-payments", particularPaymentRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ status: "OK" });

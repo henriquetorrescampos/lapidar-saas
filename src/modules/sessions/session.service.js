@@ -10,6 +10,7 @@ import {
   SESSION_STATUS,
   getMaxSessionsForPatientType,
 } from "../../lib/constants.js";
+import { resetForNewCycle } from "../particular-payments/particular-payment.service.js";
 
 async function ensureSessionHistoryTable(db = prisma) {
   await db.$executeRaw`
@@ -180,7 +181,13 @@ export async function archiveSessionsToHistory(data, currentUser) {
     return date;
   });
 
-  return prisma.$transaction(async (tx) => {
+  // Busca health_plan antes da transação para uso posterior
+  const patientRecord = await prisma.patient.findUnique({
+    where: { id: patientId },
+    select: { health_plan: true },
+  });
+
+  const result = await prisma.$transaction(async (tx) => {
     await ensureSessionHistoryTable(tx);
 
     const [patient, registrant] = await Promise.all([
@@ -249,6 +256,18 @@ export async function archiveSessionsToHistory(data, currentUser) {
 
     return insertedHistory[0];
   });
+
+  // Para pacientes particulares, reset do status de pagamento ao iniciar novo ciclo.
+  // Erro aqui não deve propagar — o archive já foi concluído com sucesso.
+  if (patientRecord?.health_plan?.toUpperCase() === "PARTICULAR") {
+    try {
+      await resetForNewCycle(patientId);
+    } catch (err) {
+      console.error("Erro ao resetar pagamento particular (não crítico):", err);
+    }
+  }
+
+  return result;
 }
 
 export async function deleteSessionHistory(historyId) {
