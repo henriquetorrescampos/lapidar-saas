@@ -89,7 +89,6 @@ export default function Dashboard() {
         sp_psicomotricidade: countSpecialty("Psicomotricidade"),
         sp_fisioterapia: countSpecialty("Fisioterapia"),
       });
-
     } catch (err) {
       // Erro silenciosamente tratado
     } finally {
@@ -285,7 +284,6 @@ export default function Dashboard() {
           </p>
         </Card>
 
-
         <div className="mt-8">
           <h2 className="text-xl font-bold text-gray-800 mb-6">
             Guia de Emissão de Guias
@@ -351,7 +349,7 @@ export default function Dashboard() {
                       <strong className="not-italic">Obs:</strong> Caso o
                       paciente questione e queira fazer 20 minutos, nós fazemos
                       sem problema. Aí é para emitir{" "}
-                      <strong className="not-italic">5 quantidades</strong>.
+                      <strong className="not-italic">4 quantidades</strong>.
                     </span>
                   </li>
                 </ul>
