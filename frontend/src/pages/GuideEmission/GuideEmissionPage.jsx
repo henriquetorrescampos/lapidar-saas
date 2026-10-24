@@ -40,6 +40,15 @@ const ALL_SPECIALTIES = [
   "Fisioterapia",
 ];
 
+const NON_AUTISTIC_CODES = {
+  Psicologia:          { code1: "5.00.00.47-0", code2: "5.00.01.22-1", obs: null },
+  Fonoaudiologia:      { code1: "5.00.00.61-6", code2: "5.00.00.58-6", obs: null },
+  Psicopedagogia:      { code1: "5.00.00.47-0", code2: "5.00.01.22-1", obs: null },
+  "Terapia Ocupacional": { code1: "5.00.00.47-0", code2: "5.00.00.05-5", obs: "O plano do IPASGO não disponibiliza o código de Terapia Ocupacional para todos os beneficiários" },
+  Fisioterapia:        { code1: "5.00.00.47-0", code2: "5.00.01.22-1", obs: "Ainda em verificação" },
+  Psicomotricidade:    { code1: "5.00.00.47-0", code2: "5.00.01.22-1", obs: null },
+};
+
 function formatDays(days) {
   if (!days) return "Sem agenda";
   return days.split(",").filter(Boolean).map((entry) => {
@@ -340,22 +349,48 @@ export default function GuideEmissionPage() {
                                 {noSchedule
                                   ? "Configure os dias na edição do paciente"
                                   : item.autism_status === "nao_autista"
-                                  ? (
-                                    <span className="flex flex-col gap-0.5">
-                                      <span className="text-base font-bold text-gray-700">
-                                        {formatDays(item.schedule_days)} —{" "}
-                                        <span className="text-cyan-700">5.00.00.47-0</span> (10 qtd) +{" "}
-                                        <span className="text-cyan-700">5.00.01.22-1</span> (1 qtd) = 5 atendimentos
-                                      </span>
-                                      <span className="text-xs text-gray-500">
-                                        Obs: se houver <strong>2 especialidades</strong> na mesma guia, adicionar{" "}
-                                        <strong className="text-cyan-700">5.00.00.58-6</strong> (1 qtd)
-                                      </span>
-                                    </span>
-                                  )
+                                  ? (() => {
+                                      const codes = NON_AUTISTIC_CODES[item.specialty];
+                                      if (!codes) return (
+                                        <span className="text-base font-bold text-gray-700">
+                                          {formatDays(item.schedule_days)} — 4 atendimentos
+                                        </span>
+                                      );
+                                      return (
+                                        <span className="flex flex-col gap-0.5">
+                                          <span className="text-base font-bold text-gray-700">
+                                            {formatDays(item.schedule_days)} —{" "}
+                                            <span className="text-blue-600 font-semibold">{codes.code1}</span> (8 qtd) +{" "}
+                                            <span className="text-blue-600 font-semibold">{codes.code2}</span> (1 qtd) = 4 atendimentos
+                                          </span>
+                                          {codes.obs && (
+                                            <span className="text-xs text-amber-600">
+                                              Obs: {codes.obs}
+                                            </span>
+                                          )}
+                                        </span>
+                                      );
+                                    })()
                                   : (
-                                    <span className="text-xl font-bold text-gray-700">
-                                      {formatDays(item.schedule_days)} — {item.quantity} sessões
+                                    <span className="flex flex-col gap-0.5">
+                                      <span className="text-xl font-bold text-gray-700">
+                                        {formatDays(item.schedule_days)} — {item.quantity} sessões
+                                      </span>
+                                      {item.specialty === "Terapia Ocupacional" && (
+                                        <span className="text-xs text-gray-500">
+                                          1 qtd <span className="text-blue-600 font-semibold">5.00.00.05-5</span> + {item.quantity} qtd <span className="text-blue-600 font-semibold">0.00.40.04-5</span>
+                                        </span>
+                                      )}
+                                      {item.specialty === "Fonoaudiologia" && (
+                                        <span className="text-xs text-gray-500">
+                                          {item.quantity} qtd <span className="text-blue-600 font-semibold">0.00.11.18-5</span> + 1 qtd <span className="text-blue-600 font-semibold">5.00.00.58-6</span>
+                                        </span>
+                                      )}
+                                      {item.specialty === "Psicologia" && (
+                                        <span className="text-xs text-gray-500">
+                                          {item.quantity} qtd <span className="text-blue-600 font-semibold">0.00.11.19-3</span> + 1 qtd <span className="text-blue-600 font-semibold">5.00.01.22-1</span>
+                                        </span>
+                                      )}
                                     </span>
                                   )}
                               </p>
