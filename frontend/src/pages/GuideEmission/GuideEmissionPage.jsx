@@ -376,7 +376,7 @@ export default function GuideEmissionPage() {
                                       <span className="text-xl font-bold text-gray-700">
                                         {formatDays(item.schedule_days)} — {item.quantity} sessões
                                       </span>
-                                      {item.specialty === "Terapia Ocupacional" && (
+                                      {(item.specialty === "Terapia Ocupacional" || item.specialty === "Psicomotricidade" || item.specialty === "Fisioterapia") && (
                                         <span className="text-xs text-gray-500">
                                           1 qtd <span className="text-blue-600 font-semibold">5.00.00.05-5</span> + {item.quantity} qtd <span className="text-blue-600 font-semibold">0.00.40.04-5</span>
                                         </span>
