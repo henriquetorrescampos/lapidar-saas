@@ -508,8 +508,8 @@ export default function Dashboard() {
                       <strong>10 quantidades</strong>) +{" "}
                       <strong>6.00.30.02-0</strong> (
                       <strong>10 quantidades</strong>)
-                      <strong>5.00.01.22-1</strong> (
-                      <strong>1 quantidade</strong>)
+                      <strong> 5.00.01.22-1</strong> (
+                      <strong>+ 1 quantidade</strong>)
                     </span>
                   </li>
                   <li className="flex gap-2">
