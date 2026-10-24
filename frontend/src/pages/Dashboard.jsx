@@ -310,9 +310,13 @@ export default function Dashboard() {
                     <span className="text-cyan-500 font-bold mt-0.5">•</span>
                     <span>
                       Utilizar código{" "}
-                      <span className="text-blue-600 font-semibold">5.00.00.47-0</span>{" "}
+                      <span className="text-blue-600 font-semibold">
+                        5.00.00.47-0
+                      </span>{" "}
                       (<strong>8 quantidades</strong>) +{" "}
-                      <span className="text-blue-600 font-semibold">5.00.01.22-1</span>{" "}
+                      <span className="text-blue-600 font-semibold">
+                        5.00.01.22-1
+                      </span>{" "}
                       (<strong>1 quantidade</strong>) — representa{" "}
                       <strong>
                         4 atendimentos 40 minutos = (20 minutos + 20 minutos)
@@ -341,13 +345,21 @@ export default function Dashboard() {
                       Para atendimentos avulsos (de acordo com a
                       disponibilidade) será <strong>2 quantidades</strong> do
                       código{" "}
-                      <span className="text-blue-600 font-semibold">6.00.20.01-6</span>{" "}
+                      <span className="text-blue-600 font-semibold">
+                        6.00.20.01-6
+                      </span>{" "}
                       ou{" "}
-                      <span className="text-blue-600 font-semibold">6.00.30.02-0</span>{" "}
+                      <span className="text-blue-600 font-semibold">
+                        6.00.30.02-0
+                      </span>{" "}
                       código{" "}
-                      <span className="text-blue-600 font-semibold">6.00.20.01-6</span>{" "}
+                      <span className="text-blue-600 font-semibold">
+                        6.00.20.01-6
+                      </span>{" "}
                       + <strong>1 quantidade</strong>{" "}
-                      <span className="text-blue-600 font-semibold">5.00.01.22-1</span>
+                      <span className="text-blue-600 font-semibold">
+                        5.00.01.22-1
+                      </span>
                     </span>
                   </li>
                   <li className="flex gap-2">
@@ -395,17 +407,23 @@ export default function Dashboard() {
                     <span className="text-sm text-gray-500 italic">
                       <strong className="not-italic">Obs:</strong> Emitir guia
                       de consulta de acordo com a especialidade:{" "}
-                      <strong className="not-italic">Terapia Ocupacional</strong>
+                      <strong className="not-italic">
+                        Terapia Ocupacional
+                      </strong>
                       : 1 quantidade{" "}
-                      <span className="text-blue-600 font-semibold not-italic">5.00.00.05-5</span>{" "}
-                      —{" "}
-                      <strong className="not-italic">Fonoaudiologia</strong>: 1
+                      <span className="text-blue-600 font-semibold not-italic">
+                        5.00.00.05-5
+                      </span>{" "}
+                      — <strong className="not-italic">Fonoaudiologia</strong>:
+                      1 quantidade{" "}
+                      <span className="text-blue-600 font-semibold not-italic">
+                        5.00.00.58-6
+                      </span>{" "}
+                      — <strong className="not-italic">Psicologia</strong>: 1
                       quantidade{" "}
-                      <span className="text-blue-600 font-semibold not-italic">5.00.00.58-6</span>{" "}
-                      —{" "}
-                      <strong className="not-italic">Psicologia</strong>: 1
-                      quantidade{" "}
-                      <span className="text-blue-600 font-semibold not-italic">5.00.01.22-1</span>
+                      <span className="text-blue-600 font-semibold not-italic">
+                        5.00.01.22-1
+                      </span>
                     </span>
                   </li>
                 </ul>
@@ -427,9 +445,13 @@ export default function Dashboard() {
                     <span className="text-teal-500 font-bold mt-0.5">•</span>
                     <span>
                       Psicologia: Utilizar código{" "}
-                      <span className="text-blue-600 font-semibold">5.00.00.47-0</span>{" "}
+                      <span className="text-blue-600 font-semibold">
+                        5.00.00.47-0
+                      </span>{" "}
                       (<strong>8 quantidades</strong>) +{" "}
-                      <span className="text-blue-600 font-semibold">5.00.01.22-1</span>{" "}
+                      <span className="text-blue-600 font-semibold">
+                        5.00.01.22-1
+                      </span>{" "}
                       (<strong>1 quantidade</strong>) — representa{" "}
                       <strong>
                         4 atendimentos 40 minutos = (20 minutos + 20 minutos)
@@ -440,12 +462,22 @@ export default function Dashboard() {
                     <span className="text-teal-500 font-bold mt-0.5">•</span>
                     <span>
                       Fonoaudiologia: Utilizar código{" "}
-                      <span className="text-blue-600 font-semibold">5.00.00.61-6</span>{" "}
+                      <span className="text-blue-600 font-semibold">
+                        5.00.00.61-6
+                      </span>{" "}
                       (<strong>8 quantidades</strong>) +{" "}
-                      <span className="text-blue-600 font-semibold">5.00.00.58-6</span>{" "}
+                      <span className="text-blue-600 font-semibold">
+                        6.00.30.02-0
+                      </span>{" "}
+                      (<strong>8 quantidade</strong>) — representa{" "}
+                      <span className="text-blue-600 font-semibold">
+                        5.00.00.58-6
+                      </span>{" "}
                       (<strong>1 quantidade</strong>) — representa{" "}
                       <strong>
                         4 atendimentos 40 minutos = (20 minutos + 20 minutos)
+                        Fonoaudiologa realiza vários procedimentos na sessão de
+                        fonoaudiologia
                       </strong>
                     </span>
                   </li>
@@ -453,9 +485,13 @@ export default function Dashboard() {
                     <span className="text-teal-500 font-bold mt-0.5">•</span>
                     <span>
                       Psicopedagogia: Utilizar código{" "}
-                      <span className="text-blue-600 font-semibold">5.00.00.47-0</span>{" "}
+                      <span className="text-blue-600 font-semibold">
+                        5.00.00.47-0
+                      </span>{" "}
                       (<strong>8 quantidades</strong>) +{" "}
-                      <span className="text-blue-600 font-semibold">5.00.01.22-1</span>{" "}
+                      <span className="text-blue-600 font-semibold">
+                        5.00.01.22-1
+                      </span>{" "}
                       (<strong>1 quantidade</strong>) — representa{" "}
                       <strong>
                         4 atendimentos 40 minutos = (20 minutos + 20 minutos)
@@ -466,9 +502,13 @@ export default function Dashboard() {
                     <span className="text-teal-500 font-bold mt-0.5">•</span>
                     <span>
                       Terapia Ocupacional: Utilizar código{" "}
-                      <span className="text-blue-600 font-semibold">5.00.00.47-0</span>{" "}
+                      <span className="text-blue-600 font-semibold">
+                        5.00.00.47-0
+                      </span>{" "}
                       (<strong>8 quantidades</strong>) +{" "}
-                      <span className="text-blue-600 font-semibold">5.00.00.05-5</span>{" "}
+                      <span className="text-blue-600 font-semibold">
+                        5.00.00.05-5
+                      </span>{" "}
                       (<strong>1 quantidade</strong>) — representa{" "}
                       <strong>
                         4 atendimentos 40 minutos = (20 minutos + 20 minutos)
@@ -483,9 +523,13 @@ export default function Dashboard() {
                     <span className="text-teal-500 font-bold mt-0.5">•</span>
                     <span>
                       Fisioterapia: Utilizar código{" "}
-                      <span className="text-blue-600 font-semibold">5.00.00.47-0</span>{" "}
+                      <span className="text-blue-600 font-semibold">
+                        5.00.00.47-0
+                      </span>{" "}
                       (<strong>8 quantidades</strong>) +{" "}
-                      <span className="text-blue-600 font-semibold">5.00.01.22-1</span>{" "}
+                      <span className="text-blue-600 font-semibold">
+                        5.00.01.22-1
+                      </span>{" "}
                       (<strong>1 quantidade</strong>) — representa{" "}
                       <strong>
                         4 atendimentos 40 minutos = (20 minutos + 20 minutos)
@@ -530,11 +574,17 @@ export default function Dashboard() {
                     <span className="text-amber-500 font-bold mt-0.5">•</span>
                     <span>
                       <strong>Adulto e Criança:</strong> emitir códigos{" "}
-                      <span className="text-blue-600 font-semibold">6.00.20.01-6</span>{" "}
+                      <span className="text-blue-600 font-semibold">
+                        6.00.20.01-6
+                      </span>{" "}
                       (<strong>10 quantidades</strong>) +{" "}
-                      <span className="text-blue-600 font-semibold">6.00.30.02-0</span>{" "}
+                      <span className="text-blue-600 font-semibold">
+                        6.00.30.02-0
+                      </span>{" "}
                       (<strong>10 quantidades</strong>){" "}
-                      <span className="text-blue-600 font-semibold">5.00.01.22-1</span>{" "}
+                      <span className="text-blue-600 font-semibold">
+                        5.00.01.22-1
+                      </span>{" "}
                       (<strong>+ 1 quantidade</strong>)
                     </span>
                   </li>
@@ -543,7 +593,9 @@ export default function Dashboard() {
                     <span>
                       <strong>Falta (devolutiva ou sessão):</strong> emitir{" "}
                       <strong>2 quantidades</strong> do código{" "}
-                      <span className="text-blue-600 font-semibold">6.00.20.01-6</span>
+                      <span className="text-blue-600 font-semibold">
+                        6.00.20.01-6
+                      </span>
                     </span>
                   </li>
                 </ul>
@@ -574,7 +626,10 @@ export default function Dashboard() {
                       Emitir código de{" "}
                       <strong>avaliação neuropsicológica</strong> — quantidade{" "}
                       <strong>8</strong> código{" "}
-                      <span className="text-blue-600 font-semibold">80010040</span>.
+                      <span className="text-blue-600 font-semibold">
+                        80010040
+                      </span>
+                      .
                     </span>
                   </li>
                   <li className="flex gap-2">
@@ -589,7 +644,9 @@ export default function Dashboard() {
                     <span>
                       Emitir guia de <strong>sessão de psicologia</strong> —
                       quantidade <strong>4</strong> código{" "}
-                      <span className="text-blue-600 font-semibold">010016</span>
+                      <span className="text-blue-600 font-semibold">
+                        010016
+                      </span>
                     </span>
                   </li>
                   <li className="flex gap-2">
@@ -597,7 +654,9 @@ export default function Dashboard() {
                     <span>
                       <strong>Falta (devolutiva ou sessão):</strong> cobrar{" "}
                       <strong>2 quantidades</strong> do código{" "}
-                      <span className="text-blue-600 font-semibold">010016</span>
+                      <span className="text-blue-600 font-semibold">
+                        010016
+                      </span>
                     </span>
                   </li>
                 </ul>
