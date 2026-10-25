@@ -475,9 +475,9 @@ export default function Dashboard() {
                       </span>{" "}
                       (<strong>1 quantidade</strong>) — representa{" "}
                       <strong>
-                        4 atendimentos 40 minutos = (20 minutos + 20 minutos)
-                        Fonoaudiologa realiza vários procedimentos na sessão de
-                        fonoaudiologia
+                        4 atendimentos 40 minutos = (20 minutos + 20 minutos) Os
+                        dois códigos são procedimentos que a Fono realiza dentro
+                        da sessão
                       </strong>
                     </span>
                   </li>
