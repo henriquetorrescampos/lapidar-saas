@@ -367,6 +367,9 @@ export default function Dashboard() {
                           ×1
                         </span>
                       </span>
+                      <span className="text-sm text-cyan-700 font-bold">
+                        = 1 atendimento
+                      </span>
                     </div>
                   </div>
                   <div className="py-3 pb-0">
