@@ -298,8 +298,9 @@ export default function Dashboard() {
               <div className="flex-1 h-px bg-gray-200" />
             </div>
             <p className="text-base font-bold text-gray-700 mb-4">
-              ℹ O código de consulta emitimos sempre para que a profissional
-              realize a evolução do paciente
+              ℹ Em caso de questionamento sobre código de consulta: O código de
+              consulta emitimos sempre para que a profissional realize a
+              evolução do paciente
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card>
