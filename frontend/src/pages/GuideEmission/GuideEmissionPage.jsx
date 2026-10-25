@@ -380,7 +380,10 @@ export default function GuideEmissionPage() {
                                       <span className="text-xl font-bold text-gray-700">
                                         {formatDays(item.schedule_days)} — {item.quantity} sessões
                                       </span>
-                                      {item.patient_type?.includes("TERAPIA_ADULTO") && (
+                                      {item.autism_status === "autista" && item.birth_date && (() => {
+                                        const age = Math.floor((new Date() - new Date(item.birth_date)) / (365.25 * 24 * 60 * 60 * 1000));
+                                        return age >= 18;
+                                      })() && (
                                         <span className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1 italic">
                                           2 qtd = 1 atendimento (20 + 20 = 40 min) — {item.quantity} sessões → <strong>{item.quantity * 2} quantidades</strong> na guia
                                         </span>
