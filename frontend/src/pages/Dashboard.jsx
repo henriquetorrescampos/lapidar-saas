@@ -463,7 +463,7 @@ export default function Dashboard() {
                     <span>
                       Fonoaudiologia: Utilizar código{" "}
                       <span className="text-blue-600 font-semibold">
-                        5.00.00.61-6
+                        6.00.20.01-6
                       </span>{" "}
                       (<strong>8 quantidades</strong>) +{" "}
                       <span className="text-blue-600 font-semibold">
@@ -509,13 +509,19 @@ export default function Dashboard() {
                       <span className="text-blue-600 font-semibold">
                         5.00.00.05-5
                       </span>{" "}
-                      (<strong>1 quantidade</strong>) — representa{" "}
+                      (<strong>1 quantidade</strong>){" "}
+                      <span className="text-blue-600 font-semibold">
+                        2.01.03.63-8
+                      </span>{" "}
+                      (<strong>8 quantidade</strong>) — representa{" "}
                       <strong>
                         4 atendimentos 40 minutos = (20 minutos + 20 minutos)
                       </strong>
                       <span className="text-gray-400 text-sm">
                         (o plano do IPASGO não disponibiliza o código de Terapia
-                        Ocupacional para todos os beneficiários)
+                        Ocupacional para todos os beneficiários - O procedimento
+                        labirintite é um procedimento que a TO realiza na
+                        sessão)
                       </span>
                     </span>
                   </li>
@@ -528,7 +534,11 @@ export default function Dashboard() {
                       </span>{" "}
                       (<strong>8 quantidades</strong>) +{" "}
                       <span className="text-blue-600 font-semibold">
-                        5.00.01.22-1
+                        2.01.03.63-8
+                      </span>{" "}
+                      (<strong>8 quantidades</strong>) +{" "}
+                      <span className="text-blue-600 font-semibold">
+                        5.00.00.05-5
                       </span>{" "}
                       (<strong>1 quantidade</strong>) — representa{" "}
                       <strong>

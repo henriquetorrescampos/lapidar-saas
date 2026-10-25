@@ -41,12 +41,12 @@ const ALL_SPECIALTIES = [
 ];
 
 const NON_AUTISTIC_CODES = {
-  Psicologia:          { code1: "5.00.00.47-0", code2: "5.00.01.22-1", obs: null },
-  Fonoaudiologia:      { code1: "5.00.00.61-6", code2: "5.00.00.58-6", obs: null },
-  Psicopedagogia:      { code1: "5.00.00.47-0", code2: "5.00.01.22-1", obs: null },
-  "Terapia Ocupacional": { code1: "5.00.00.47-0", code2: "5.00.00.05-5", obs: "O plano do IPASGO não disponibiliza o código de Terapia Ocupacional para todos os beneficiários" },
-  Fisioterapia:        { code1: "5.00.00.47-0", code2: "5.00.01.22-1", obs: "Ainda em verificação" },
-  Psicomotricidade:    { code1: "5.00.00.47-0", code2: "5.00.01.22-1", obs: null },
+  Psicologia:            { codes: [{ c: "5.00.00.47-0", q: "8" }, { c: "5.00.01.22-1", q: "1" }], obs: null },
+  Fonoaudiologia:        { codes: [{ c: "6.00.20.01-6", q: "8" }, { c: "6.00.30.02-0", q: "8" }, { c: "5.00.00.58-6", q: "1" }], obs: null },
+  Psicopedagogia:        { codes: [{ c: "5.00.00.47-0", q: "8" }, { c: "5.00.01.22-1", q: "1" }], obs: null },
+  "Terapia Ocupacional": { codes: [{ c: "5.00.00.47-0", q: "8" }, { c: "5.00.00.05-5", q: "1" }, { c: "2.01.03.63-8", q: "8" }], obs: "O plano do IPASGO não disponibiliza o código de Terapia Ocupacional para todos os beneficiários" },
+  Fisioterapia:          { codes: [{ c: "5.00.00.47-0", q: "8" }, { c: "2.01.03.63-8", q: "8" }, { c: "5.00.00.05-5", q: "1" }], obs: "Ainda estamos em processo de adicionar os códigos de Fisioterapia no nosso sistema do IPASGO" },
+  Psicomotricidade:      { codes: [{ c: "5.00.00.47-0", q: "8" }, { c: "5.00.01.22-1", q: "1" }], obs: null },
 };
 
 function formatDays(days) {
@@ -360,8 +360,12 @@ export default function GuideEmissionPage() {
                                         <span className="flex flex-col gap-0.5">
                                           <span className="text-base font-bold text-gray-700">
                                             {formatDays(item.schedule_days)} —{" "}
-                                            <span className="text-blue-600 font-semibold">{codes.code1}</span> (8 qtd) +{" "}
-                                            <span className="text-blue-600 font-semibold">{codes.code2}</span> (1 qtd) = 4 atendimentos
+                                            {codes.codes.map((entry, i) => (
+                                              <span key={entry.c}>
+                                                <span className="text-blue-600 font-semibold">{entry.c}</span> ({entry.q} qtd){i < codes.codes.length - 1 ? " + " : ""}
+                                              </span>
+                                            ))}
+                                            {" "}= 4 atendimentos
                                           </span>
                                           {codes.obs && (
                                             <span className="text-xs text-amber-600">
