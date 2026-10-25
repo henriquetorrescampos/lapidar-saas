@@ -375,36 +375,38 @@ export default function GuideEmissionPage() {
                                         </span>
                                       );
                                     })()
-                                  : (
-                                    <span className="flex flex-col gap-0.5">
-                                      <span className="text-xl font-bold text-gray-700">
-                                        {formatDays(item.schedule_days)} — {item.quantity} sessões
+                                  : (() => {
+                                    const isAdultAutistic = item.autism_status === "autista" && item.birth_date &&
+                                      Math.floor((new Date() - new Date(item.birth_date)) / (365.25 * 24 * 60 * 60 * 1000)) >= 18;
+                                    const effectiveQty = isAdultAutistic ? item.quantity * 2 : item.quantity;
+                                    return (
+                                      <span className="flex flex-col gap-0.5">
+                                        <span className="text-xl font-bold text-gray-700">
+                                          {formatDays(item.schedule_days)} — {item.quantity} sessões
+                                        </span>
+                                        {isAdultAutistic && (
+                                          <span className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1 italic">
+                                            2 qtd = 1 atendimento (20 + 20 = 40 min) — {item.quantity} sessões → <strong>{effectiveQty} quantidades</strong> na guia
+                                          </span>
+                                        )}
+                                        {(item.specialty === "Terapia Ocupacional" || item.specialty === "Psicomotricidade" || item.specialty === "Fisioterapia") && (
+                                          <span className="text-xs text-gray-500">
+                                            1 qtd <span className="text-blue-600 font-semibold">5.00.00.05-5</span> + {effectiveQty} qtd <span className="text-blue-600 font-semibold">0.00.40.04-5</span>
+                                          </span>
+                                        )}
+                                        {item.specialty === "Fonoaudiologia" && (
+                                          <span className="text-xs text-gray-500">
+                                            {effectiveQty} qtd <span className="text-blue-600 font-semibold">0.00.11.18-5</span> + 1 qtd <span className="text-blue-600 font-semibold">5.00.00.58-6</span>
+                                          </span>
+                                        )}
+                                        {item.specialty === "Psicologia" && (
+                                          <span className="text-xs text-gray-500">
+                                            {effectiveQty} qtd <span className="text-blue-600 font-semibold">0.00.11.19-3</span> + 1 qtd <span className="text-blue-600 font-semibold">5.00.01.22-1</span>
+                                          </span>
+                                        )}
                                       </span>
-                                      {item.autism_status === "autista" && item.birth_date && (() => {
-                                        const age = Math.floor((new Date() - new Date(item.birth_date)) / (365.25 * 24 * 60 * 60 * 1000));
-                                        return age >= 18;
-                                      })() && (
-                                        <span className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1 italic">
-                                          2 qtd = 1 atendimento (20 + 20 = 40 min) — {item.quantity} sessões → <strong>{item.quantity * 2} quantidades</strong> na guia
-                                        </span>
-                                      )}
-                                      {(item.specialty === "Terapia Ocupacional" || item.specialty === "Psicomotricidade" || item.specialty === "Fisioterapia") && (
-                                        <span className="text-xs text-gray-500">
-                                          1 qtd <span className="text-blue-600 font-semibold">5.00.00.05-5</span> + {item.quantity} qtd <span className="text-blue-600 font-semibold">0.00.40.04-5</span>
-                                        </span>
-                                      )}
-                                      {item.specialty === "Fonoaudiologia" && (
-                                        <span className="text-xs text-gray-500">
-                                          {item.quantity} qtd <span className="text-blue-600 font-semibold">0.00.11.18-5</span> + 1 qtd <span className="text-blue-600 font-semibold">5.00.00.58-6</span>
-                                        </span>
-                                      )}
-                                      {item.specialty === "Psicologia" && (
-                                        <span className="text-xs text-gray-500">
-                                          {item.quantity} qtd <span className="text-blue-600 font-semibold">0.00.11.19-3</span> + 1 qtd <span className="text-blue-600 font-semibold">5.00.01.22-1</span>
-                                        </span>
-                                      )}
-                                    </span>
-                                  )}
+                                    );
+                                  })()}
                               </p>
                             </div>
                           </div>
