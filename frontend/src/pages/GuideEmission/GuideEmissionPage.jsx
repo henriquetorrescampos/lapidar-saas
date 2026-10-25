@@ -382,11 +382,11 @@ export default function GuideEmissionPage() {
                                     return (
                                       <span className="flex flex-col gap-0.5">
                                         <span className="text-xl font-bold text-gray-700">
-                                          {formatDays(item.schedule_days)} — {item.quantity} sessões
+                                          {formatDays(item.schedule_days)} — {effectiveQty} sessões
                                         </span>
                                         {isAdultAutistic && (
                                           <span className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1 italic">
-                                            2 qtd = 1 atendimento (20 + 20 = 40 min) — {item.quantity} sessões → <strong>{effectiveQty} quantidades</strong> na guia
+                                            2 qtd = 1 atendimento (20 + 20 = 40 min) — {item.quantity} atendimentos → <strong>{effectiveQty} quantidades</strong> na guia
                                           </span>
                                         )}
                                         {(item.specialty === "Terapia Ocupacional" || item.specialty === "Psicomotricidade" || item.specialty === "Fisioterapia") && (
