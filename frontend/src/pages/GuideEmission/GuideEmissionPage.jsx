@@ -384,24 +384,19 @@ export default function GuideEmissionPage() {
                                         <span className="text-xl font-bold text-gray-700">
                                           {formatDays(item.schedule_days)} — {effectiveQty} sessões
                                         </span>
-                                        {isAdultAutistic && (
-                                          <span className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1 italic">
-                                            2 qtd = 1 atendimento (20 + 20 = 40 min) — {item.quantity} atendimentos → <strong>{effectiveQty} quantidades</strong> na guia
-                                          </span>
-                                        )}
                                         {(item.specialty === "Terapia Ocupacional" || item.specialty === "Psicomotricidade" || item.specialty === "Fisioterapia") && (
-                                          <span className="text-xs text-gray-500">
-                                            1 qtd <span className="text-blue-600 font-semibold">5.00.00.05-5</span> + {effectiveQty} qtd <span className="text-blue-600 font-semibold">0.00.40.04-5</span>
+                                          <span className="text-base font-semibold text-gray-700">
+                                            1 qtd <span className="text-blue-600">5.00.00.05-5</span> + {effectiveQty} qtd <span className="text-blue-600">0.00.40.04-5</span>
                                           </span>
                                         )}
                                         {item.specialty === "Fonoaudiologia" && (
-                                          <span className="text-xs text-gray-500">
-                                            {effectiveQty} qtd <span className="text-blue-600 font-semibold">0.00.11.18-5</span> + 1 qtd <span className="text-blue-600 font-semibold">5.00.00.58-6</span>
+                                          <span className="text-base font-semibold text-gray-700">
+                                            {effectiveQty} qtd <span className="text-blue-600">0.00.11.18-5</span> + 1 qtd <span className="text-blue-600">5.00.00.58-6</span>
                                           </span>
                                         )}
                                         {item.specialty === "Psicologia" && (
-                                          <span className="text-xs text-gray-500">
-                                            {effectiveQty} qtd <span className="text-blue-600 font-semibold">0.00.11.19-3</span> + 1 qtd <span className="text-blue-600 font-semibold">5.00.01.22-1</span>
+                                          <span className="text-base font-semibold text-gray-700">
+                                            {effectiveQty} qtd <span className="text-blue-600">0.00.11.19-3</span> + 1 qtd <span className="text-blue-600">5.00.01.22-1</span>
                                           </span>
                                         )}
                                       </span>
