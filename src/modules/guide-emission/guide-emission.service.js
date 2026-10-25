@@ -107,7 +107,17 @@ export async function getGuideEmissions(month, year) {
   const [abaPatients, iamescPatients] = await Promise.all([
     prisma.patient.findMany({
       where: {
-        patient_type: { contains: "ABA" },
+        OR: [
+          { patient_type: { contains: "ABA" } },
+          {
+            patient_type: { contains: "TERAPIA_ADULTO" },
+            NOT: [
+              { autism_status: "nao_autista" },
+              { autism_status: "" },
+              { autism_status: null },
+            ],
+          },
+        ],
         health_plan: { notIn: ["PARTICULAR", "IAMESC"] },
         active: true,
       },
@@ -152,6 +162,7 @@ export async function getGuideEmissions(month, year) {
         patient_name: patient.name,
         health_plan: patient.health_plan,
         autism_status: patient.autism_status || "",
+        patient_type: patient.patient_type || "",
         specialty,
         schedule_days: schedule?.days || null,
         quantity: calculateSessions(schedule?.days, dayCountMap),

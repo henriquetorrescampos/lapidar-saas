@@ -380,6 +380,11 @@ export default function GuideEmissionPage() {
                                       <span className="text-xl font-bold text-gray-700">
                                         {formatDays(item.schedule_days)} — {item.quantity} sessões
                                       </span>
+                                      {item.patient_type?.includes("TERAPIA_ADULTO") && (
+                                        <span className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1 italic">
+                                          2 qtd = 1 atendimento (20 + 20 = 40 min) — {item.quantity} sessões → <strong>{item.quantity * 2} quantidades</strong> na guia
+                                        </span>
+                                      )}
                                       {(item.specialty === "Terapia Ocupacional" || item.specialty === "Psicomotricidade" || item.specialty === "Fisioterapia") && (
                                         <span className="text-xs text-gray-500">
                                           1 qtd <span className="text-blue-600 font-semibold">5.00.00.05-5</span> + {item.quantity} qtd <span className="text-blue-600 font-semibold">0.00.40.04-5</span>

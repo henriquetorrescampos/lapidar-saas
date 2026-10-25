@@ -298,194 +298,236 @@ export default function Dashboard() {
               <div className="flex-1 h-px bg-gray-200" />
             </div>
             <p className="text-sm text-gray-500 italic mb-4">
-              ℹ O código de consulta emitimos sempre para que a profissional realize a evolução do paciente
+              ℹ O código de consulta emitimos sempre para que a profissional
+              realize a evolução do paciente
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card>
-                <div className="flex items-center gap-2 mb-3">
+                <div className="flex items-center gap-2 mb-4">
                   <div className="w-3 h-3 rounded-full bg-cyan-500" />
                   <h3 className="font-semibold text-gray-800">
-                    Terapia Adulto — Pacientes{" "}
+                    Terapia Adulto — Pacientes
                   </h3>
                 </div>
-                <ul className="space-y-2 text-base text-gray-600">
-                  <li className="flex gap-2">
-                    <span className="text-cyan-500 font-bold mt-0.5">•</span>
-                    <span>
-                      Utilizar código{" "}
-                      <span className="text-blue-600 font-semibold">
-                        5.00.00.47-0
-                      </span>{" "}
-                      (<strong>8 quantidades</strong>) +{" "}
-                      <span className="text-blue-600 font-semibold">
-                        5.00.01.22-1
-                      </span>{" "}
-                      (<strong>1 quantidade</strong>) — representa{" "}
-                      <strong>
-                        4 atendimentos 40 minutos = (20 minutos + 20 minutos)
-                      </strong>
+                <div className="divide-y divide-gray-100">
+                  <div className="py-3 pt-0">
+                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                      Sessão padrão (40 min)
                     </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-cyan-500 font-bold mt-0.5">•</span>
-                    <span>
-                      <strong>8 quantidades</strong> na guia ={" "}
-                      <strong>
-                        4 atendimentos 40 minutos = (20 minutos + 20 minutos)
-                      </strong>
-                    </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-cyan-500 font-bold mt-0.5">•</span>
-                    <span>
-                      Emitir sempre na <strong>última sessão</strong> para
-                      reservar o horário do paciente
-                    </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-cyan-500 font-bold mt-0.5">•</span>
-                    <span>
-                      Para atendimentos avulsos (de acordo com a
-                      disponibilidade) será <strong>2 quantidades</strong> do
-                      código{" "}
-                      <span className="text-blue-600 font-semibold">
-                        6.00.20.01-6
-                      </span>{" "}
-                      ou{" "}
-                      <span className="text-blue-600 font-semibold">
-                        6.00.30.02-0
-                      </span>{" "}
-                      código{" "}
-                      <span className="text-blue-600 font-semibold">
-                        6.00.20.01-6
-                      </span>{" "}
-                      + <strong>1 quantidade</strong>{" "}
-                      <span className="text-blue-600 font-semibold">
-                        5.00.01.22-1
+                    <div className="flex flex-wrap gap-2 items-center mt-2">
+                      <span className="flex items-center gap-1.5">
+                        <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
+                          5.00.00.47-0
+                        </span>
+                        <span className="text-sm font-bold text-gray-700">
+                          ×8
+                        </span>
+                        <span className="text-gray-400 text-sm font-bold">
+                          +
+                        </span>
                       </span>
+                      <span className="flex items-center gap-1.5">
+                        <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
+                          5.00.01.22-1
+                        </span>
+                        <span className="text-sm font-bold text-gray-700">
+                          ×1
+                        </span>
+                      </span>
+                      <span className="text-sm text-cyan-700 font-bold">
+                        = 4 atend.
+                      </span>
+                    </div>
+                    <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1 mt-2 italic">
+                      Emitir sempre na última sessão para reservar o horário do
+                      paciente
+                    </p>
+                  </div>
+                  <div className="py-3">
+                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                      Atendimento avulso
                     </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-cyan-500 font-bold mt-0.5">ℹ</span>
-                    <span className="text-sm text-gray-500 italic">
-                      <strong className="not-italic">Obs:</strong> Caso o
-                      paciente questione e queira fazer 20 minutos, nós fazemos
-                      sem problema. Aí é para emitir{" "}
-                      <strong className="not-italic">4 quantidades</strong>.
-                    </span>
-                  </li>
-                </ul>
+                    <div className="flex flex-wrap gap-2 items-center mt-2">
+                      <span className="flex items-center gap-1.5">
+                        <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
+                          6.00.20.01-6
+                        </span>
+                        <span className="text-sm font-bold text-gray-700">
+                          ×2
+                        </span>
+                        <span className="text-gray-400 text-sm font-bold">
+                          +
+                        </span>
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
+                          5.00.01.22-1
+                        </span>
+                        <span className="text-sm font-bold text-gray-700">
+                          ×1
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                  <div className="py-3 pb-0">
+                    <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1 italic">
+                      Caso o paciente queira fazer 20 minutos, emitir{" "}
+                      <strong>4 quantidades</strong>
+                    </p>
+                  </div>
+                </div>
               </Card>
 
               <Card>
-                <div className="flex items-center gap-2 mb-3">
+                <div className="flex items-center gap-2 mb-4">
                   <div className="w-3 h-3 rounded-full bg-indigo-500" />
                   <h3 className="font-semibold text-gray-800">
                     Terapia ABA — Pacientes{" "}
                     <span className="text-indigo-600">
-                      com autismo ou sindrome de down
+                      com autismo ou síndrome de down
                     </span>{" "}
                     (Código TEA)
                   </h3>
                 </div>
-                <ul className="space-y-2 text-base text-gray-600">
-                  <li className="flex gap-2">
-                    <span className="text-indigo-500 font-bold mt-0.5">•</span>
-                    <span>
-                      <strong>1x/semana:</strong> 1 quantidade na guia = 1
-                      atendimento (40 min). Ex: 4 semanas → emitir{" "}
-                      <strong>4 quantidades</strong>
-                    </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-indigo-500 font-bold mt-0.5">•</span>
-                    <span>
-                      <strong>2x/semana:</strong> 1 quantidade na guia = 1
-                      atendimento (40 min). Ex: 4 semanas → emitir{" "}
-                      <strong>8 quantidades</strong>
-                    </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-indigo-500 font-bold mt-0.5">ℹ</span>
-                    <span className="text-sm text-gray-500 italic">
-                      <strong className="not-italic">Obs:</strong> Emitir guia
-                      de consulta de acordo com a especialidade:{" "}
-                      <strong className="not-italic">
-                        Terapia Ocupacional
-                      </strong>
-                      : 1 quantidade{" "}
-                      <span className="text-blue-600 font-semibold not-italic">
-                        5.00.00.05-5
-                      </span>{" "}
-                      — <strong className="not-italic">Fonoaudiologia</strong>:
-                      1 quantidade{" "}
-                      <span className="text-blue-600 font-semibold not-italic">
-                        5.00.00.58-6
-                      </span>{" "}
-                      — <strong className="not-italic">Psicologia</strong>: 1
-                      quantidade{" "}
-                      <span className="text-blue-600 font-semibold not-italic">
-                        5.00.01.22-1
+                <div className="divide-y divide-gray-100">
+                  {[
+                    { freq: "1x/semana", qtd: 4 },
+                    { freq: "2x/semana", qtd: 8 },
+                  ].map(({ freq, qtd }) => (
+                    <div
+                      key={freq}
+                      className="py-3 first:pt-0 flex items-center justify-between gap-3"
+                    >
+                      <span className="text-sm font-bold text-gray-800 min-w-[100px]">
+                        {freq}
                       </span>
-                    </span>
-                  </li>
-                </ul>
+                      <span className="text-sm text-gray-600 flex-1">
+                        1 qtd = 1 atendimento (40 min) — 4 semanas →
+                      </span>
+                      <span className="text-sm font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 rounded whitespace-nowrap">
+                        {qtd} quantidades
+                      </span>
+                    </div>
+                  ))}
+                  <div className="pt-3">
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+                      Guia de consulta por especialidade
+                    </p>
+                    <div className="divide-y divide-gray-100">
+                      {[
+                        { label: "Terapia Ocupacional", code: "5.00.00.05-5" },
+                        { label: "Fonoaudiologia", code: "5.00.00.58-6" },
+                        { label: "Psicologia", code: "5.00.01.22-1" },
+                      ].map(({ label, code }) => (
+                        <div
+                          key={label}
+                          className="py-2 first:pt-0 last:pb-0 flex items-center justify-between gap-3"
+                        >
+                          <span className="text-sm font-bold text-gray-700">
+                            {label}
+                          </span>
+                          <span className="flex items-center gap-1.5">
+                            <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
+                              {code}
+                            </span>
+                            <span className="text-sm font-bold text-gray-700">
+                              ×1
+                            </span>
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </Card>
 
               <Card>
                 <div className="flex items-center gap-2 mb-4">
                   <div className="w-3 h-3 rounded-full bg-teal-500" />
                   <h3 className="font-semibold text-gray-800">
-                    Terapia ABA e Terapia Ocupacional/Fonoaudiologia/Fisioterapia — Pacientes{" "}
-                    <span className="text-teal-600">SEM AUTISMO - CRIANÇAS E ADULTOS</span>
+                    Terapia ABA e Terapia
+                    Ocupacional/Fonoaudiologia/Fisioterapia — Pacientes{" "}
+                    <span className="text-teal-600">
+                      SEM AUTISMO - CRIANÇAS E ADULTOS
+                    </span>
                   </h3>
                 </div>
                 <div className="divide-y divide-gray-100">
                   {[
                     {
                       label: "Psicologia",
-                      codes: [{ c: "5.00.00.47-0", q: 8 }, { c: "5.00.01.22-1", q: 1 }],
+                      codes: [
+                        { c: "5.00.00.47-0", q: 8 },
+                        { c: "5.00.01.22-1", q: 1 },
+                      ],
                       obs: null,
                     },
                     {
                       label: "Fonoaudiologia",
-                      codes: [{ c: "6.00.20.01-6", q: 8 }, { c: "6.00.30.02-0", q: 8 }, { c: "5.00.00.58-6", q: 1 }],
+                      codes: [
+                        { c: "6.00.20.01-6", q: 8 },
+                        { c: "6.00.30.02-0", q: 8 },
+                        { c: "5.00.00.58-6", q: 1 },
+                      ],
                       obs: "Os dois primeiros códigos são procedimentos que a Fono realiza dentro da sessão",
                     },
                     {
                       label: "Psicopedagogia",
-                      codes: [{ c: "5.00.00.47-0", q: 8 }, { c: "5.00.01.22-1", q: 1 }],
+                      codes: [
+                        { c: "5.00.00.47-0", q: 8 },
+                        { c: "5.00.01.22-1", q: 1 },
+                      ],
                       obs: null,
                     },
                     {
                       label: "Terapia Ocupacional",
-                      codes: [{ c: "5.00.00.47-0", q: 8 }, { c: "5.00.00.05-5", q: 1 }, { c: "2.01.03.63-8", q: 8 }],
+                      codes: [
+                        { c: "5.00.00.47-0", q: 8 },
+                        { c: "5.00.00.05-5", q: 1 },
+                        { c: "2.01.03.63-8", q: 8 },
+                      ],
                       obs: "O plano do IPASGO não disponibiliza o código de TO para todos os beneficiários. O procedimento labirintite é realizado dentro da sessão.",
                     },
                     {
                       label: "Fisioterapia",
-                      codes: [{ c: "5.00.00.47-0", q: 8 }, { c: "2.01.03.63-8", q: 8 }, { c: "5.00.00.05-5", q: 1 }],
-                      obs: "Ainda em processo de adicionar os códigos de Fisioterapia no sistema do IPASGO",
+                      codes: [
+                        { c: "5.00.00.47-0", q: 8 },
+                        { c: "2.01.03.63-8", q: 8 },
+                        { c: "5.00.00.05-5", q: 1 },
+                      ],
+                      obs: "Ainda em processo de adicionar os códigos de Fisioterapia no sistema do IPASGO. O procedimento labirintite é realizado dentro da sessão de fisioterapia.",
                     },
                   ].map(({ label, codes, obs }) => (
                     <div key={label} className="py-3 first:pt-0 last:pb-0">
                       <div className="flex items-start justify-between gap-3 flex-wrap">
-                        <span className="text-sm font-semibold text-gray-700 min-w-[140px]">{label}</span>
+                        <span className="text-sm font-bold text-gray-800 min-w-[150px]">
+                          {label}
+                        </span>
                         <div className="flex flex-wrap gap-2 flex-1">
                           {codes.map(({ c, q }, i) => (
-                            <span key={c} className="flex items-center gap-1">
-                              <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-xs font-semibold px-2 py-0.5 rounded">
+                            <span key={c} className="flex items-center gap-1.5">
+                              <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
                                 {c}
                               </span>
-                              <span className="text-xs text-gray-500">×{q}</span>
-                              {i < codes.length - 1 && <span className="text-gray-400 text-xs">+</span>}
+                              <span className="text-sm font-bold text-gray-700">
+                                ×{q}
+                              </span>
+                              {i < codes.length - 1 && (
+                                <span className="text-gray-400 text-sm font-bold">
+                                  +
+                                </span>
+                              )}
                             </span>
                           ))}
-                          <span className="text-xs text-teal-700 font-semibold self-center">= 4 atend.</span>
+                          <span className="text-sm text-teal-700 font-bold self-center">
+                            = 4 atend.
+                          </span>
                         </div>
                       </div>
                       {obs && (
-                        <p className="text-xs text-gray-400 mt-1 ml-0 italic">{obs}</p>
+                        <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1 mt-2 italic">
+                          {obs}
+                        </p>
                       )}
                     </div>
                   ))}
@@ -493,61 +535,73 @@ export default function Dashboard() {
               </Card>
 
               <Card>
-                <div className="flex items-center gap-2 mb-3">
+                <div className="flex items-center gap-2 mb-4">
                   <div className="w-3 h-3 rounded-full bg-violet-500" />
                   <h3 className="font-semibold text-gray-800">
-                    Terapia Adulto ABA - Código TEA
+                    Terapia Adulto ABA — Código TEA
                   </h3>
                 </div>
-                <ul className="space-y-2 text-base text-gray-600">
-                  <li className="flex gap-2">
-                    <span className="text-violet-500 font-bold mt-0.5">•</span>
-                    <span>
-                      <strong>1x/semana:</strong> 1 quantidade na guia = 1
-                      atendimento/semana (40 min). Ex: 4 semanas → emitir{" "}
-                      <strong>4 quantidades</strong>
-                    </span>
-                  </li>
-                </ul>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-sm font-bold text-gray-800 min-w-[100px]">
+                    1x/semana
+                  </span>
+                  <span className="text-sm text-gray-600 flex-1">
+                    2 qtd = 1 atendimento (20 + 20 = 40 min) — 4 semanas →
+                  </span>
+                  <span className="text-sm font-bold text-violet-700 bg-violet-50 border border-violet-200 px-2.5 py-0.5 rounded whitespace-nowrap">
+                    8 quantidades
+                  </span>
+                </div>
               </Card>
 
               <Card>
-                <div className="flex items-center gap-2 mb-3">
+                <div className="flex items-center gap-2 mb-4">
                   <div className="w-3 h-3 rounded-full bg-amber-500" />
                   <h3 className="font-semibold text-gray-800">
                     Avaliação Neuropsicológica
                   </h3>
                 </div>
-                <ul className="space-y-2 text-base text-gray-600">
-                  <li className="flex gap-2">
-                    <span className="text-amber-500 font-bold mt-0.5">•</span>
-                    <span>
-                      <strong>Adulto e Criança:</strong> emitir códigos{" "}
-                      <span className="text-blue-600 font-semibold">
-                        6.00.20.01-6
-                      </span>{" "}
-                      (<strong>10 quantidades</strong>) +{" "}
-                      <span className="text-blue-600 font-semibold">
-                        6.00.30.02-0
-                      </span>{" "}
-                      (<strong>10 quantidades</strong>){" "}
-                      <span className="text-blue-600 font-semibold">
-                        5.00.01.22-1
-                      </span>{" "}
-                      (<strong>+ 1 quantidade</strong>)
+                <div className="divide-y divide-gray-100">
+                  <div className="pb-3">
+                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                      Adulto e Criança
                     </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-amber-500 font-bold mt-0.5">•</span>
-                    <span>
-                      <strong>Falta (devolutiva ou sessão):</strong> emitir{" "}
-                      <strong>2 quantidades</strong> do código{" "}
-                      <span className="text-blue-600 font-semibold">
+                    <div className="flex flex-wrap gap-2 items-center mt-2">
+                      {[
+                        { c: "6.00.20.01-6", q: 10 },
+                        { c: "6.00.30.02-0", q: 10 },
+                        { c: "5.00.01.22-1", q: 1 },
+                      ].map(({ c, q }, i, arr) => (
+                        <span key={c} className="flex items-center gap-1.5">
+                          <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
+                            {c}
+                          </span>
+                          <span className="text-sm font-bold text-gray-700">
+                            ×{q}
+                          </span>
+                          {i < arr.length - 1 && (
+                            <span className="text-gray-400 text-sm font-bold">
+                              +
+                            </span>
+                          )}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="pt-3 flex items-center justify-between gap-3">
+                    <span className="text-sm font-bold text-gray-800">
+                      Falta (devolutiva ou sessão)
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
                         6.00.20.01-6
                       </span>
+                      <span className="text-sm font-bold text-gray-700">
+                        ×2
+                      </span>
                     </span>
-                  </li>
-                </ul>
+                  </div>
+                </div>
               </Card>
             </div>
           </div>
