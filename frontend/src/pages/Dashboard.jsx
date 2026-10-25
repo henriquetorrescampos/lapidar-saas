@@ -433,127 +433,63 @@ export default function Dashboard() {
               </Card>
 
               <Card>
-                <div className="flex items-center gap-2 mb-3">
+                <div className="flex items-center gap-2 mb-4">
                   <div className="w-3 h-3 rounded-full bg-teal-500" />
                   <h3 className="font-semibold text-gray-800">
-                    Terapia ABA e Terapia
-                    Ocupacional/Fonoaudiologia/Fisioterapia — Pacientes{" "}
-                    <span className="text-teal-600">
-                      SEM AUTISMO - CRIANÇAS E ADULTOS
-                    </span>
+                    Terapia ABA e Terapia Ocupacional/Fonoaudiologia/Fisioterapia — Pacientes{" "}
+                    <span className="text-teal-600">SEM AUTISMO - CRIANÇAS E ADULTOS</span>
                   </h3>
                 </div>
-                <ul className="space-y-2 text-base text-gray-600">
-                  <li className="flex gap-2">
-                    <span className="text-teal-500 font-bold mt-0.5">•</span>
-                    <span>
-                      Psicologia: Utilizar código{" "}
-                      <span className="text-blue-600 font-semibold">
-                        5.00.00.47-0
-                      </span>{" "}
-                      (<strong>8 quantidades</strong>) +{" "}
-                      <span className="text-blue-600 font-semibold">
-                        5.00.01.22-1
-                      </span>{" "}
-                      (<strong>1 quantidade</strong>) — representa{" "}
-                      <strong>
-                        4 atendimentos 40 minutos = (20 minutos + 20 minutos)
-                      </strong>
-                    </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-teal-500 font-bold mt-0.5">•</span>
-                    <span>
-                      Fonoaudiologia: Utilizar código{" "}
-                      <span className="text-blue-600 font-semibold">
-                        6.00.20.01-6
-                      </span>{" "}
-                      (<strong>8 quantidades</strong>) +{" "}
-                      <span className="text-blue-600 font-semibold">
-                        6.00.30.02-0
-                      </span>{" "}
-                      (<strong>8 quantidade</strong>) — representa{" "}
-                      <span className="text-blue-600 font-semibold">
-                        5.00.00.58-6
-                      </span>{" "}
-                      (<strong>1 quantidade</strong>) — representa{" "}
-                      <strong>
-                        4 atendimentos 40 minutos = (20 minutos + 20 minutos) Os
-                        dois códigos são procedimentos que a Fono realiza dentro
-                        da sessão
-                      </strong>
-                    </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-teal-500 font-bold mt-0.5">•</span>
-                    <span>
-                      Psicopedagogia: Utilizar código{" "}
-                      <span className="text-blue-600 font-semibold">
-                        5.00.00.47-0
-                      </span>{" "}
-                      (<strong>8 quantidades</strong>) +{" "}
-                      <span className="text-blue-600 font-semibold">
-                        5.00.01.22-1
-                      </span>{" "}
-                      (<strong>1 quantidade</strong>) — representa{" "}
-                      <strong>
-                        4 atendimentos 40 minutos = (20 minutos + 20 minutos)
-                      </strong>
-                    </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-teal-500 font-bold mt-0.5">•</span>
-                    <span>
-                      Terapia Ocupacional: Utilizar código{" "}
-                      <span className="text-blue-600 font-semibold">
-                        5.00.00.47-0
-                      </span>{" "}
-                      (<strong>8 quantidades</strong>) +{" "}
-                      <span className="text-blue-600 font-semibold">
-                        5.00.00.05-5
-                      </span>{" "}
-                      (<strong>1 quantidade</strong>){" "}
-                      <span className="text-blue-600 font-semibold">
-                        2.01.03.63-8
-                      </span>{" "}
-                      (<strong>8 quantidade</strong>) — representa{" "}
-                      <strong>
-                        4 atendimentos 40 minutos = (20 minutos + 20 minutos)
-                      </strong>
-                      <span className="text-gray-400 text-sm">
-                        (o plano do IPASGO não disponibiliza o código de Terapia
-                        Ocupacional para todos os beneficiários - O procedimento
-                        labirintite é um procedimento que a TO realiza na
-                        sessão)
-                      </span>
-                    </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-teal-500 font-bold mt-0.5">•</span>
-                    <span>
-                      Fisioterapia: Utilizar código{" "}
-                      <span className="text-blue-600 font-semibold">
-                        5.00.00.47-0
-                      </span>{" "}
-                      (<strong>8 quantidades</strong>) +{" "}
-                      <span className="text-blue-600 font-semibold">
-                        2.01.03.63-8
-                      </span>{" "}
-                      (<strong>8 quantidades</strong>) +{" "}
-                      <span className="text-blue-600 font-semibold">
-                        5.00.00.05-5
-                      </span>{" "}
-                      (<strong>1 quantidade</strong>) — representa{" "}
-                      <strong>
-                        4 atendimentos 40 minutos = (20 minutos + 20 minutos)
-                      </strong>
-                      <span className="text-gray-400 text-sm">
-                        (ainda estamos em processo de adicionar os códigos de
-                        Fisioterapia no nosso sistema do IPASGO)
-                      </span>
-                    </span>
-                  </li>
-                </ul>
+                <div className="divide-y divide-gray-100">
+                  {[
+                    {
+                      label: "Psicologia",
+                      codes: [{ c: "5.00.00.47-0", q: 8 }, { c: "5.00.01.22-1", q: 1 }],
+                      obs: null,
+                    },
+                    {
+                      label: "Fonoaudiologia",
+                      codes: [{ c: "6.00.20.01-6", q: 8 }, { c: "6.00.30.02-0", q: 8 }, { c: "5.00.00.58-6", q: 1 }],
+                      obs: "Os dois primeiros códigos são procedimentos que a Fono realiza dentro da sessão",
+                    },
+                    {
+                      label: "Psicopedagogia",
+                      codes: [{ c: "5.00.00.47-0", q: 8 }, { c: "5.00.01.22-1", q: 1 }],
+                      obs: null,
+                    },
+                    {
+                      label: "Terapia Ocupacional",
+                      codes: [{ c: "5.00.00.47-0", q: 8 }, { c: "5.00.00.05-5", q: 1 }, { c: "2.01.03.63-8", q: 8 }],
+                      obs: "O plano do IPASGO não disponibiliza o código de TO para todos os beneficiários. O procedimento labirintite é realizado dentro da sessão.",
+                    },
+                    {
+                      label: "Fisioterapia",
+                      codes: [{ c: "5.00.00.47-0", q: 8 }, { c: "2.01.03.63-8", q: 8 }, { c: "5.00.00.05-5", q: 1 }],
+                      obs: "Ainda em processo de adicionar os códigos de Fisioterapia no sistema do IPASGO",
+                    },
+                  ].map(({ label, codes, obs }) => (
+                    <div key={label} className="py-3 first:pt-0 last:pb-0">
+                      <div className="flex items-start justify-between gap-3 flex-wrap">
+                        <span className="text-sm font-semibold text-gray-700 min-w-[140px]">{label}</span>
+                        <div className="flex flex-wrap gap-2 flex-1">
+                          {codes.map(({ c, q }, i) => (
+                            <span key={c} className="flex items-center gap-1">
+                              <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-xs font-semibold px-2 py-0.5 rounded">
+                                {c}
+                              </span>
+                              <span className="text-xs text-gray-500">×{q}</span>
+                              {i < codes.length - 1 && <span className="text-gray-400 text-xs">+</span>}
+                            </span>
+                          ))}
+                          <span className="text-xs text-teal-700 font-semibold self-center">= 4 atend.</span>
+                        </div>
+                      </div>
+                      {obs && (
+                        <p className="text-xs text-gray-400 mt-1 ml-0 italic">{obs}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </Card>
 
               <Card>
