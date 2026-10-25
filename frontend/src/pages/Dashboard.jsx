@@ -456,7 +456,7 @@ export default function Dashboard() {
                     </span>
                   </h3>
                   <p className="text-sm font-semibold text-gray-600 mt-1">
-                    ℹ (20 + 20 = 40 minutos) são realizados 2 sessões em 1
+                    ℹ Cada sessão de 40 min é composta por 2 blocos de 20 min — portanto, 1 sessão = 2 quantidades na guia
                   </p>
                 </div>
                 <div className="divide-y divide-gray-100">
