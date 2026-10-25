@@ -291,12 +291,15 @@ export default function Dashboard() {
 
           {/* IPASGO */}
           <div className="mb-8">
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center gap-3 mb-3">
               <span className="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
                 IPASGO
               </span>
               <div className="flex-1 h-px bg-gray-200" />
             </div>
+            <p className="text-sm text-gray-500 italic mb-4">
+              ℹ O código de consulta emitimos sempre para que a profissional realize a evolução do paciente
+            </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card>
                 <div className="flex items-center gap-2 mb-3">
