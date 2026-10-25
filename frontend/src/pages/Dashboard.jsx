@@ -335,7 +335,7 @@ export default function Dashboard() {
                         </span>
                       </span>
                       <span className="text-sm text-cyan-700 font-bold">
-                        = 4 atend.
+                        = 4 atendimentos
                       </span>
                     </div>
                     <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1 mt-2 italic">
@@ -520,7 +520,7 @@ export default function Dashboard() {
                             </span>
                           ))}
                           <span className="text-sm text-teal-700 font-bold self-center">
-                            = 4 atend.
+                            = 4 atendimentos
                           </span>
                         </div>
                       </div>
