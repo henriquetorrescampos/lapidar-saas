@@ -110,11 +110,11 @@ export async function getGuideEmissions(month, year) {
         OR: [
           { patient_type: { contains: "ABA" } },
           {
-            patient_type: { contains: "TERAPIA_ADULTO" },
-            NOT: [
-              { autism_status: "nao_autista" },
-              { autism_status: "" },
-              { autism_status: null },
+            AND: [
+              { patient_type: { contains: "TERAPIA_ADULTO" } },
+              { autism_status: { not: null } },
+              { autism_status: { not: "" } },
+              { autism_status: { not: "nao_autista" } },
             ],
           },
         ],
