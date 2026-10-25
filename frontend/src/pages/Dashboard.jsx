@@ -297,7 +297,7 @@ export default function Dashboard() {
               </span>
               <div className="flex-1 h-px bg-gray-200" />
             </div>
-            <p className="text-sm text-gray-500 italic mb-4">
+            <p className="text-base font-bold text-gray-700 mb-4">
               ℹ O código de consulta emitimos sempre para que a profissional
               realize a evolução do paciente
             </p>
@@ -454,6 +454,9 @@ export default function Dashboard() {
                       SEM AUTISMO - CRIANÇAS E ADULTOS
                     </span>
                   </h3>
+                  <p className="text-sm font-semibold text-gray-600 mt-1">
+                    ℹ (20 + 20 = 40 minutos) são realizados 2 sessões em 1
+                  </p>
                 </div>
                 <div className="divide-y divide-gray-100">
                   {[
