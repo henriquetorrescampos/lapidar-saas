@@ -351,7 +351,7 @@ export default function Dashboard() {
                     <div className="flex flex-wrap gap-2 items-center mt-2">
                       <span className="flex items-center gap-1.5">
                         <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
-                          6.00.20.01-6
+                          8.00.10.03-2
                         </span>
                         <span className="text-sm font-bold text-gray-700">
                           ×2
@@ -456,7 +456,8 @@ export default function Dashboard() {
                     </span>
                   </h3>
                   <p className="text-sm font-semibold text-gray-600 mt-1">
-                    ℹ Cada sessão de 40 min é composta por 2 blocos de 20 min — portanto, 1 sessão = 2 quantidades na guia
+                    ℹ Cada sessão de 40 min é composta por 2 blocos de 20 min —
+                    portanto, 1 sessão = 2 quantidades na guia
                   </p>
                 </div>
                 <div className="divide-y divide-gray-100">
