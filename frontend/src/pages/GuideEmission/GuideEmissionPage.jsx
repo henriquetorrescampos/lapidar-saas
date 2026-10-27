@@ -384,17 +384,17 @@ export default function GuideEmissionPage() {
                                         <span className="text-xl font-bold text-gray-700">
                                           {formatDays(item.schedule_days)} — {effectiveQty} sessões
                                         </span>
-                                        {(item.specialty === "Terapia Ocupacional" || item.specialty === "Psicomotricidade" || item.specialty === "Fisioterapia") && (
+                                        {!item.health_plan?.toUpperCase().includes("IAMESC") && (item.specialty === "Terapia Ocupacional" || item.specialty === "Psicomotricidade" || item.specialty === "Fisioterapia") && (
                                           <span className="text-base font-semibold text-gray-700">
                                             1 qtd <span className="text-blue-600">5.00.00.05-5</span> + {effectiveQty} qtd <span className="text-blue-600">0.00.40.04-5</span>
                                           </span>
                                         )}
-                                        {item.specialty === "Fonoaudiologia" && (
+                                        {!item.health_plan?.toUpperCase().includes("IAMESC") && item.specialty === "Fonoaudiologia" && (
                                           <span className="text-base font-semibold text-gray-700">
                                             {effectiveQty} qtd <span className="text-blue-600">0.00.11.18-5</span> + 1 qtd <span className="text-blue-600">5.00.00.58-6</span>
                                           </span>
                                         )}
-                                        {item.specialty === "Psicologia" && (
+                                        {!item.health_plan?.toUpperCase().includes("IAMESC") && item.specialty === "Psicologia" && (
                                           <span className="text-base font-semibold text-gray-700">
                                             {effectiveQty} qtd <span className="text-blue-600">0.00.11.19-3</span> + 1 qtd <span className="text-blue-600">5.00.01.22-1</span>
                                           </span>
