@@ -244,4 +244,21 @@ export const appointmentService = {
       throw new Error(err.message || "Erro ao registrar pagamento");
     }
   },
+
+  clearParticularPayment: async (patientId) => {
+    try {
+      const response = await fetch(
+        `${API_URL}/particular-payments/${patientId}/pay`,
+        { method: "DELETE", headers: getHeaders() },
+      );
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || error.message || "Erro ao desfazer pagamento");
+      }
+      return response.json();
+    } catch (err) {
+      console.error("Erro na requisição:", err);
+      throw new Error(err.message || "Erro ao desfazer pagamento");
+    }
+  },
 };

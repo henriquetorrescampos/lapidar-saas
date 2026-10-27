@@ -324,6 +324,19 @@ export default function SessionsPage() {
     }
   };
 
+  const handleClearPayment = async () => {
+    if (!selectedPatient) return;
+    setPaymentLoading(true);
+    try {
+      const data = await appointmentService.clearParticularPayment(selectedPatient.id);
+      setParticularPayment(data);
+    } catch (err) {
+      setError("Erro ao desfazer pagamento: " + err.message);
+    } finally {
+      setPaymentLoading(false);
+    }
+  };
+
   const therapyPatients = patients.filter(
     (patient) => patient.patient_type !== "AVALIACAO_NEUROPSICOLOGICA",
   );
@@ -700,32 +713,30 @@ export default function SessionsPage() {
 
         {/* Banner de pagamento — apenas pacientes particulares */}
         {selectedPatient?.health_plan?.toUpperCase() === "PARTICULAR" && (
-          <div
-            className={`mb-6 p-4 rounded-lg border ${
-              (particularPayment?.paid_cycles ?? 0) > 0
-                ? "bg-green-50 border-green-300"
-                : "bg-red-50 border-red-300"
-            }`}
-          >
-            <div className="flex items-center justify-between gap-4">
+          (particularPayment?.paid_cycles ?? 0) > 0 ? (
+            <div className="mb-6 p-4 rounded-lg border bg-green-50 border-green-300 flex items-center justify-between gap-4">
               <div>
-                <p
-                  className={`font-semibold text-base ${
-                    (particularPayment?.paid_cycles ?? 0) > 0 ? "text-green-800" : "text-red-800"
-                  }`}
-                >
-                  {(particularPayment?.paid_cycles ?? 0) > 0
-                    ? `✅ ${particularPayment.paid_cycles} pacote(s) pago(s)`
-                    : "⚠️ Pagamento pendente"}
+                <p className="font-semibold text-base text-green-800">
+                  ✅ {particularPayment.paid_cycles} pacote(s) pago(s)
                 </p>
-                <p
-                  className={`text-sm mt-0.5 ${
-                    (particularPayment?.paid_cycles ?? 0) > 0 ? "text-green-700" : "text-red-700"
-                  }`}
-                >
-                  {(particularPayment?.paid_cycles ?? 0) > 0
-                    ? `Ciclo ${particularPayment.cycle} — pago em ${new Date(particularPayment.paid_at).toLocaleDateString("pt-BR")}`
-                    : "O paciente ainda não efetuou o pagamento pelo pacote atual."}
+                <p className="text-sm mt-0.5 text-green-700">
+                  Ciclo {particularPayment.cycle} — pago em {new Date(particularPayment.paid_at).toLocaleDateString("pt-BR")}
+                </p>
+              </div>
+              <button
+                onClick={handleClearPayment}
+                disabled={paymentLoading}
+                className="shrink-0 px-3 py-1.5 bg-white hover:bg-red-50 text-red-600 border border-red-300 text-sm font-medium rounded-lg disabled:opacity-50 transition"
+              >
+                {paymentLoading ? "Aguarde..." : "Desfazer"}
+              </button>
+            </div>
+          ) : (
+            <div className="mb-6 p-4 rounded-lg border bg-red-50 border-red-300 flex items-center justify-between gap-4">
+              <div>
+                <p className="font-semibold text-base text-red-800">⚠️ Pagamento pendente</p>
+                <p className="text-sm mt-0.5 text-red-700">
+                  O paciente ainda não efetuou o pagamento pelo pacote atual.
                 </p>
               </div>
               <div className="flex items-center gap-2 shrink-0">
@@ -747,7 +758,7 @@ export default function SessionsPage() {
                 </button>
               </div>
             </div>
-          </div>
+          )
         )}
 
         {/* Grid de Especialidades */}

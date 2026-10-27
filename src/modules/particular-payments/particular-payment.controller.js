@@ -1,6 +1,7 @@
 import {
   getPaymentStatus,
   markAsPaid,
+  clearPayment,
 } from "./particular-payment.service.js";
 
 export async function getPaymentStatusController(req, res) {
@@ -18,6 +19,16 @@ export async function markAsPaidController(req, res) {
     const { patientId } = req.params;
     const { cycles } = req.body || {};
     const status = await markAsPaid(patientId, cycles);
+    res.json(status);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+}
+
+export async function clearPaymentController(req, res) {
+  try {
+    const { patientId } = req.params;
+    const status = await clearPayment(patientId);
     res.json(status);
   } catch (err) {
     res.status(400).json({ error: err.message });

@@ -58,6 +58,25 @@ export async function markAsPaid(patientId, cycles = 1) {
   return { ...row, paid: row.paid_cycles > 0 };
 }
 
+export async function clearPayment(patientId) {
+  const id = validateNumberId(patientId);
+  await ensureTable();
+
+  const [row] = await prisma.$queryRaw`
+    INSERT INTO "particular_payments" (patient_id, paid, paid_cycles, paid_at, cycle, updated_at)
+    VALUES (${id}, FALSE, 0, NULL, 1, NOW())
+    ON CONFLICT (patient_id)
+    DO UPDATE SET
+      paid = FALSE,
+      paid_cycles = 0,
+      paid_at = NULL,
+      updated_at = NOW()
+    RETURNING *
+  `;
+
+  return { ...row, paid: false };
+}
+
 export async function resetForNewCycle(patientId) {
   const id = validateNumberId(patientId);
   await ensureTable();
