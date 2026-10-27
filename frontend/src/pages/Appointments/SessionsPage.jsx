@@ -181,6 +181,7 @@ export default function SessionsPage() {
 
   const [particularPayment, setParticularPayment] = useState(null);
   const [paymentLoading, setPaymentLoading] = useState(false);
+  const [packagesCount, setPackagesCount] = useState(1);
   const [history, setHistory] = useState([]);
   const [selectedHistoryItem, setSelectedHistoryItem] = useState(null);
   const [deleteConfirmItem, setDeleteConfirmItem] = useState(null);
@@ -231,6 +232,7 @@ export default function SessionsPage() {
       } else {
         setParticularPayment(null);
       }
+      setPackagesCount(1);
       Promise.all(loads);
     } else {
       setHistory([]);
@@ -238,6 +240,7 @@ export default function SessionsPage() {
       setDeleteConfirmItem(null);
       setSpecialtyPages({});
       setParticularPayment(null);
+      setPackagesCount(1);
     }
   }, [selectedPatient]);
 
@@ -311,8 +314,9 @@ export default function SessionsPage() {
     if (!selectedPatient) return;
     setPaymentLoading(true);
     try {
-      const data = await appointmentService.markParticularAsPaid(selectedPatient.id);
+      const data = await appointmentService.markParticularAsPaid(selectedPatient.id, packagesCount);
       setParticularPayment(data);
+      setPackagesCount(1);
     } catch (err) {
       setError("Erro ao registrar pagamento: " + err.message);
     } finally {
@@ -697,41 +701,52 @@ export default function SessionsPage() {
         {/* Banner de pagamento — apenas pacientes particulares */}
         {selectedPatient?.health_plan?.toUpperCase() === "PARTICULAR" && (
           <div
-            className={`mb-6 p-4 rounded-lg border flex items-center justify-between gap-4 ${
-              particularPayment?.paid
+            className={`mb-6 p-4 rounded-lg border ${
+              (particularPayment?.paid_cycles ?? 0) > 0
                 ? "bg-green-50 border-green-300"
                 : "bg-red-50 border-red-300"
             }`}
           >
-            <div>
-              <p
-                className={`font-semibold text-base ${
-                  particularPayment?.paid ? "text-green-800" : "text-red-800"
-                }`}
-              >
-                {particularPayment?.paid
-                  ? "✅ Pagamento recebido"
-                  : "⚠️ Pagamento pendente"}
-              </p>
-              <p
-                className={`text-sm mt-0.5 ${
-                  particularPayment?.paid ? "text-green-700" : "text-red-700"
-                }`}
-              >
-                {particularPayment?.paid
-                  ? `Ciclo ${particularPayment.cycle} pago em ${new Date(particularPayment.paid_at).toLocaleDateString("pt-BR")}`
-                  : "O paciente ainda não efetuou o pagamento pelo pacote atual."}
-              </p>
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p
+                  className={`font-semibold text-base ${
+                    (particularPayment?.paid_cycles ?? 0) > 0 ? "text-green-800" : "text-red-800"
+                  }`}
+                >
+                  {(particularPayment?.paid_cycles ?? 0) > 0
+                    ? `✅ ${particularPayment.paid_cycles} pacote(s) pago(s)`
+                    : "⚠️ Pagamento pendente"}
+                </p>
+                <p
+                  className={`text-sm mt-0.5 ${
+                    (particularPayment?.paid_cycles ?? 0) > 0 ? "text-green-700" : "text-red-700"
+                  }`}
+                >
+                  {(particularPayment?.paid_cycles ?? 0) > 0
+                    ? `Ciclo ${particularPayment.cycle} — pago em ${new Date(particularPayment.paid_at).toLocaleDateString("pt-BR")}`
+                    : "O paciente ainda não efetuou o pagamento pelo pacote atual."}
+                </p>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <label className="text-sm font-medium text-gray-600">Pacotes:</label>
+                <input
+                  type="number"
+                  min={1}
+                  max={20}
+                  value={packagesCount}
+                  onChange={(e) => setPackagesCount(Math.max(1, parseInt(e.target.value) || 1))}
+                  className="w-16 px-2 py-1.5 text-sm border border-gray-300 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-green-400"
+                />
+                <button
+                  onClick={handleMarkAsPaid}
+                  disabled={paymentLoading}
+                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg disabled:opacity-50 transition"
+                >
+                  {paymentLoading ? "Salvando..." : "Marcar como pago"}
+                </button>
+              </div>
             </div>
-            {!particularPayment?.paid && (
-              <button
-                onClick={handleMarkAsPaid}
-                disabled={paymentLoading}
-                className="shrink-0 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg disabled:opacity-50 transition"
-              >
-                {paymentLoading ? "Salvando..." : "Marcar como pago"}
-              </button>
-            )}
           </div>
         )}
 

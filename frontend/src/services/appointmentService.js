@@ -224,11 +224,15 @@ export const appointmentService = {
     }
   },
 
-  markParticularAsPaid: async (patientId) => {
+  markParticularAsPaid: async (patientId, cycles = 1) => {
     try {
       const response = await fetch(
         `${API_URL}/particular-payments/${patientId}/pay`,
-        { method: "PUT", headers: getHeaders() },
+        {
+          method: "PUT",
+          headers: getHeaders(),
+          body: JSON.stringify({ cycles }),
+        },
       );
       if (!response.ok) {
         const error = await response.json();

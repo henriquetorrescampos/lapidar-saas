@@ -16,7 +16,8 @@ export async function getPaymentStatusController(req, res) {
 export async function markAsPaidController(req, res) {
   try {
     const { patientId } = req.params;
-    const status = await markAsPaid(patientId);
+    const { cycles } = req.body || {};
+    const status = await markAsPaid(patientId, cycles);
     res.json(status);
   } catch (err) {
     res.status(400).json({ error: err.message });
