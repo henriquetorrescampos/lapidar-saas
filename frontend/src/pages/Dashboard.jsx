@@ -482,8 +482,9 @@ export default function Dashboard() {
                     {
                       label: "Psicopedagogia",
                       codes: [
-                        { c: "5.00.00.47-0", q: 8 },
-                        { c: "5.00.01.22-1", q: 1 },
+                        { c: "6.00.20.01-6", q: 8 },
+                        { c: "6.00.30.02-0", q: 8 },
+                        { c: "5.00.00.58-6", q: 1 },
                       ],
                       obs: null,
                     },
@@ -499,11 +500,11 @@ export default function Dashboard() {
                     {
                       label: "Fisioterapia",
                       codes: [
-                        { c: "5.00.00.47-0", q: 8 },
-                        { c: "2.01.03.63-8", q: 8 },
-                        { c: "5.00.00.05-5", q: 1 },
+                        { c: "6.00.20.01-6", q: 8 },
+                        { c: "6.00.30.02-0", q: 8 },
+                        { c: "5.00.00.58-6", q: 1 },
                       ],
-                      obs: "Ainda em processo de adicionar os códigos de Fisioterapia no sistema do IPASGO. O procedimento labirintite é realizado dentro da sessão de fisioterapia.",
+                      obs: null,
                     },
                   ].map(({ label, codes, obs }) => (
                     <div key={label} className="py-3 first:pt-0 last:pb-0">
