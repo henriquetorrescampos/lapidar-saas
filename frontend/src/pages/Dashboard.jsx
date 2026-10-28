@@ -419,9 +419,9 @@ export default function Dashboard() {
                     </p>
                     <div className="divide-y divide-gray-100">
                       {[
-                        { label: "Terapia Ocupacional", code: "5.00.00.05-5" },
-                        { label: "Fonoaudiologia", code: "5.00.00.58-6" },
-                        { label: "Psicologia", code: "5.00.01.22-1" },
+                        { label: "Terapia Ocupacional (SOMENTE A ANAMNESE)", code: "5.00.00.05-5" },
+                        { label: "Fonoaudiologia (SOMENTE A ANAMNESE)", code: "5.00.00.58-6" },
+                        { label: "Psicologia (SOMENTE A ANAMNESE)", code: "5.00.01.22-1" },
                       ].map(({ label, code }) => (
                         <div
                           key={label}
@@ -474,17 +474,15 @@ export default function Dashboard() {
                       label: "Fonoaudiologia",
                       codes: [
                         { c: "6.00.20.01-6", q: 8 },
-                        { c: "6.00.30.02-0", q: 8 },
-                        { c: "5.00.00.58-6", q: 1 },
+                        { c: "6.00.30.02-0", q: 4 },
                       ],
-                      obs: "Os dois primeiros códigos são procedimentos que a Fono realiza dentro da sessão",
+                      obs: null,
                     },
                     {
                       label: "Psicopedagogia",
                       codes: [
-                        { c: "6.00.20.01-6", q: 8 },
-                        { c: "6.00.30.02-0", q: 8 },
-                        { c: "5.00.00.58-6", q: 1 },
+                        { c: "5.00.00.47-0", q: 8 },
+                        { c: "5.00.01.22-1", q: 1 },
                       ],
                       obs: null,
                     },
