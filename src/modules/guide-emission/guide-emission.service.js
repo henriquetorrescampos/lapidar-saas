@@ -164,10 +164,20 @@ export async function getGuideEmissions(month, year) {
   }
 
   for (const patient of iamescPatients) {
-    const patientSpecialties = patient.specialties
+    let patientSpecialties = patient.specialties
       .split(",")
       .map((s) => s.trim())
       .filter((s) => GUIDE_SPECIALTIES.includes(s));
+
+    // Pacientes TERAPIA_ADULTO autistas não têm especialidades salvas no formulário;
+    // sua especialidade de emissão de guia é sempre Psicologia.
+    if (
+      patientSpecialties.length === 0 &&
+      patient.patient_type?.includes("TERAPIA_ADULTO") &&
+      patient.autism_status === "autista"
+    ) {
+      patientSpecialties = ["Psicologia"];
+    }
 
     for (const specialty of patientSpecialties) {
       const schedule = patient.patient_schedules.find(
@@ -183,6 +193,8 @@ export async function getGuideEmissions(month, year) {
         patient_name: patient.name,
         health_plan: patient.health_plan,
         autism_status: patient.autism_status || "",
+        patient_type: patient.patient_type || "",
+        birth_date: patient.birth_date || null,
         specialty,
         schedule_days: schedule?.days || null,
         quantity: calculateSessionsIamesc(schedule?.days, dayCountMap),

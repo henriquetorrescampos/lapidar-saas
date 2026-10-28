@@ -265,6 +265,7 @@ export default function PatientForm() {
   };
 
   const isABA = formData.patient_type.includes("ABA");
+  const isTerapiaAdulto = formData.patient_type.includes("TERAPIA_ADULTO");
   const abaSpecialties = formData.specialties.filter((s) =>
     CLINICAL_SPECIALTIES.some((cs) => cs.value === s)
   );
@@ -289,6 +290,20 @@ export default function PatientForm() {
       } else {
         const created = await patientService.create(payload);
         patientId = created.id;
+      }
+
+      // Salvar agenda para Terapia Adulto (Psicologia)
+      if (isTerapiaAdulto && patientId) {
+        const psicologiaDays = Object.entries(schedules["Psicologia"] || {})
+          .filter(([, qty]) => qty > 0)
+          .sort(([a], [b]) => Number(a) - Number(b))
+          .map(([day, qty]) => `${day}:${qty}`)
+          .join(",");
+        if (psicologiaDays) {
+          await guideEmissionService.upsertPatientSchedules(patientId, [
+            { specialty: "Psicologia", days: psicologiaDays },
+          ]);
+        }
       }
 
       // Salvar agenda para especialidades ABA
@@ -559,6 +574,59 @@ export default function PatientForm() {
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+            )}
+
+            {isTerapiaAdulto && (
+              <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Agenda — Psicologia
+                </label>
+                <p className="text-xs text-gray-400 mb-4">
+                  Selecione os dias e quantas sessões o paciente realiza por dia.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  {WEEK_DAYS.map((day) => {
+                    const qty = (schedules["Psicologia"] || {})[day.value] || 0;
+                    const selected = qty > 0;
+                    return (
+                      <div key={day.value} className="flex flex-col items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => handleScheduleDayToggle("Psicologia", day.value)}
+                          className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
+                            selected
+                              ? "bg-primary-600 text-white"
+                              : "bg-white border border-gray-300 text-gray-600 hover:border-primary-400"
+                          }`}
+                        >
+                          {day.label}
+                        </button>
+                        {selected && (
+                          <div className="flex items-center gap-1">
+                            <button
+                              type="button"
+                              onClick={() => handleScheduleDayQty("Psicologia", day.value, -1)}
+                              className="w-5 h-5 flex items-center justify-center rounded bg-gray-200 hover:bg-gray-300 text-xs font-bold leading-none"
+                            >
+                              −
+                            </button>
+                            <span className="text-xs font-semibold w-5 text-center text-gray-700">
+                              {qty}×
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => handleScheduleDayQty("Psicologia", day.value, 1)}
+                              className="w-5 h-5 flex items-center justify-center rounded bg-gray-200 hover:bg-gray-300 text-xs font-bold leading-none"
+                            >
+                              +
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
