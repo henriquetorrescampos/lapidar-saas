@@ -538,6 +538,36 @@ export default function Dashboard() {
                       )}
                     </div>
                   ))}
+                  <div className="pt-3">
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+                      Guia de consulta por especialidade
+                    </p>
+                    <div className="divide-y divide-gray-100">
+                      {[
+                        { label: "Terapia Ocupacional (SOMENTE A ANAMNESE)", code: "5.00.00.05-5" },
+                        { label: "Fonoaudiologia (SOMENTE A ANAMNESE)", code: "5.00.00.58-6" },
+                        { label: "Psicologia (SOMENTE A ANAMNESE)", code: "5.00.01.22-1" },
+                        { label: "Fisioterapia (SOMENTE A ANAMNESE)", code: "5.00.00.05-5" },
+                      ].map(({ label, code }) => (
+                        <div
+                          key={label}
+                          className="py-2 first:pt-0 last:pb-0 flex items-center justify-between gap-3"
+                        >
+                          <span className="text-sm font-bold text-gray-700">
+                            {label}
+                          </span>
+                          <span className="flex items-center gap-1.5">
+                            <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
+                              {code}
+                            </span>
+                            <span className="text-sm font-bold text-gray-700">
+                              ×1
+                            </span>
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </Card>
 
