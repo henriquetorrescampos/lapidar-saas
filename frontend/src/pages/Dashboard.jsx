@@ -320,7 +320,7 @@ export default function Dashboard() {
                         <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
                           5.00.00.47-0
                         </span>
-                        <span className="text-sm font-bold text-gray-700">
+                        <span className="text-base font-extrabold text-gray-900">
                           ×8
                         </span>
                         <span className="text-gray-400 text-sm font-bold">
@@ -331,7 +331,7 @@ export default function Dashboard() {
                         <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
                           5.00.01.22-1
                         </span>
-                        <span className="text-sm font-bold text-gray-700">
+                        <span className="text-base font-extrabold text-gray-900">
                           ×1
                         </span>
                       </span>
@@ -353,7 +353,7 @@ export default function Dashboard() {
                         <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
                           5.00.00.47-0
                         </span>
-                        <span className="text-sm font-bold text-gray-700">
+                        <span className="text-base font-extrabold text-gray-900">
                           ×2
                         </span>
                         <span className="text-gray-400 text-sm font-bold">
@@ -364,7 +364,7 @@ export default function Dashboard() {
                         <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
                           5.00.01.22-1
                         </span>
-                        <span className="text-sm font-bold text-gray-700">
+                        <span className="text-base font-extrabold text-gray-900">
                           ×1
                         </span>
                       </span>
@@ -443,7 +443,7 @@ export default function Dashboard() {
                             <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
                               {code}
                             </span>
-                            <span className="text-sm font-bold text-gray-700">
+                            <span className="text-base font-extrabold text-gray-900">
                               ×1
                             </span>
                           </span>
@@ -525,7 +525,7 @@ export default function Dashboard() {
                               <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
                                 {c}
                               </span>
-                              <span className="text-sm font-bold text-gray-700">
+                              <span className="text-base font-extrabold text-gray-900">
                                 ×{q}
                               </span>
                               {i < codes.length - 1 && (
@@ -572,7 +572,7 @@ export default function Dashboard() {
                             <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
                               {code}
                             </span>
-                            <span className="text-sm font-bold text-gray-700">
+                            <span className="text-base font-extrabold text-gray-900">
                               ×1
                             </span>
                           </span>
@@ -625,7 +625,7 @@ export default function Dashboard() {
                           <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
                             {c}
                           </span>
-                          <span className="text-sm font-bold text-gray-700">
+                          <span className="text-base font-extrabold text-gray-900">
                             ×{q}
                           </span>
                           {i < arr.length - 1 && (
@@ -645,7 +645,7 @@ export default function Dashboard() {
                       <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
                         6.00.20.01-6
                       </span>
-                      <span className="text-sm font-bold text-gray-700">
+                      <span className="text-base font-extrabold text-gray-900">
                         ×2
                       </span>
                     </span>
