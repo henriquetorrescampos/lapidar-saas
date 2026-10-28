@@ -419,9 +419,18 @@ export default function Dashboard() {
                     </p>
                     <div className="divide-y divide-gray-100">
                       {[
-                        { label: "Terapia Ocupacional (SOMENTE A ANAMNESE)", code: "5.00.00.05-5" },
-                        { label: "Fonoaudiologia (SOMENTE A ANAMNESE)", code: "5.00.00.58-6" },
-                        { label: "Psicologia (SOMENTE A ANAMNESE)", code: "5.00.01.22-1" },
+                        {
+                          label: "Terapia Ocupacional (SOMENTE A ANAMNESE)",
+                          code: "5.00.00.05-5",
+                        },
+                        {
+                          label: "Fonoaudiologia (SOMENTE A ANAMNESE)",
+                          code: "5.00.00.58-6",
+                        },
+                        {
+                          label: "Psicologia (SOMENTE A ANAMNESE)",
+                          code: "5.00.01.22-1",
+                        },
                       ].map(({ label, code }) => (
                         <div
                           key={label}
@@ -544,10 +553,13 @@ export default function Dashboard() {
                     </p>
                     <div className="divide-y divide-gray-100">
                       {[
-                        { label: "Terapia Ocupacional (SOMENTE A ANAMNESE)", code: "5.00.00.05-5" },
-                        { label: "Fonoaudiologia (SOMENTE A ANAMNESE)", code: "5.00.00.58-6" },
-                        { label: "Psicologia (SOMENTE A ANAMNESE)", code: "5.00.01.22-1" },
-                        { label: "Fisioterapia (SOMENTE A ANAMNESE)", code: "5.00.00.05-5" },
+                        { label: "Terapia Ocupacional", code: "5.00.00.05-5" },
+                        {
+                          label: "Fonoaudiologia (SOMENTE A ANAMNESE)",
+                          code: "5.00.00.58-6",
+                        },
+                        { label: "Psicologia", code: "5.00.01.22-1" },
+                        { label: "Fisioterapia", code: "5.00.00.05-5" },
                       ].map(({ label, code }) => (
                         <div
                           key={label}
