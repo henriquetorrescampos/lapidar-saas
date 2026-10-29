@@ -300,7 +300,7 @@ export default function Dashboard() {
             <p className="text-base font-bold text-gray-700 mb-4">
               ℹ Em caso de questionamento sobre código de consulta: O código de
               consulta emitimos sempre para que a profissional realize a
-              evolução do paciente
+              evolução do paciente e para futuros relatórios solicitados
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card>
