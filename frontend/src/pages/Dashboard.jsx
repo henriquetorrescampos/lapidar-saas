@@ -485,7 +485,7 @@ export default function Dashboard() {
                         { c: "6.00.20.01-6", q: 8 },
                         { c: "6.00.30.02-0", q: 4 },
                       ],
-                      obs: null,
+                      obs: "Os dois códigos são utilizados, pois a fono realiza os dois procedimentos na sessão.",
                     },
                     {
                       label: "Psicopedagogia",
