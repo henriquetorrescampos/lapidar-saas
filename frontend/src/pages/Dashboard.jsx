@@ -509,10 +509,10 @@ export default function Dashboard() {
                       label: "Fisioterapia",
                       codes: [
                         { c: "6.00.20.01-6", q: 8 },
-                        { c: "6.00.30.02-0", q: 8 },
+                        { c: "2.01.03.63-8", q: 8 },
                         { c: "5.00.00.58-6", q: 1 },
                       ],
-                      obs: null,
+                      obs: "Estamos aguardando o plano Ipasgo liberar os códigos de Fisioterapia, enquanto isso utilizamos esses códigos.",
                     },
                   ].map(({ label, codes, obs }) => (
                     <div key={label} className="py-3 first:pt-0 last:pb-0">
