@@ -42,7 +42,7 @@ const ALL_SPECIALTIES = [
 
 const NON_AUTISTIC_CODES = {
   Psicologia:            { codes: [{ c: "5.00.00.47-0", q: "8" }, { c: "5.00.01.22-1", q: "1" }], obs: null },
-  Fonoaudiologia:        { codes: [{ c: "6.00.20.01-6", q: "8" }, { c: "6.00.30.02-0", q: "8" }, { c: "5.00.00.58-6", q: "1" }], obs: null },
+  Fonoaudiologia:        { codes: [{ c: "6.00.20.01-6", q: "8" }, { c: "6.00.30.02-0", q: "5" }, { c: "5.00.00.58-6", q: "1" }], obs: null },
   Psicopedagogia:        { codes: [{ c: "5.00.00.47-0", q: "8" }, { c: "5.00.01.22-1", q: "1" }], obs: null },
   "Terapia Ocupacional": { codes: [{ c: "5.00.00.47-0", q: "8" }, { c: "5.00.00.05-5", q: "1" }, { c: "2.01.03.63-8", q: "8" }], obs: "O plano do IPASGO não disponibiliza o código de Terapia Ocupacional para todos os beneficiários" },
   Fisioterapia:          { codes: [{ c: "5.00.00.47-0", q: "8" }, { c: "2.01.03.63-8", q: "8" }, { c: "5.00.00.05-5", q: "1" }], obs: "Ainda estamos em processo de adicionar os códigos de Fisioterapia no nosso sistema do IPASGO" },
