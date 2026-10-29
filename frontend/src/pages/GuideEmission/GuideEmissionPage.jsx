@@ -16,8 +16,18 @@ import { guideEmissionService } from "../../services/guideEmissionService";
 const PAGE_SIZE = 10;
 
 const MONTH_NAMES = [
-  "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-  "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
+  "Janeiro",
+  "Fevereiro",
+  "Março",
+  "Abril",
+  "Maio",
+  "Junho",
+  "Julho",
+  "Agosto",
+  "Setembro",
+  "Outubro",
+  "Novembro",
+  "Dezembro",
 ];
 
 const DAY_NAMES = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
@@ -41,21 +51,64 @@ const ALL_SPECIALTIES = [
 ];
 
 const NON_AUTISTIC_CODES = {
-  Psicologia:            { codes: [{ c: "5.00.00.47-0", q: "8" }, { c: "5.00.01.22-1", q: "1" }], obs: null },
-  Fonoaudiologia:        { codes: [{ c: "6.00.20.01-6", q: "8" }, { c: "6.00.30.02-0", q: "5" }, { c: "5.00.00.58-6", q: "1" }], obs: null },
-  Psicopedagogia:        { codes: [{ c: "5.00.00.47-0", q: "8" }, { c: "5.00.01.22-1", q: "1" }], obs: null },
-  "Terapia Ocupacional": { codes: [{ c: "5.00.00.47-0", q: "8" }, { c: "5.00.00.05-5", q: "1" }, { c: "2.01.03.63-8", q: "8" }], obs: "O plano do IPASGO não disponibiliza o código de Terapia Ocupacional para todos os beneficiários" },
-  Fisioterapia:          { codes: [{ c: "5.00.00.47-0", q: "8" }, { c: "2.01.03.63-8", q: "8" }, { c: "5.00.00.05-5", q: "1" }], obs: "Ainda estamos em processo de adicionar os códigos de Fisioterapia no nosso sistema do IPASGO" },
-  Psicomotricidade:      { codes: [{ c: "5.00.00.47-0", q: "8" }, { c: "5.00.01.22-1", q: "1" }], obs: null },
+  Psicologia: {
+    codes: [
+      { c: "5.00.00.47-0", q: "8" },
+      { c: "5.00.01.22-1", q: "1" },
+    ],
+    obs: null,
+  },
+  Fonoaudiologia: {
+    codes: [
+      { c: "6.00.20.01-6", q: "8" },
+      { c: "6.00.30.02-0", q: "4" },
+      { c: "5.00.00.58-6", q: "1" },
+    ],
+    obs: null,
+  },
+  Psicopedagogia: {
+    codes: [
+      { c: "5.00.00.47-0", q: "8" },
+      { c: "5.00.01.22-1", q: "1" },
+    ],
+    obs: null,
+  },
+  "Terapia Ocupacional": {
+    codes: [
+      { c: "5.00.00.47-0", q: "8" },
+      { c: "5.00.00.05-5", q: "1" },
+      { c: "2.01.03.63-8", q: "8" },
+    ],
+    obs: "O plano do IPASGO não disponibiliza o código de Terapia Ocupacional para todos os beneficiários",
+  },
+  Fisioterapia: {
+    codes: [
+      { c: "5.00.00.47-0", q: "8" },
+      { c: "2.01.03.63-8", q: "8" },
+      { c: "5.00.00.05-5", q: "1" },
+    ],
+    obs: "Ainda estamos em processo de adicionar os códigos de Fisioterapia no nosso sistema do IPASGO",
+  },
+  Psicomotricidade: {
+    codes: [
+      { c: "5.00.00.47-0", q: "8" },
+      { c: "5.00.01.22-1", q: "1" },
+    ],
+    obs: null,
+  },
 };
 
 function formatDays(days) {
   if (!days) return "Sem agenda";
-  return days.split(",").filter(Boolean).map((entry) => {
-    const [d, q] = entry.split(":").map(Number);
-    const name = DAY_NAMES[d] || "?";
-    return q > 1 ? `${name} (${q}×)` : name;
-  }).join(", ");
+  return days
+    .split(",")
+    .filter(Boolean)
+    .map((entry) => {
+      const [d, q] = entry.split(":").map(Number);
+      const name = DAY_NAMES[d] || "?";
+      return q > 1 ? `${name} (${q}×)` : name;
+    })
+    .join(", ");
 }
 
 export default function GuideEmissionPage() {
@@ -86,32 +139,49 @@ export default function GuideEmissionPage() {
     }
   }, [month, year]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
 
   // Reset página ao mudar filtros ou mês
-  useEffect(() => { setCurrentPage(1); }, [search, filterSpecialty, filterStatus, filterDay, month, year]);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, filterSpecialty, filterStatus, filterDay, month, year]);
 
   function prevMonth() {
-    if (month === 1) { setMonth(12); setYear((y) => y - 1); }
-    else setMonth((m) => m - 1);
+    if (month === 1) {
+      setMonth(12);
+      setYear((y) => y - 1);
+    } else setMonth((m) => m - 1);
   }
 
   function nextMonth() {
-    if (month === 12) { setMonth(1); setYear((y) => y + 1); }
-    else setMonth((m) => m + 1);
+    if (month === 12) {
+      setMonth(1);
+      setYear((y) => y + 1);
+    } else setMonth((m) => m + 1);
   }
 
   async function handleToggle(item) {
     const key = `${item.patient_id}-${item.specialty}`;
     setToggling(key);
     try {
-      await guideEmissionService.toggle(item.patient_id, item.specialty, month, year);
+      await guideEmissionService.toggle(
+        item.patient_id,
+        item.specialty,
+        month,
+        year,
+      );
       setEmissions((prev) =>
         prev.map((e) =>
           e.patient_id === item.patient_id && e.specialty === item.specialty
-            ? { ...e, emitted: !e.emitted, emitted_at: !e.emitted ? new Date().toISOString() : null }
-            : e
-        )
+            ? {
+                ...e,
+                emitted: !e.emitted,
+                emitted_at: !e.emitted ? new Date().toISOString() : null,
+              }
+            : e,
+        ),
       );
     } catch (err) {
       setError(err.message || "Erro ao atualizar emissão");
@@ -127,11 +197,21 @@ export default function GuideEmissionPage() {
   // Filtro client-side
   const filtered = useMemo(() => {
     return emissions.filter((item) => {
-      if (search && !item.patient_name.toLowerCase().includes(search.toLowerCase())) return false;
+      if (
+        search &&
+        !item.patient_name.toLowerCase().includes(search.toLowerCase())
+      )
+        return false;
       if (filterSpecialty && item.specialty !== filterSpecialty) return false;
       if (filterStatus === "emitted" && !item.emitted) return false;
       if (filterStatus === "pending" && item.emitted) return false;
-      if (filterDay && !(item.schedule_days || "").split(",").some((e) => e.split(":")[0] === filterDay)) return false;
+      if (
+        filterDay &&
+        !(item.schedule_days || "")
+          .split(",")
+          .some((e) => e.split(":")[0] === filterDay)
+      )
+        return false;
       return true;
     });
   }, [emissions, search, filterSpecialty, filterStatus, filterDay]);
@@ -140,14 +220,18 @@ export default function GuideEmissionPage() {
   const { groupedList, totalPatients, totalPages, pageGroups } = useMemo(() => {
     const grouped = filtered.reduce((acc, item) => {
       if (!acc[item.patient_id]) {
-        acc[item.patient_id] = { id: item.patient_id, name: item.patient_name, items: [] };
+        acc[item.patient_id] = {
+          id: item.patient_id,
+          name: item.patient_name,
+          items: [],
+        };
       }
       acc[item.patient_id].items.push(item);
       return acc;
     }, {});
 
     const list = Object.values(grouped).sort((a, b) =>
-      a.name.localeCompare(b.name, "pt-BR")
+      a.name.localeCompare(b.name, "pt-BR"),
     );
     const total = list.length;
     const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
@@ -163,7 +247,8 @@ export default function GuideEmissionPage() {
 
   const safePage = Math.min(currentPage, totalPages);
 
-  const hasActiveFilter = search || filterSpecialty || filterStatus !== "all" || filterDay;
+  const hasActiveFilter =
+    search || filterSpecialty || filterStatus !== "all" || filterDay;
 
   function clearFilters() {
     setSearch("");
@@ -175,7 +260,9 @@ export default function GuideEmissionPage() {
   return (
     <Layout>
       <div>
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">Emissão de Guias</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-2">
+          Emissão de Guias
+        </h1>
         <p className="text-gray-500 text-sm mb-8">
           Controle mensal de emissão de guias para pacientes ABA e IAMESC
         </p>
@@ -184,7 +271,10 @@ export default function GuideEmissionPage() {
           <div className="mb-6 flex items-center gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
             <AlertCircle size={18} className="shrink-0" />
             <span>{error}</span>
-            <button onClick={() => setError("")} className="ml-auto text-red-400 hover:text-red-600">
+            <button
+              onClick={() => setError("")}
+              className="ml-auto text-red-400 hover:text-red-600"
+            >
               <X size={16} />
             </button>
           </div>
@@ -192,13 +282,19 @@ export default function GuideEmissionPage() {
 
         {/* Navegação de mês */}
         <div className="flex items-center gap-4 mb-6">
-          <button onClick={prevMonth} className="p-2 rounded-lg hover:bg-gray-100 transition">
+          <button
+            onClick={prevMonth}
+            className="p-2 rounded-lg hover:bg-gray-100 transition"
+          >
             <ChevronLeft size={20} />
           </button>
           <h2 className="text-xl font-semibold text-gray-700 min-w-[180px] text-center">
             {MONTH_NAMES[month - 1]} {year}
           </h2>
-          <button onClick={nextMonth} className="p-2 rounded-lg hover:bg-gray-100 transition">
+          <button
+            onClick={nextMonth}
+            className="p-2 rounded-lg hover:bg-gray-100 transition"
+          >
             <ChevronRight size={20} />
           </button>
         </div>
@@ -218,7 +314,10 @@ export default function GuideEmissionPage() {
         {/* Filtros */}
         <div className="flex flex-wrap gap-3 mb-6">
           <div className="relative flex-1 min-w-[200px]">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search
+              size={16}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+            />
             <input
               type="text"
               placeholder="Buscar paciente..."
@@ -234,7 +333,11 @@ export default function GuideEmissionPage() {
             className="input-field py-2 text-sm min-w-[180px]"
           >
             <option value="">Todas as especialidades</option>
-            {ALL_SPECIALTIES.map((s) => <option key={s} value={s}>{s}</option>)}
+            {ALL_SPECIALTIES.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
           </select>
 
           <select
@@ -278,7 +381,10 @@ export default function GuideEmissionPage() {
           <Card>
             <div className="flex items-center gap-3 text-gray-400 py-4">
               <AlertCircle size={24} />
-              <p>Nenhum paciente ABA ou IAMESC com especialidades encontrado. Configure a agenda dos pacientes no cadastro.</p>
+              <p>
+                Nenhum paciente ABA ou IAMESC com especialidades encontrado.
+                Configure a agenda dos pacientes no cadastro.
+              </p>
             </div>
           </Card>
         ) : groupedList.length === 0 ? (
@@ -292,131 +398,200 @@ export default function GuideEmissionPage() {
           <>
             <div className="space-y-6">
               {pageGroups.map((group) => {
-                const isIamesc = group.items.some((i) => i.health_plan?.toUpperCase().includes("IAMESC"));
+                const isIamesc = group.items.some((i) =>
+                  i.health_plan?.toUpperCase().includes("IAMESC"),
+                );
                 return (
-                <Card key={group.id}>
-                  <div className="flex items-center gap-2 mb-4">
-                    <h3 className="font-bold text-gray-800 text-lg">{group.name}</h3>
-                    {isIamesc && (
-                      <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">
-                        IAMESC
-                      </span>
-                    )}
-                  </div>
-                  <div className="space-y-3">
-                    {group.items.map((item) => {
-                      const key = `${item.patient_id}-${item.specialty}`;
-                      const isToggling = toggling === key;
-                      const noSchedule = !item.schedule_days;
+                  <Card key={group.id}>
+                    <div className="flex items-center gap-2 mb-4">
+                      <h3 className="font-bold text-gray-800 text-lg">
+                        {group.name}
+                      </h3>
+                      {isIamesc && (
+                        <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">
+                          IAMESC
+                        </span>
+                      )}
+                    </div>
+                    <div className="space-y-3">
+                      {group.items.map((item) => {
+                        const key = `${item.patient_id}-${item.specialty}`;
+                        const isToggling = toggling === key;
+                        const noSchedule = !item.schedule_days;
 
-                      return (
-                        <div
-                          key={key}
-                          className={`flex items-center justify-between p-3 rounded-lg border transition ${
-                            item.emitted ? "bg-green-50 border-green-200" : "bg-white border-gray-200"
-                          }`}
-                        >
-                          <div className="flex items-center gap-3 flex-1">
-                            <button
-                              onClick={() => handleToggle(item)}
-                              disabled={isToggling}
-                              className="shrink-0 text-gray-400 hover:text-green-600 transition disabled:opacity-50"
-                            >
-                              {item.emitted ? (
-                                <CheckCircle size={24} className="text-green-500" />
-                              ) : (
-                                <Circle size={24} />
-                              )}
-                            </button>
-
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 flex-wrap">
-                                <span
-                                  className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
-                                    SPECIALTY_COLORS[item.specialty] || "bg-gray-100 text-gray-600"
-                                  }`}
-                                >
-                                  {item.specialty}
-                                </span>
-                                {noSchedule && (
-                                  <span className="text-xs text-amber-500 flex items-center gap-1">
-                                    <AlertCircle size={12} />
-                                    Sem agenda configurada
-                                  </span>
+                        return (
+                          <div
+                            key={key}
+                            className={`flex items-center justify-between p-3 rounded-lg border transition ${
+                              item.emitted
+                                ? "bg-green-50 border-green-200"
+                                : "bg-white border-gray-200"
+                            }`}
+                          >
+                            <div className="flex items-center gap-3 flex-1">
+                              <button
+                                onClick={() => handleToggle(item)}
+                                disabled={isToggling}
+                                className="shrink-0 text-gray-400 hover:text-green-600 transition disabled:opacity-50"
+                              >
+                                {item.emitted ? (
+                                  <CheckCircle
+                                    size={24}
+                                    className="text-green-500"
+                                  />
+                                ) : (
+                                  <Circle size={24} />
                                 )}
-                              </div>
-                              <p className="text-sm text-gray-500 mt-1">
-                                {noSchedule
-                                  ? "Configure os dias na edição do paciente"
-                                  : item.autism_status === "nao_autista"
-                                  ? (() => {
-                                      const codes = NON_AUTISTIC_CODES[item.specialty];
-                                      if (!codes) return (
-                                        <span className="text-base font-bold text-gray-700">
-                                          {formatDays(item.schedule_days)} — 4 atendimentos
-                                        </span>
-                                      );
-                                      return (
-                                        <span className="flex flex-col gap-0.5">
-                                          <span className="text-base font-bold text-gray-700">
-                                            {formatDays(item.schedule_days)} —{" "}
-                                            {codes.codes.map((entry, i) => (
-                                              <span key={entry.c}>
-                                                <span className="text-blue-600 font-semibold">{entry.c}</span> ({entry.q} qtd){i < codes.codes.length - 1 ? " + " : ""}
-                                              </span>
-                                            ))}
-                                            {" "}= 4 atendimentos
-                                          </span>
-                                          {codes.obs && (
-                                            <span className="text-xs text-amber-600">
-                                              Obs: {codes.obs}
-                                            </span>
-                                          )}
-                                        </span>
-                                      );
-                                    })()
-                                  : (() => {
-                                    const isAdultAutistic = item.autism_status === "autista" && item.birth_date &&
-                                      Math.floor((new Date() - new Date(item.birth_date)) / (365.25 * 24 * 60 * 60 * 1000)) >= 18;
-                                    const effectiveQty = isAdultAutistic ? item.quantity * 2 : item.quantity;
-                                    return (
-                                      <span className="flex flex-col gap-0.5">
-                                        <span className="text-xl font-bold text-gray-700">
-                                          {formatDays(item.schedule_days)} — {effectiveQty} sessões
-                                        </span>
-                                        {!item.health_plan?.toUpperCase().includes("IAMESC") && (item.specialty === "Terapia Ocupacional" || item.specialty === "Psicomotricidade" || item.specialty === "Fisioterapia") && (
-                                          <span className="text-base font-semibold text-gray-700">
-                                            1 qtd <span className="text-blue-600">5.00.00.05-5</span> + {effectiveQty} qtd <span className="text-blue-600">0.00.40.04-5</span>
-                                          </span>
-                                        )}
-                                        {!item.health_plan?.toUpperCase().includes("IAMESC") && item.specialty === "Fonoaudiologia" && (
-                                          <span className="text-base font-semibold text-gray-700">
-                                            {effectiveQty} qtd <span className="text-blue-600">0.00.11.18-5</span> + 1 qtd <span className="text-blue-600">5.00.00.58-6</span>
-                                          </span>
-                                        )}
-                                        {!item.health_plan?.toUpperCase().includes("IAMESC") && item.specialty === "Psicologia" && (
-                                          <span className="text-base font-semibold text-gray-700">
-                                            {effectiveQty} qtd <span className="text-blue-600">0.00.11.19-3</span> + 1 qtd <span className="text-blue-600">5.00.01.22-1</span>
-                                          </span>
-                                        )}
-                                      </span>
-                                    );
-                                  })()}
-                              </p>
-                            </div>
-                          </div>
+                              </button>
 
-                          {item.emitted && item.emitted_at && (
-                            <span className="text-xs text-gray-400 shrink-0">
-                              Emitida em {new Date(item.emitted_at).toLocaleDateString("pt-BR")}
-                            </span>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </Card>
-              );
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span
+                                    className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+                                      SPECIALTY_COLORS[item.specialty] ||
+                                      "bg-gray-100 text-gray-600"
+                                    }`}
+                                  >
+                                    {item.specialty}
+                                  </span>
+                                  {noSchedule && (
+                                    <span className="text-xs text-amber-500 flex items-center gap-1">
+                                      <AlertCircle size={12} />
+                                      Sem agenda configurada
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-sm text-gray-500 mt-1">
+                                  {noSchedule
+                                    ? "Configure os dias na edição do paciente"
+                                    : item.autism_status === "nao_autista"
+                                      ? (() => {
+                                          const codes =
+                                            NON_AUTISTIC_CODES[item.specialty];
+                                          if (!codes)
+                                            return (
+                                              <span className="text-base font-bold text-gray-700">
+                                                {formatDays(item.schedule_days)}{" "}
+                                                — 4 atendimentos
+                                              </span>
+                                            );
+                                          return (
+                                            <span className="flex flex-col gap-0.5">
+                                              <span className="text-base font-bold text-gray-700">
+                                                {formatDays(item.schedule_days)}{" "}
+                                                —{" "}
+                                                {codes.codes.map((entry, i) => (
+                                                  <span key={entry.c}>
+                                                    <span className="text-blue-600 font-semibold">
+                                                      {entry.c}
+                                                    </span>{" "}
+                                                    ({entry.q} qtd)
+                                                    {i < codes.codes.length - 1
+                                                      ? " + "
+                                                      : ""}
+                                                  </span>
+                                                ))}{" "}
+                                                = 4 atendimentos
+                                              </span>
+                                              {codes.obs && (
+                                                <span className="text-xs text-amber-600">
+                                                  Obs: {codes.obs}
+                                                </span>
+                                              )}
+                                            </span>
+                                          );
+                                        })()
+                                      : (() => {
+                                          const isAdultAutistic =
+                                            item.autism_status === "autista" &&
+                                            item.birth_date &&
+                                            Math.floor(
+                                              (new Date() -
+                                                new Date(item.birth_date)) /
+                                                (365.25 * 24 * 60 * 60 * 1000),
+                                            ) >= 18;
+                                          const effectiveQty = isAdultAutistic
+                                            ? item.quantity * 2
+                                            : item.quantity;
+                                          return (
+                                            <span className="flex flex-col gap-0.5">
+                                              <span className="text-xl font-bold text-gray-700">
+                                                {formatDays(item.schedule_days)}{" "}
+                                                — {effectiveQty} sessões
+                                              </span>
+                                              {!item.health_plan
+                                                ?.toUpperCase()
+                                                .includes("IAMESC") &&
+                                                (item.specialty ===
+                                                  "Terapia Ocupacional" ||
+                                                  item.specialty ===
+                                                    "Psicomotricidade" ||
+                                                  item.specialty ===
+                                                    "Fisioterapia") && (
+                                                  <span className="text-base font-semibold text-gray-700">
+                                                    1 qtd{" "}
+                                                    <span className="text-blue-600">
+                                                      5.00.00.05-5
+                                                    </span>{" "}
+                                                    + {effectiveQty} qtd{" "}
+                                                    <span className="text-blue-600">
+                                                      0.00.40.04-5
+                                                    </span>
+                                                  </span>
+                                                )}
+                                              {!item.health_plan
+                                                ?.toUpperCase()
+                                                .includes("IAMESC") &&
+                                                item.specialty ===
+                                                  "Fonoaudiologia" && (
+                                                  <span className="text-base font-semibold text-gray-700">
+                                                    {effectiveQty} qtd{" "}
+                                                    <span className="text-blue-600">
+                                                      0.00.11.18-5
+                                                    </span>{" "}
+                                                    + 1 qtd{" "}
+                                                    <span className="text-blue-600">
+                                                      5.00.00.58-6
+                                                    </span>
+                                                  </span>
+                                                )}
+                                              {!item.health_plan
+                                                ?.toUpperCase()
+                                                .includes("IAMESC") &&
+                                                item.specialty ===
+                                                  "Psicologia" && (
+                                                  <span className="text-base font-semibold text-gray-700">
+                                                    {effectiveQty} qtd{" "}
+                                                    <span className="text-blue-600">
+                                                      0.00.11.19-3
+                                                    </span>{" "}
+                                                    + 1 qtd{" "}
+                                                    <span className="text-blue-600">
+                                                      5.00.01.22-1
+                                                    </span>
+                                                  </span>
+                                                )}
+                                            </span>
+                                          );
+                                        })()}
+                                </p>
+                              </div>
+                            </div>
+
+                            {item.emitted && item.emitted_at && (
+                              <span className="text-xs text-gray-400 shrink-0">
+                                Emitida em{" "}
+                                {new Date(item.emitted_at).toLocaleDateString(
+                                  "pt-BR",
+                                )}
+                              </span>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </Card>
+                );
               })}
             </div>
 
@@ -424,8 +599,9 @@ export default function GuideEmissionPage() {
             {totalPages > 1 && (
               <div className="flex items-center justify-between mt-8">
                 <p className="text-sm text-gray-500">
-                  {totalPatients} paciente{totalPatients !== 1 ? "s" : ""} encontrado{totalPatients !== 1 ? "s" : ""} —
-                  página {safePage} de {totalPages}
+                  {totalPatients} paciente{totalPatients !== 1 ? "s" : ""}{" "}
+                  encontrado{totalPatients !== 1 ? "s" : ""} — página {safePage}{" "}
+                  de {totalPages}
                 </p>
                 <div className="flex items-center gap-1">
                   <button
@@ -436,22 +612,26 @@ export default function GuideEmissionPage() {
                     <ChevronLeft size={18} />
                   </button>
 
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <button
-                      key={page}
-                      onClick={() => setCurrentPage(page)}
-                      className={`w-9 h-9 rounded-lg text-sm font-medium transition ${
-                        page === safePage
-                          ? "bg-primary-600 text-white"
-                          : "hover:bg-gray-100 text-gray-600"
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  ))}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`w-9 h-9 rounded-lg text-sm font-medium transition ${
+                          page === safePage
+                            ? "bg-primary-600 text-white"
+                            : "hover:bg-gray-100 text-gray-600"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ),
+                  )}
 
                   <button
-                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                    onClick={() =>
+                      setCurrentPage((p) => Math.min(totalPages, p + 1))
+                    }
                     disabled={safePage === totalPages}
                     className="p-2 rounded-lg hover:bg-gray-100 transition disabled:opacity-30 disabled:cursor-not-allowed"
                   >
