@@ -458,8 +458,8 @@ export default function Dashboard() {
                 <div className="flex items-center gap-2 mb-4">
                   <div className="w-3 h-3 rounded-full bg-teal-500" />
                   <h3 className="font-semibold text-gray-800">
-                    Terapia ABA e Terapia
-                    Ocupacional/Fonoaudiologia/Fisioterapia — Pacientes{" "}
+                    Psicologia|Terapia Ocupacional|Fonoaudiologia|Fisioterapia —
+                    Pacientes{" "}
                     <span className="text-teal-600">
                       SEM AUTISMO - CRIANÇAS E ADULTOS
                     </span>
