@@ -483,9 +483,10 @@ export default function Dashboard() {
                       label: "Fonoaudiologia",
                       codes: [
                         { c: "6.00.20.01-6", q: 8 },
-                        { c: "6.00.30.02-0", q: 5 },
+                        { c: "6.00.30.02-0", q: 4 },
+                        { c: "5.00.00.58-6", q: 1 },
                       ],
-                      obs: "Os dois códigos são utilizados, pois a fono realiza os dois procedimentos na sessão.",
+                      obs: null,
                     },
                     {
                       label: "Psicopedagogia",
@@ -555,7 +556,7 @@ export default function Dashboard() {
                       {[
                         { label: "Terapia Ocupacional", code: "5.00.00.05-5" },
                         {
-                          label: "Fonoaudiologia (SOMENTE A ANAMNESE)",
+                          label: "Fonoaudiologia",
                           code: "5.00.00.58-6",
                         },
                         { label: "Psicologia", code: "5.00.01.22-1" },
