@@ -499,16 +499,16 @@ export default function Dashboard() {
                     {
                       label: "Terapia Ocupacional",
                       codes: [
-                        { c: "2.01.03.63-8", q: 8 },
-                        { c: "5.00.00.47-0", q: 8 },
+                        { c: "6.00.30.02-0", q: 8 },
+                        { c: "6.00.20.01-6", q: 8 },
                         { c: "5.00.00.05-5", q: 1 },
                       ],
-                      obs: "O plano do IPASGO não disponibiliza o código de TO para todos os beneficiários. O procedimento labirintite é realizado dentro da sessão.",
+                      obs: "O plano do IPASGO não disponibiliza o código de TO para todos os beneficiários.",
                     },
                     {
                       label: "Fisioterapia",
                       codes: [
-                        { c: "2.01.03.63-8", q: 8 },
+                        { c: "6.00.30.02-0", q: 8 },
                         { c: "6.00.20.01-6", q: 8 },
                         { c: "5.00.00.58-6", q: 1 },
                       ],
