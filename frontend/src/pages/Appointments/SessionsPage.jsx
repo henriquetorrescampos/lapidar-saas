@@ -5,7 +5,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronDown,
-  Info,
 } from "lucide-react";
 import Layout from "../../components/Layout/Layout";
 import Card from "../../components/Common/Card";
@@ -767,96 +766,6 @@ export default function SessionsPage() {
             {selectedPatient?.health_plan?.toUpperCase() !== "PARTICULAR" && (<>
 
             {/* Dicas ABA */}
-            {selectedPatient?.patient_type?.includes("ABA") && (
-              <details className="mb-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <summary className="flex items-center gap-2 px-4 py-2.5 cursor-pointer select-none">
-                  <Info size={16} className="text-blue-500 shrink-0" />
-                  <span className="text-sm font-medium text-blue-800">
-                    Dicas para emissão de guias
-                  </span>
-                </summary>
-                <ul className="px-4 pb-3 pt-1 space-y-1.5 text-lg text-blue-700 list-disc list-inside">
-                  <li>
-                    Paciente 1x/semana → 1 quantidade na guia = 1 atendimento
-                    (40 min). Ex: 4 semanas → emitir 4 quantidades.
-                  </li>
-                  <li>
-                    Paciente 2x/semana → 1 sessão na guia equivale a 1
-                    atendimento. Checar quantas semanas no mês (ex: 4 semanas =
-                    emitir 8 sessões).
-                  </li>
-                </ul>
-              </details>
-            )}
-
-            {selectedPatient?.patient_type?.includes("ABA") && (
-              <p className="text-xl text-gray-500 mb-4 px-1">
-                * Caso o paciente seja da Gislene e tenha TEA(autismo), emitir
-                guia com código de psicologia ABA: 1x/semana = 4 quantidades,
-                2x/semana = 8 quantidades (1 qtd = 1 atendimento, 40 min).
-              </p>
-            )}
-
-            {/* Dicas ABA adulto Fisioterapia/Fonoaudiologia (não TEA) */}
-            {selectedPatient?.patient_type?.includes("ABA") &&
-              selectedPatient?.autism_status !== "nao_autista" &&
-              getPatientAge(selectedPatient?.birth_date) > 18 &&
-              (selectedPatient?.specialties?.includes("Fisioterapia") ||
-                selectedPatient?.specialties?.includes("Fonoaudiologia")) && (
-              <details className="mb-4 bg-teal-50 border border-teal-200 rounded-lg">
-                <summary className="flex items-center gap-2 px-4 py-2.5 cursor-pointer select-none">
-                  <Info size={16} className="text-teal-500 shrink-0" />
-                  <span className="text-sm font-medium text-teal-800">
-                    Dicas para emissão de guias — Adulto (Fisioterapia/Fonoaudiologia)
-                  </span>
-                </summary>
-                <ul className="px-4 pb-3 pt-1 space-y-1.5 text-lg text-teal-700 list-disc list-inside">
-                  <li>
-                    Emitir <strong>5.00.00.47-0</strong> (10 quantidades) +{" "}
-                    <strong>5.00.00.61-6</strong> (4 quantidades) por
-                    especialidade.
-                  </li>
-                </ul>
-              </details>
-            )}
-
-            {/* Dicas Paciente Não Autista */}
-            {selectedPatient?.autism_status === "nao_autista" && (
-              <details className="mb-4 bg-amber-50 border border-amber-200 rounded-lg">
-                <summary className="flex items-center gap-2 px-4 py-2.5 cursor-pointer select-none">
-                  <Info size={16} className="text-amber-500 shrink-0" />
-                  <span className="text-sm font-medium text-amber-800">
-                    Dicas para emissão de guias — Paciente Não Autista
-                  </span>
-                </summary>
-                <ul className="px-4 pb-3 pt-1 space-y-1.5 text-lg text-amber-700 list-disc list-inside">
-                  <li>
-                    Emitir <strong>5.00.00.47-0</strong> (10 quantidades) +{" "}
-                    <strong>5.00.01.22-1</strong> (1 quantidade) por
-                    especialidade — equivale a 5 atendimentos.
-                  </li>
-                </ul>
-              </details>
-            )}
-
-            {/* Dicas Terapia Adulto */}
-            {selectedPatient?.patient_type?.includes("TERAPIA_ADULTO") && (
-              <details className="mb-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <summary className="flex items-center gap-2 px-4 py-2.5 cursor-pointer select-none">
-                  <Info size={16} className="text-blue-500 shrink-0" />
-                  <span className="text-sm font-medium text-blue-800">
-                    Dicas para emissão de guias
-                  </span>
-                </summary>
-                <ul className="px-4 pb-3 pt-1 space-y-1.5 text-lg text-blue-700 list-disc list-inside">
-                  <li>
-                    A guia de terapia adulto com 10 quantidades representa 5
-                    sessões. Sempre emitir a guia na última sessão para reservar
-                    o horário para o paciente.
-                  </li>
-                </ul>
-              </details>
-            )}
             </>)}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
