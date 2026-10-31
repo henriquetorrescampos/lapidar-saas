@@ -447,6 +447,9 @@ export default function Dashboard() {
                     ℹ Cada sessão de 40 min é composta por 2 blocos de 20 min —
                     portanto, 1 sessão = 2 quantidades na guia
                   </p>
+                  <p className="text-sm font-semibold text-amber-700 mt-2 bg-amber-50 rounded px-3 py-2">
+                    ⚠ Sempre emitir a guia do paciente na última sessão, ou seja na 4ª sessão do paciente
+                  </p>
                 </div>
                 <div className="divide-y divide-gray-100">
                   {[
