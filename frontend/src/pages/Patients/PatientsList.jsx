@@ -91,7 +91,6 @@ export default function PatientsList() {
   const SPECIALTIES = [
     { value: "ABA", label: "ABA" },
     { value: "TERAPIA_ADULTO", label: "Terapia Adulto" },
-    { value: "AVALIACAO_NEUROPSICOLOGICA", label: "Avaliação Neuropsicológica" },
   ];
 
   const filteredPatients = patients.filter((patient) => {
@@ -224,7 +223,7 @@ export default function PatientsList() {
               >
                 <option value="">Todos</option>
                 {employeesList
-                  .filter((emp) => ["PSICOLOGA", "TERAPEUTA OCUPACIONAL", "NEUROPSICOLOGA", "FONOAUDIOLOGA", "PSICOPEDAGOGA"].includes(emp.specialty))
+                  .filter((emp) => ["PSICOLOGA", "TERAPEUTA OCUPACIONAL", "FONOAUDIOLOGA", "PSICOPEDAGOGA"].includes(emp.specialty))
                   .map((emp) => (
                     <option key={emp.id} value={String(emp.id)}>{emp.name}</option>
                   ))}
@@ -304,24 +303,20 @@ export default function PatientsList() {
                                   const labels = {
                                     ABA: "ABA",
                                     TERAPIA_ADULTO: "Terapia Adulto",
-                                    AVALIACAO_NEUROPSICOLOGICA: "Avaliação Neuro",
                                   };
                                   const colors = {
                                     ABA: "bg-blue-100 text-blue-800",
                                     TERAPIA_ADULTO: "bg-purple-100 text-purple-800",
-                                    AVALIACAO_NEUROPSICOLOGICA: "bg-green-100 text-green-800",
                                   };
                                   let typeProf = null;
-                                  if (type === "AVALIACAO_NEUROPSICOLOGICA" || type === "TERAPIA_ADULTO") {
+                                  if (type === "TERAPIA_ADULTO") {
                                     try {
                                       const profs = patient.specialty_professionals ? JSON.parse(patient.specialty_professionals) : {};
-                                      const key = type === "AVALIACAO_NEUROPSICOLOGICA" ? "Neuropsicologia" : "TerapiaAdulto";
-                                      const empId = profs[key];
+                                      const empId = profs["TerapiaAdulto"];
                                       if (empId) typeProf = employeesMap[empId] || null;
                                     } catch { typeProf = null; }
                                   }
                                   const profColors = {
-                                    AVALIACAO_NEUROPSICOLOGICA: "text-green-700",
                                     TERAPIA_ADULTO: "text-purple-700",
                                   };
                                   return (
@@ -348,7 +343,6 @@ export default function PatientsList() {
                                 Psicopedagogia: "bg-violet-50 text-violet-700",
                                 Psicomotricidade: "bg-pink-50 text-pink-700",
                                 Fisioterapia: "bg-teal-50 text-teal-700",
-                                Neuropsicologia: "bg-amber-50 text-amber-700",
                               };
                               const DAY_COLORS = {
                                 Psicologia: "bg-green-500 text-white",
@@ -357,7 +351,6 @@ export default function PatientsList() {
                                 Psicopedagogia: "bg-violet-500 text-white",
                                 Psicomotricidade: "bg-pink-500 text-white",
                                 Fisioterapia: "bg-teal-500 text-white",
-                                Neuropsicologia: "bg-amber-500 text-white",
                               };
                               const PROF_COLORS = {
                                 Psicologia: "text-green-700",
@@ -366,7 +359,6 @@ export default function PatientsList() {
                                 Psicopedagogia: "text-violet-700",
                                 Psicomotricidade: "text-pink-700",
                                 Fisioterapia: "text-teal-700",
-                                Neuropsicologia: "text-amber-700",
                               };
                               const DAY_SHORT = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
                               return (

@@ -25,7 +25,6 @@ const ALL_SPECIALTIES = [
   { value: "Psicomotricidade", label: "Psicomotricidade", employeeSpecialty: "TERAPEUTA OCUPACIONAL" },
   { value: "Fisioterapia", label: "Fisioterapia", employeeSpecialty: "TERAPEUTA OCUPACIONAL" },
   { value: "Terapia Adulto", label: "Terapia Adulto", employeeSpecialty: "PSICOLOGA" },
-  { value: "Avaliação Neuropsicológica", label: "Avaliação Neuropsicológica", employeeSpecialty: "NEUROPSICOLOGA" },
 ];
 
 const EMPTY_FORM = {

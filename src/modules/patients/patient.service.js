@@ -5,7 +5,7 @@ import {
   validateNumberId,
 } from "../../lib/validators.js";
 
-const PATIENT_TYPES = ["ABA", "TERAPIA_ADULTO", "AVALIACAO_NEUROPSICOLOGICA"];
+const PATIENT_TYPES = ["ABA", "TERAPIA_ADULTO"];
 
 function validatePatientType(patientType) {
   const types = patientType.split(",");

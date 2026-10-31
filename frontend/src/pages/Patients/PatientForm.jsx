@@ -150,9 +150,6 @@ export default function PatientForm() {
 
       if (has) {
         const updatedProfessionals = { ...prev.specialty_professionals };
-        if (value === "AVALIACAO_NEUROPSICOLOGICA") {
-          delete updatedProfessionals["Neuropsicologia"];
-        }
         if (value === "TERAPIA_ADULTO") {
           delete updatedProfessionals["TerapiaAdulto"];
         }
@@ -372,10 +369,6 @@ export default function PatientForm() {
                 {[
                   { value: "ABA", label: "ABA" },
                   { value: "TERAPIA_ADULTO", label: "Terapia Adulto" },
-                  {
-                    value: "AVALIACAO_NEUROPSICOLOGICA",
-                    label: "Avaliação Neuropsicológica",
-                  },
                 ].map((option) => (
                   <label
                     key={option.value}
@@ -445,28 +438,6 @@ export default function PatientForm() {
                   <option value="">-- Selecione a profissional --</option>
                   {employees
                     .filter((e) => e.specialty === "PSICOLOGA")
-                    .map((emp) => (
-                      <option key={emp.id} value={emp.id}>
-                        {emp.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
-            )}
-
-            {formData.patient_type.includes("AVALIACAO_NEUROPSICOLOGICA") && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Neuropsicologa Responsável
-                </label>
-                <select
-                  value={formData.specialty_professionals["Neuropsicologia"] || ""}
-                  onChange={(e) => handleProfessionalChange("Neuropsicologia", e.target.value)}
-                  className="input-field max-w-xs"
-                >
-                  <option value="">-- Selecione a profissional --</option>
-                  {employees
-                    .filter((e) => e.specialty === "NEUROPSICOLOGA")
                     .map((emp) => (
                       <option key={emp.id} value={emp.id}>
                         {emp.name}

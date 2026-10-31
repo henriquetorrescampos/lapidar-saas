@@ -141,7 +141,6 @@ export default function PatientView() {
                   const labels = {
                     ABA: "ABA",
                     TERAPIA_ADULTO: "Terapia Adulto",
-                    AVALIACAO_NEUROPSICOLOGICA: "Avaliação Neuropsicológica",
                   };
                   return (
                     <span

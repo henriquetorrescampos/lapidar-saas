@@ -336,11 +336,7 @@ export default function SessionsPage() {
     }
   };
 
-  const therapyPatients = patients.filter(
-    (patient) => patient.patient_type !== "AVALIACAO_NEUROPSICOLOGICA",
-  );
-
-  const filteredPatients = therapyPatients.filter((patient) =>
+  const filteredPatients = patients.filter((patient) =>
     patient.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
@@ -673,7 +669,7 @@ export default function SessionsPage() {
               <select
                 value={selectedPatient?.id || ""}
                 onChange={(e) => {
-                  const patient = therapyPatients.find(
+                  const patient = patients.find(
                     (p) => p.id === parseInt(e.target.value),
                   );
                   setSelectedPatient(patient);
@@ -681,7 +677,7 @@ export default function SessionsPage() {
                 className="input-field"
               >
                 <option value="">-- Selecione um paciente --</option>
-                {therapyPatients.map((patient) => (
+                {patients.map((patient) => (
                   <option key={patient.id} value={patient.id}>
                     {patient.name} - {formatPatientAge(patient.birth_date)}
                   </option>
