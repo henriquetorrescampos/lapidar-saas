@@ -504,6 +504,7 @@ export default function GuideEmissionPage() {
                                       : (() => {
                                           const isAdultAutistic =
                                             item.autism_status === "autista" &&
+                                            !item.health_plan?.toUpperCase().includes("IAMESC") &&
                                             item.birth_date &&
                                             Math.floor(
                                               (new Date() -

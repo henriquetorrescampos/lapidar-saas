@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import {
   Save,
   Trash2,
@@ -152,7 +152,6 @@ export default function SessionsPage() {
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
-  const [sessionsLoading, setSessionsLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -255,9 +254,8 @@ export default function SessionsPage() {
     }
   };
 
-  const loadExistingSessions = async (force = false) => {
+  const loadExistingSessions = async () => {
     if (!selectedPatient) return;
-    if (!force) setSessionsLoading(true);
 
     try {
       const allSessions = await appointmentService.getAllByPatient(selectedPatient.id);
@@ -284,8 +282,6 @@ export default function SessionsPage() {
     } catch (err) {
       console.error("Erro ao carregar sessões:", err);
       setSessions(initializeSessions(selectedPatient));
-    } finally {
-      if (!force) setSessionsLoading(false);
     }
   };
 
@@ -340,12 +336,20 @@ export default function SessionsPage() {
     patient.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  const getSpecialtySessions = (specialty) => {
+  const getSpecialtySessions = useCallback((specialty) => {
     if (Array.isArray(sessions[specialty])) {
       return sessions[specialty];
     }
     return initializeSessions(selectedPatient)[specialty] || [];
-  };
+  }, [sessions, selectedPatient]);
+
+  const historyTotalsBySpecialty = useMemo(() => {
+    const map = {};
+    for (const item of history) {
+      map[item.specialty] = (map[item.specialty] || 0) + (item.completed || 0);
+    }
+    return map;
+  }, [history]);
 
   const handleSessionToggle = useCallback(
     async (specialty, index) => {
@@ -560,7 +564,7 @@ export default function SessionsPage() {
       });
 
       const reloads = [
-        loadExistingSessions(true),
+        loadExistingSessions(),
         loadSessionHistory(selectedPatient.id),
       ];
       if (selectedPatient.health_plan?.toUpperCase() === "PARTICULAR") {
@@ -766,9 +770,7 @@ export default function SessionsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
               {getAvailableSpecialties(selectedPatient).map((specialty) => {
-                const historySessions = history
-                  .filter((item) => item.specialty === specialty)
-                  .reduce((sum, item) => sum + (item.completed || 0), 0);
+                const historySessions = historyTotalsBySpecialty[specialty] || 0;
                 const activeSessions = countCompleted(specialty);
                 const totalSessions = historySessions + activeSessions;
 
@@ -800,7 +802,7 @@ export default function SessionsPage() {
                         sessionItem={getSpecialtySessions(specialty)[index]}
                         onToggle={handleSessionToggle}
                         onDateChange={handleSessionDateChange}
-                        disabled={sessionsLoading || submitting}
+                        disabled={submitting}
                       />
                     ))}
                   </div>
