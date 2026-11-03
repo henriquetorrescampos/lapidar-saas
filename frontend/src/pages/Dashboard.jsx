@@ -586,6 +586,56 @@ export default function Dashboard() {
                 </div>
               </Card>
 
+              <Card>
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-3 h-3 rounded-full bg-amber-500" />
+                  <h3 className="font-semibold text-gray-800">
+                    Avaliação Neuropsicológica
+                  </h3>
+                </div>
+                <div className="divide-y divide-gray-100">
+                  <div className="pb-3">
+                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                      Adulto e Criança
+                    </span>
+                    <div className="flex flex-wrap gap-2 items-center mt-2">
+                      {[
+                        { c: "6.00.20.01-6", q: 10 },
+                        { c: "6.00.30.02-0", q: 10 },
+                        { c: "5.00.01.22-1", q: 1 },
+                      ].map(({ c, q }, i, arr) => (
+                        <span key={c} className="flex items-center gap-1.5">
+                          <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
+                            {c}
+                          </span>
+                          <span className="text-base font-extrabold text-gray-900">
+                            ×{q}
+                          </span>
+                          {i < arr.length - 1 && (
+                            <span className="text-gray-400 text-sm font-bold">
+                              +
+                            </span>
+                          )}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="pt-3 flex items-center justify-between gap-3">
+                    <span className="text-sm font-bold text-gray-800">
+                      Falta (devolutiva ou sessão)
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
+                        6.00.20.01-6
+                      </span>
+                      <span className="text-base font-extrabold text-gray-900">
+                        ×2
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </Card>
+
             </div>
           </div>
 
@@ -619,6 +669,56 @@ export default function Dashboard() {
                         <strong>4 quantidades</strong> na guia
                       </span>
                     </div>
+                  </li>
+                </ul>
+              </Card>
+
+              <Card>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-3 h-3 rounded-full bg-amber-500" />
+                  <h3 className="font-semibold text-gray-800">
+                    Avaliação Neuropsicológica
+                  </h3>
+                </div>
+                <ul className="space-y-2 text-base text-gray-600">
+                  <li className="flex gap-2">
+                    <span className="text-amber-500 font-bold mt-0.5">•</span>
+                    <span>
+                      Emitir código de{" "}
+                      <strong>avaliação neuropsicológica</strong> — quantidade{" "}
+                      <strong>8</strong> código{" "}
+                      <span className="text-blue-600 font-semibold">
+                        80010040
+                      </span>
+                      .
+                    </span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-amber-500 font-bold mt-0.5">•</span>
+                    <span>
+                      Emitir <strong>1 guia de consulta</strong> código{" "}
+                      <span className="text-blue-600 font-semibold">10030</span>
+                    </span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-amber-500 font-bold mt-0.5">•</span>
+                    <span>
+                      Emitir guia de <strong>sessão de psicologia</strong> —
+                      quantidade <strong>4</strong> código{" "}
+                      <span className="text-blue-600 font-semibold">
+                        010016
+                      </span>
+                    </span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-amber-500 font-bold mt-0.5">•</span>
+                    <span>
+                      <strong>Falta (devolutiva ou sessão):</strong> cobrar{" "}
+                      <strong>2 quantidades</strong> do código{" "}
+                      <span className="text-blue-600 font-semibold">
+                        010016
+                      </span>
+                    </span>
                   </li>
                 </ul>
               </Card>
