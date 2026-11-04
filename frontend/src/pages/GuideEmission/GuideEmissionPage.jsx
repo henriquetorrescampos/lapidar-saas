@@ -76,7 +76,7 @@ const NON_AUTISTIC_CODES = {
   "Terapia Ocupacional": {
     codes: [
       { c: "2.01.03.63-8", q: "8" },
-      { c: "5.00.00.47-0", q: "8" },
+      { c: "6.00.20.01-6", q: "8" },
       { c: "5.00.00.05-5", q: "1" },
     ],
     obs: "O plano do IPASGO não disponibiliza o código de Terapia Ocupacional para todos os beneficiários",
@@ -504,7 +504,9 @@ export default function GuideEmissionPage() {
                                       : (() => {
                                           const isAdultAutistic =
                                             item.autism_status === "autista" &&
-                                            !item.health_plan?.toUpperCase().includes("IAMESC") &&
+                                            !item.health_plan
+                                              ?.toUpperCase()
+                                              .includes("IAMESC") &&
                                             item.birth_date &&
                                             Math.floor(
                                               (new Date() -
