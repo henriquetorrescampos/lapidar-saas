@@ -298,7 +298,7 @@ export default function PatientsList() {
                             <div className="flex flex-wrap gap-1 items-center">
                               {(patient.patient_type || "")
                                 .split(",")
-                                .filter(Boolean)
+                                .filter((t) => t && t !== "AVALIACAO_NEUROPSICOLOGICA")
                                 .map((type) => {
                                   const labels = {
                                     ABA: "ABA",

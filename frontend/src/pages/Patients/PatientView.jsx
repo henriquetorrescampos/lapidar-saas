@@ -137,7 +137,7 @@ export default function PatientView() {
                 Especialidades
               </label>
               <div className="flex flex-wrap gap-2">
-                {(patient.patient_type || "").split(",").filter(Boolean).map((type) => {
+                {(patient.patient_type || "").split(",").filter((t) => t && t !== "AVALIACAO_NEUROPSICOLOGICA").map((type) => {
                   const labels = {
                     ABA: "ABA",
                     TERAPIA_ADULTO: "Terapia Adulto",

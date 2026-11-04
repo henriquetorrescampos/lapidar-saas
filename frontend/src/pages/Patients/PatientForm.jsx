@@ -103,7 +103,9 @@ export default function PatientForm() {
 
       setFormData({
         name: data.name,
-        patient_type: data.patient_type ? data.patient_type.split(",") : [],
+        patient_type: data.patient_type
+          ? data.patient_type.split(",").filter((t) => t !== "AVALIACAO_NEUROPSICOLOGICA")
+          : [],
         specialties: data.specialties
           ? data.specialties.split(",").filter(Boolean)
           : [],
