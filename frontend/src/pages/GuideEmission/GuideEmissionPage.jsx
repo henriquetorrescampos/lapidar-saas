@@ -68,10 +68,11 @@ const NON_AUTISTIC_CODES = {
   },
   Psicopedagogia: {
     codes: [
-      { c: "5.00.00.47-0", q: "8" },
-      { c: "5.00.01.22-1", q: "1" },
+      { c: "6.00.20.01-6", q: "8" },
+      { c: "6.00.30.02-0", q: "8" },
+      { c: "5.00.00.58-6", q: "1" },
     ],
-    obs: null,
+    obs: "O IPASGO não fornece o código específico de psicopedagogia para o paciente.",
   },
   "Terapia Ocupacional": {
     codes: [
