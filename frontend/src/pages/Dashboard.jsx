@@ -481,7 +481,7 @@ export default function Dashboard() {
                     {
                       label: "Terapia Ocupacional",
                       codes: [
-                        { c: "6.00.30.02-0", q: 8 },
+                        { c: "2.01.03.63-8", q: 8 },
                         { c: "6.00.20.01-6", q: 8 },
                         { c: "5.00.00.05-5", q: 1 },
                       ],
@@ -490,7 +490,7 @@ export default function Dashboard() {
                     {
                       label: "Fisioterapia",
                       codes: [
-                        { c: "6.00.30.02-0", q: 8 },
+                        { c: "2.01.03.63-8", q: 8 },
                         { c: "6.00.20.01-6", q: 8 },
                         { c: "5.00.00.58-6", q: 1 },
                       ],
