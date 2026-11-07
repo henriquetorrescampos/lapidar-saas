@@ -523,38 +523,6 @@ export default function GuideEmissionPage() {
                                                 {formatDays(item.schedule_days)}{" "}
                                                 — {effectiveQty} sessões
                                               </span>
-                                              {!item.health_plan
-                                                ?.toUpperCase()
-                                                .includes("IAMESC") &&
-                                                item.specialty ===
-                                                  "Fonoaudiologia" && (
-                                                  <span className="text-base font-semibold text-gray-700">
-                                                    {effectiveQty} qtd{" "}
-                                                    <span className="text-blue-600">
-                                                      0.00.11.18-5
-                                                    </span>{" "}
-                                                    + 1 qtd{" "}
-                                                    <span className="text-blue-600">
-                                                      5.00.00.58-6
-                                                    </span>
-                                                  </span>
-                                                )}
-                                              {!item.health_plan
-                                                ?.toUpperCase()
-                                                .includes("IAMESC") &&
-                                                item.specialty ===
-                                                  "Psicologia" && (
-                                                  <span className="text-base font-semibold text-gray-700">
-                                                    {effectiveQty} qtd{" "}
-                                                    <span className="text-blue-600">
-                                                      0.00.11.19-3
-                                                    </span>{" "}
-                                                    + 1 qtd{" "}
-                                                    <span className="text-blue-600">
-                                                      5.00.01.22-1
-                                                    </span>
-                                                  </span>
-                                                )}
                                             </span>
                                           );
                                         })()}
