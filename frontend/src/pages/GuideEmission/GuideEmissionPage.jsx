@@ -526,26 +526,6 @@ export default function GuideEmissionPage() {
                                               {!item.health_plan
                                                 ?.toUpperCase()
                                                 .includes("IAMESC") &&
-                                                (item.specialty ===
-                                                  "Terapia Ocupacional" ||
-                                                  item.specialty ===
-                                                    "Psicomotricidade" ||
-                                                  item.specialty ===
-                                                    "Fisioterapia") && (
-                                                  <span className="text-base font-semibold text-gray-700">
-                                                    1 qtd{" "}
-                                                    <span className="text-blue-600">
-                                                      5.00.00.05-5
-                                                    </span>{" "}
-                                                    + {effectiveQty} qtd{" "}
-                                                    <span className="text-blue-600">
-                                                      0.00.40.04-5
-                                                    </span>
-                                                  </span>
-                                                )}
-                                              {!item.health_plan
-                                                ?.toUpperCase()
-                                                .includes("IAMESC") &&
                                                 item.specialty ===
                                                   "Fonoaudiologia" && (
                                                   <span className="text-base font-semibold text-gray-700">
