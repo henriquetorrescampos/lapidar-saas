@@ -128,7 +128,6 @@ export default function Dashboard() {
             </div>
           </Card>
 
-
           {user?.role === "admin" && (
             <Card>
               <div className="flex items-center justify-between">
@@ -448,7 +447,8 @@ export default function Dashboard() {
                     portanto, 1 sessão = 2 quantidades na guia
                   </p>
                   <p className="text-sm font-semibold text-amber-700 mt-2 bg-amber-50 rounded px-3 py-2">
-                    ⚠ Sempre emitir a guia do paciente na última sessão, ou seja na 4ª sessão do paciente
+                    ⚠ Sempre emitir a guia do paciente na última sessão, ou seja
+                    na 4ª sessão do paciente
                   </p>
                 </div>
                 <div className="divide-y divide-gray-100">
@@ -483,7 +483,7 @@ export default function Dashboard() {
                       label: "Terapia Ocupacional",
                       codes: [
                         { c: "2.01.03.63-8", q: 8 },
-                        { c: "6.00.20.01-6", q: 8 },
+                        { c: "6.00.20.01-6", q: 4 },
                         { c: "5.00.00.05-5", q: 1 },
                       ],
                       obs: "O plano do IPASGO não disponibiliza o código de TO para todos os beneficiários.",
@@ -492,7 +492,7 @@ export default function Dashboard() {
                       label: "Fisioterapia",
                       codes: [
                         { c: "2.01.03.63-8", q: 8 },
-                        { c: "6.00.20.01-6", q: 8 },
+                        { c: "6.00.20.01-6", q: 4 },
                         { c: "5.00.00.58-6", q: 1 },
                       ],
                       obs: "Estamos aguardando o plano Ipasgo liberar os códigos de Fisioterapia, enquanto isso utilizamos esses códigos.",
@@ -636,7 +636,6 @@ export default function Dashboard() {
                   </div>
                 </div>
               </Card>
-
             </div>
           </div>
 
@@ -649,7 +648,6 @@ export default function Dashboard() {
               <div className="flex-1 h-px bg-gray-200" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
               <Card>
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-3 h-3 rounded-full bg-green-500" />
