@@ -77,7 +77,7 @@ const NON_AUTISTIC_CODES = {
   "Terapia Ocupacional": {
     codes: [
       { c: "2.01.03.63-8", q: "8" },
-      { c: "6.00.20.01-6", q: "8" },
+      { c: "6.00.20.01-6", q: "4" },
       { c: "5.00.00.05-5", q: "1" },
     ],
     obs: "O plano do IPASGO não disponibiliza o código de Terapia Ocupacional para todos os beneficiários",
