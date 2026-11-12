@@ -85,8 +85,8 @@ const NON_AUTISTIC_CODES = {
   Fisioterapia: {
     codes: [
       { c: "2.01.03.63-8", q: "8" },
-      { c: "6.00.20.01-6", q: "8" },
-      { c: "5.00.00.58-6", q: "1" },
+      { c: "6.00.20.01-6", q: "4" },
+      { c: "5.00.00.05-5", q: "1" },
     ],
     obs: "Estamos aguardando o plano Ipasgo liberar os códigos de Fisioterapia, enquanto isso utilizamos esses códigos.",
   },
