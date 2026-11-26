@@ -533,6 +533,7 @@ export default function GuideEmissionPage() {
                                 Emitida em{" "}
                                 {new Date(item.emitted_at).toLocaleDateString(
                                   "pt-BR",
+                                  { timeZone: "America/Sao_Paulo" },
                                 )}
                               </span>
                             )}
