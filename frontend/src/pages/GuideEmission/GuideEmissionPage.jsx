@@ -56,7 +56,7 @@ const NON_AUTISTIC_CODES = {
   Psicologia: {
     codes: [
       { c: "5.00.00.47-0", q: "8" },
-      { c: "5.00.01.22-1", q: "1" },
+      { c: "5.00.00.05-5", q: "1" },
     ],
     obs: null,
   },
@@ -93,7 +93,7 @@ const NON_AUTISTIC_CODES = {
   Psicomotricidade: {
     codes: [
       { c: "5.00.00.47-0", q: "8" },
-      { c: "5.00.01.22-1", q: "1" },
+      { c: "5.00.00.05-5", q: "1" },
     ],
     obs: null,
   },

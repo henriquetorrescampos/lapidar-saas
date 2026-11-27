@@ -324,7 +324,7 @@ export default function Dashboard() {
                       </span>
                       <span className="flex items-center gap-1.5">
                         <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
-                          5.00.01.22-1
+                          5.00.00.05-5
                         </span>
                         <span className="text-base font-extrabold text-gray-900">
                           ×1
@@ -357,7 +357,7 @@ export default function Dashboard() {
                       </span>
                       <span className="flex items-center gap-1.5">
                         <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
-                          5.00.01.22-1
+                          5.00.00.05-5
                         </span>
                         <span className="text-base font-extrabold text-gray-900">
                           ×1
@@ -424,7 +424,7 @@ export default function Dashboard() {
                         },
                         {
                           label: "Psicologia",
-                          code: "5.00.01.22-1",
+                          code: "5.00.00.05-5",
                         },
                       ].map(({ label, code }) => (
                         <div
@@ -474,7 +474,7 @@ export default function Dashboard() {
                       label: "Psicologia",
                       codes: [
                         { c: "5.00.00.47-0", q: 8 },
-                        { c: "5.00.01.22-1", q: 1 },
+                        { c: "5.00.00.05-5", q: 1 },
                       ],
                       obs: null,
                     },
@@ -557,7 +557,7 @@ export default function Dashboard() {
                           label: "Fonoaudiologia",
                           code: "5.00.00.58-6",
                         },
-                        { label: "Psicologia", code: "5.00.01.22-1" },
+                        { label: "Psicologia", code: "5.00.00.05-5" },
                         { label: "Fisioterapia", code: "5.00.00.05-5" },
                       ].map(({ label, code }) => (
                         <div
@@ -618,7 +618,7 @@ export default function Dashboard() {
                       {[
                         { c: "6.00.20.01-6", q: 10 },
                         { c: "6.00.30.02-0", q: 10 },
-                        { c: "5.00.01.22-1", q: 1 },
+                        { c: "5.00.00.05-5", q: 1 },
                       ].map(({ c, q }, i, arr) => (
                         <span key={c} className="flex items-center gap-1.5">
                           <span className="bg-blue-50 border border-blue-200 text-blue-700 font-mono text-sm font-bold px-2.5 py-0.5 rounded">
