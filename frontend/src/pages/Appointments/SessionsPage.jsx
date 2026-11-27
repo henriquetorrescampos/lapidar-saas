@@ -24,6 +24,7 @@ const SPECIALTIES = [
   "Terapia Ocupacional",
   "Psicomotricidade",
   "Fisioterapia",
+  "Musicoterapia",
 ];
 
 const SPECIALTIES_BY_PATIENT_TYPE = {
@@ -34,6 +35,7 @@ const SPECIALTIES_BY_PATIENT_TYPE = {
     "Terapia Ocupacional",
     "Psicomotricidade",
     "Fisioterapia",
+    "Musicoterapia",
   ],
   TERAPIA_ADULTO: ["Psicologia"],
 };
@@ -113,6 +115,12 @@ const SPECIALTY_COLORS = {
     badge: "bg-teal-500",
     light: "bg-teal-50",
   },
+  Musicoterapia: {
+    bg: "bg-amber-100",
+    text: "text-amber-800",
+    badge: "bg-amber-500",
+    light: "bg-amber-50",
+  },
 };
 
 function SessionRow({ specialty, index, sessionItem, onToggle, onDateChange, disabled }) {
@@ -169,6 +177,7 @@ export default function SessionsPage() {
       "Terapia Ocupacional": buildArray(),
       Psicomotricidade: buildArray(),
       Fisioterapia: buildArray(),
+      Musicoterapia: buildArray(),
     };
   };
 

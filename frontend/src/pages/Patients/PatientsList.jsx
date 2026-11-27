@@ -210,6 +210,7 @@ export default function PatientsList() {
                 <option value="Psicopedagogia">Psicopedagogia</option>
                 <option value="Psicomotricidade">Psicomotricidade</option>
                 <option value="Fisioterapia">Fisioterapia</option>
+                <option value="Musicoterapia">Musicoterapia</option>
               </select>
             </div>
             <div className="min-w-[200px]">
@@ -223,7 +224,7 @@ export default function PatientsList() {
               >
                 <option value="">Todos</option>
                 {employeesList
-                  .filter((emp) => ["PSICOLOGA", "TERAPEUTA OCUPACIONAL", "FONOAUDIOLOGA", "PSICOPEDAGOGA"].includes(emp.specialty))
+                  .filter((emp) => ["PSICOLOGA", "TERAPEUTA OCUPACIONAL", "FONOAUDIOLOGA", "PSICOPEDAGOGA", "MUSICOTERAPEUTA"].includes(emp.specialty))
                   .map((emp) => (
                     <option key={emp.id} value={String(emp.id)}>{emp.name}</option>
                   ))}
@@ -343,6 +344,7 @@ export default function PatientsList() {
                                 Psicopedagogia: "bg-violet-50 text-violet-700",
                                 Psicomotricidade: "bg-pink-50 text-pink-700",
                                 Fisioterapia: "bg-teal-50 text-teal-700",
+                                Musicoterapia: "bg-amber-50 text-amber-700",
                               };
                               const DAY_COLORS = {
                                 Psicologia: "bg-green-500 text-white",
@@ -351,6 +353,7 @@ export default function PatientsList() {
                                 Psicopedagogia: "bg-violet-500 text-white",
                                 Psicomotricidade: "bg-pink-500 text-white",
                                 Fisioterapia: "bg-teal-500 text-white",
+                                Musicoterapia: "bg-amber-500 text-white",
                               };
                               const PROF_COLORS = {
                                 Psicologia: "text-green-700",
@@ -359,6 +362,7 @@ export default function PatientsList() {
                                 Psicopedagogia: "text-violet-700",
                                 Psicomotricidade: "text-pink-700",
                                 Fisioterapia: "text-teal-700",
+                                Musicoterapia: "text-amber-700",
                               };
                               const DAY_SHORT = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
                               return (

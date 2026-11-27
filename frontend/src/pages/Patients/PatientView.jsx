@@ -19,6 +19,7 @@ const SPECIALTY_COLORS = {
   Psicopedagogia: "bg-violet-100 text-violet-700",
   Psicomotricidade: "bg-pink-100 text-pink-700",
   Fisioterapia: "bg-teal-100 text-teal-700",
+  Musicoterapia: "bg-amber-100 text-amber-700",
 };
 
 const SPECIALTY_DAY_ACTIVE = {
@@ -28,6 +29,7 @@ const SPECIALTY_DAY_ACTIVE = {
   Psicopedagogia: "bg-violet-500 text-white",
   Psicomotricidade: "bg-pink-500 text-white",
   Fisioterapia: "bg-teal-500 text-white",
+  Musicoterapia: "bg-amber-500 text-white",
 };
 
 export default function PatientView() {

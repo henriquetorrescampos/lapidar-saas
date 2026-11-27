@@ -9,6 +9,7 @@ const GUIDE_SPECIALTIES = [
   "Psicopedagogia",
   "Psicomotricidade",
   "Fisioterapia",
+  "Musicoterapia",
 ];
 
 const hd = new Holidays("BR");

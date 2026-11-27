@@ -39,6 +39,7 @@ const SPECIALTY_COLORS = {
   Psicopedagogia: "bg-violet-100 text-violet-700",
   Psicomotricidade: "bg-pink-100 text-pink-700",
   Fisioterapia: "bg-teal-100 text-teal-700",
+  Musicoterapia: "bg-amber-100 text-amber-700",
 };
 
 const ALL_SPECIALTIES = [
@@ -48,6 +49,7 @@ const ALL_SPECIALTIES = [
   "Psicopedagogia",
   "Psicomotricidade",
   "Fisioterapia",
+  "Musicoterapia",
 ];
 
 const NON_AUTISTIC_CODES = {

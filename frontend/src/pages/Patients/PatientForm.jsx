@@ -27,6 +27,7 @@ const CLINICAL_SPECIALTIES = [
   { value: "Terapia Ocupacional", label: "Terapia Ocupacional" },
   { value: "Psicomotricidade", label: "Psicomotricidade" },
   { value: "Fisioterapia", label: "Fisioterapia" },
+  { value: "Musicoterapia", label: "Musicoterapia" },
 ];
 
 // Mapeamento: especialidade clínica do paciente → especialidade do funcionário
@@ -37,6 +38,7 @@ const SPECIALTY_TO_EMPLOYEE_SPECIALTY = {
   "Terapia Ocupacional": "TERAPEUTA OCUPACIONAL",
   "Psicomotricidade": "TERAPEUTA OCUPACIONAL",
   "Fisioterapia": "TERAPEUTA OCUPACIONAL",
+  "Musicoterapia": "MUSICOTERAPEUTA",
 };
 
 // Segunda a Sábado (0=Dom omitido)

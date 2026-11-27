@@ -24,6 +24,7 @@ const ALL_SPECIALTIES = [
   { value: "Terapia Ocupacional", label: "Terapia Ocupacional", employeeSpecialty: "TERAPEUTA OCUPACIONAL" },
   { value: "Psicomotricidade", label: "Psicomotricidade", employeeSpecialty: "TERAPEUTA OCUPACIONAL" },
   { value: "Fisioterapia", label: "Fisioterapia", employeeSpecialty: "TERAPEUTA OCUPACIONAL" },
+  { value: "Musicoterapia", label: "Musicoterapia", employeeSpecialty: "MUSICOTERAPEUTA" },
   { value: "Terapia Adulto", label: "Terapia Adulto", employeeSpecialty: "PSICOLOGA" },
 ];
 

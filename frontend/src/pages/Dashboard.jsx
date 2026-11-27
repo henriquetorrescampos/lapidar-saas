@@ -10,6 +10,7 @@ import {
   HeartPulse,
   Activity,
   Dumbbell,
+  Music,
 } from "lucide-react";
 import Layout from "../components/Layout/Layout";
 import Card from "../components/Common/Card";
@@ -33,6 +34,7 @@ export default function Dashboard() {
     sp_psicopedagogia: 0,
     sp_psicomotricidade: 0,
     sp_fisioterapia: 0,
+    sp_musicoterapia: 0,
   });
   const [loading, setLoading] = useState(true);
   const [showBalance, setShowBalance] = useState(false);
@@ -82,6 +84,7 @@ export default function Dashboard() {
         sp_psicopedagogia: countSpecialty("Psicopedagogia"),
         sp_psicomotricidade: countSpecialty("Psicomotricidade"),
         sp_fisioterapia: countSpecialty("Fisioterapia"),
+        sp_musicoterapia: countSpecialty("Musicoterapia"),
       });
     } catch (err) {
       // Erro silenciosamente tratado
@@ -250,6 +253,20 @@ export default function Dashboard() {
               </div>
               <div className="bg-teal-100 p-4 rounded-lg">
                 <Dumbbell size={32} className="text-teal-600" />
+              </div>
+            </div>
+          </Card>
+
+          <Card>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-600 text-sm">Musicoterapia</p>
+                <p className="text-2xl font-bold text-gray-800">
+                  {stats.sp_musicoterapia}
+                </p>
+              </div>
+              <div className="bg-amber-100 p-4 rounded-lg">
+                <Music size={32} className="text-amber-600" />
               </div>
             </div>
           </Card>
